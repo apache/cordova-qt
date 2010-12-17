@@ -32,7 +32,8 @@ symbian {
     TARGET.EPOCSTACKSIZE = 0x14000
     TARGET.EPOCHEAPSIZE = 0x020000 0x800000
     htmlfiles.sources = ./../www/
-    phonegap_js = ./../js/*
+    phonegap_js.sources = ./../js/*
+    phonegap_js.target = ./www/
     DEPLOYMENT += htmlfiles phonegap_js
     include(vibra/vibra.pri)
 }
