@@ -31,9 +31,9 @@ symbian {
     LIBS += -lcone -leikcore -lavkon -lhwrmvibraclient
     TARGET.EPOCSTACKSIZE = 0x14000
     TARGET.EPOCHEAPSIZE = 0x020000 0x800000
-    htmlfiles.sources = ./../www/
+    htmlfiles.sources = ./../template/
     phonegap_js.sources = ./../js/*
-    phonegap_js.target = ./www/
+    phonegap_js.target = ./template/
     DEPLOYMENT += htmlfiles phonegap_js
     include(vibra/vibra.pri)
 }

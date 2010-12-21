@@ -15,7 +15,7 @@ WebKitWindow::WebKitWindow(QWidget *parent) :
     setCentralWidget(webView);
     webView->page()->settings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls,true);
     QDir www = QDir::current();
-    www.cd("www");
+    www.cd("app");
     webView->settings()->enablePersistentStorage();
     connect(webView->page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(add_js_extentions()));
     webView->load(QUrl::fromUserInput(www.filePath("index.html")));
