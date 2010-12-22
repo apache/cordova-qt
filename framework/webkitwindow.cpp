@@ -4,6 +4,7 @@
 #include <QWebFrame>
 #include <QWebSettings>
 #include <QDir>
+#include <QStringList>
 #include <QMessageBox>
 
 WebKitWindow::WebKitWindow(QWidget *parent) :
@@ -15,7 +16,8 @@ WebKitWindow::WebKitWindow(QWidget *parent) :
     setCentralWidget(webView);
     webView->page()->settings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls,true);
     QDir www = QDir::current();
-    www.cd("app");
+    QStringList l = www.entryList();
+    bool cd = www.cd("template");
     webView->settings()->enablePersistentStorage();
     connect(webView->page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(add_js_extentions()));
     webView->load(QUrl::fromUserInput(www.filePath("index.html")));
