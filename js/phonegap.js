@@ -1,30 +1,26 @@
 function Accelerometer() {
-    this.getCurrentAcceleration = function (accelerometerSuccess, accelerometerError) {
+
+    this.getCurrentAcceleration = function(accelerometerSuccess, accelerometerError) {
         try {
-            var accel_res = extentions.getCurrentAcceleration();
-            var accel = {
-                x: accel_res[0],
-                y: accel_res[1],
-                z: accel_res[2],
-            };
+            var accel = GapAccelerometer.getCurrentAcceleration();
             accelerometerSuccess(accel);
-        } catch (err) {
+        } catch(err) {
             accelerometerError();
         }
     };
     
-    this.watchAcceleration = function (accelerometerSuccess, accelerometerError, options) {
-        var freq = 500;
-        if (options.frequency) freq = options.frequency;
+    this.watchAcceleration = function(accelerometerSuccess, accelerometerError, options) {
+        var freq = options.frequency || 500;
+        var self = this;
         return setInterval(function () {
-            navigator.accelerometer.getCurrentAcceleration(accelerometerSuccess, accelerometerError);
+            self.getCurrentAcceleration(accelerometerSuccess, accelerometerError);
         }, freq);
     };
     
-    this.clearWatch = function (watchID) {
+    this.clearWatch = function(watchID) {
         clearInterval(watchID);
     };
-};
+}
 
 
 NetworkStatus = {
@@ -33,14 +29,16 @@ NetworkStatus = {
     REACHABLE_VIA_CARRIER_DATA_NETWORK: 2
 };
 
-function Network() 
-{
-    this.isReachable = function(hostName, successCb, options)
-    {
+function Network() {
+
+    this.isReachable = function(hostName, successCb, options) {
         var xhr = new XMLHttpRequest;
         xhr.open("GET", hostName, true);
         xhr.onreadystatechange = function(req) {
-            if (xhr.readyState != 4) return;
+            if (xhr.readyState != 4) {
+                return;
+            }
+
             alert(xhr.status);
             if (xhr.status != 200 && xhr.status != 304) {
                 successCb(NetworkStatus.NOT_REACHABLE);
@@ -52,18 +50,19 @@ function Network()
     }
 }
 
-function Notification ()
-{
-    this.vibrate = function (milis) {
-        extentions.vibrate(milis);
+
+function Notification() {
+
+    this.vibrate = function(milis) {
+        GapNotification.vibrate(milis);
     };
     
-    this.alert = function (message, callback, title, button) {
+    this.alert = function(message, callback, title, button) {
         alert(message);
         callback();
     };
     
-    this.confirm = function (message, callback, title, buttons) {
+    this.confirm = function(message, callback, title, buttons) {
         var result = confirm(message);
         callback();
         return result;
@@ -74,19 +73,19 @@ function Notification ()
     };
 }
 
-function Device () 
-{
-    this.name = extentions.device_info.name;
-    this.platform = extentions.device_info.platform;
-    this.uuid = extentions.device_info.uuid;
-    this.version = extentions.device_info.version;
+
+function Device() {
+
+    this.name = GapDeviceInfo.name;
+    this.platform = GapDeviceInfo.platform;
+    this.uuid = GapDeviceInfo.uuid;
+    this.version = GapDeviceInfo.version;
     this.phonegap = '0.9.2';
 }
 
-navigator = {
-    notification: new Notification(),
-    accelerometer: new Accelerometer(),
-    network: new Network()
-};
+
+navigator.notification = new Notification();
+navigator.accelerometer = new Accelerometer();
+navigator.network = new Network();
 
 if (window.device == undefined) window.device = new Device();

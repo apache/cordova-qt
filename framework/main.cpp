@@ -1,15 +1,34 @@
-#include <QtGui/QApplication>
-#include "webkitwindow.h"
+#include "mainwindow.h"
 
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-    WebKitWindow w;
-#if defined(Q_WS_S60)
-    w.showFullScreen();
-#else
-    w.show();
+#include <QApplication>
+
+
+bool qt_sendSpontaneousEvent(QObject *receiver, QEvent *event) {
+
+    return QCoreApplication::sendSpontaneousEvent(receiver, event);
+}
+
+int main(int argc, char *argv[]) {
+
+#if !defined(Q_WS_S60)
+    QApplication::setGraphicsSystem("raster");
 #endif
 
-    return a.exec();
+    QApplication app(argc, argv);
+    app.setApplicationName("PhoneGap");
+    app.setApplicationVersion("0.0.0");
+
+    MainWindow window;
+#ifdef Q_OS_SYMBIAN
+    window.showMaximized();
+#else
+    window.resize(360, 640);
+    window.show();
+#endif
+
+#ifdef QT_KEYPAD_NAVIGATION
+    QApplication::setNavigationMode(Qt::NavigationModeCursorAuto);
+#endif
+
+    return app.exec();
 }
