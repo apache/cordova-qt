@@ -2,6 +2,7 @@
 #include "extensions/accelerometer.h"
 #include "extensions/debugconsole.h"
 #include "extensions/deviceinfo.h"
+#include "extensions/geolocation.h"
 #include "extensions/hash.h"
 #include "extensions/notification.h"
 
@@ -22,6 +23,7 @@ Extensions::Extensions(QWebView *webView) :
     m_extensions["GapAccelerometer"] = new Accelerometer(this);
     m_extensions["GapDebugConsole"] = new DebugConsole(this);
     m_extensions["GapDeviceInfo"] = new DeviceInfo(this);
+    m_extensions["GapGeolocation"] = new Geolocation(this);
     m_extensions["GapHash"] = new Hash(this);
     m_extensions["GapNotification"] = new Notification(this);
 
