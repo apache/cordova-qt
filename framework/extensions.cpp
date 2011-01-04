@@ -5,6 +5,7 @@
 #include "extensions/geolocation.h"
 #include "extensions/hash.h"
 #include "extensions/notification.h"
+#include "extensions/utility.h"
 
 #ifdef Q_WS_S60
 #include "extensions/camera.h"
@@ -26,6 +27,7 @@ Extensions::Extensions(QWebView *webView) :
     m_extensions["GapGeolocation"] = new Geolocation(this);
     m_extensions["GapHash"] = new Hash(this);
     m_extensions["GapNotification"] = new Notification(this);
+    m_extensions["GapUtility"] = new Utility(this);
 
 #ifdef Q_WS_S60
     m_extensions["GapCamera"] = new Camera(this);

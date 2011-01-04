@@ -21,7 +21,8 @@ SOURCES += \
     extensions/deviceinfo.cpp \
     extensions/geolocation.cpp \
     extensions/hash.cpp \
-    extensions/notification.cpp
+    extensions/notification.cpp \
+	extensions/utility.cpp
 
 HEADERS += \
     cookiejar.h \
@@ -34,7 +35,8 @@ HEADERS += \
     extensions/deviceinfo.h \
     extensions/geolocation.h \
     extensions/hash.h \
-    extensions/notification.h
+    extensions/notification.h \
+	extensions/utility.h
 
 CONFIG += mobility
 MOBILITY = bearer location sensors

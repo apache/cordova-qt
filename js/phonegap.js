@@ -259,6 +259,14 @@ function Notification() {
 }
 
 
+function Utility() {
+
+    this.exit = function() {
+        GapUtility.exit();
+    };
+}
+
+
 function Device() {
 
     this.name = GapDeviceInfo.name;
@@ -268,6 +276,7 @@ function Device() {
     this.phonegap = '0.9.2';
 }
 
+
 if (typeof debug == "undefined") debug = new DebugConsole();
 
 if (typeof navigator.accelerometer == "undefined") navigator.accelerometer = new Accelerometer();
@@ -275,5 +284,6 @@ if (typeof navigator.camera == "undefined") navigator.camera = new Camera();
 if (typeof navigator.geolocation == "undefined") navigator.geolocation = new Geolocation();
 if (typeof navigator.network == "undefined") navigator.network = new Network();
 if (typeof navigator.notification == "undefined") navigator.notification = new Notification();
+if (typeof navigator.utility == "undefined") navigator.utility = new Utility();
 
 if (typeof window.device == "undefined") window.device = new Device();
