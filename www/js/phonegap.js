@@ -280,7 +280,7 @@ function Device() {
 if (typeof debug == "undefined") debug = new DebugConsole();
 
 if (typeof navigator.accelerometer == "undefined") navigator.accelerometer = new Accelerometer();
-if (typeof navigator.camera == "undefined") navigator.camera = new Camera();
+if (typeof navigator.camera == "undefined" && typeof window.GapCamera != "undefined" ) navigator.camera = new Camera();
 if (typeof navigator.geolocation == "undefined") navigator.geolocation = new Geolocation();
 if (typeof navigator.network == "undefined") navigator.network = new Network();
 if (typeof navigator.notification == "undefined") navigator.notification = new Notification();

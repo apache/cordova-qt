@@ -69,6 +69,12 @@ OTHER_FILES += \
     ../www/index.html \
     ../www/basic.js \
     ../www/basic.css \
-    ../www/js/phonegap.js
+    ../www/js/phonegap.js \
+    www/index.html \
+    www/basic.js \
+    www/basic.css \
+    www/js/phonegap.js
+
+
 
 
