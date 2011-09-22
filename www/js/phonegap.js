@@ -1,3 +1,78 @@
+PhoneGap = {
+    plugins: {},
+    constructors: {},
+    callbacks: [],
+};
+
+/*
+ * Execute a call to a plugin function
+ */
+PhoneGap.exec = function( successCallback, errorCallback, pluginName, functionName, parameters ) {
+    if( typeof PhoneGap.plugins[pluginName] == "undefined" ) {
+        if( typeof errorCallback == "function" ) errorCallback();
+        return;
+    }
+
+    // Store a reference to the callback functions
+    var scId = PhoneGap.callbacks.length;
+    var ecId = scId + 1;
+    PhoneGap.callbacks[scId] = successCallback;
+    PhoneGap.callbacks[ecId] = errorCallback;
+
+    parameters.unshift( ecId );
+    parameters.unshift( scId );
+
+    // Call the function
+    /*debug.log( "Call: " + pluginName + " / " + functionName );
+    debug.log( "P-Obj: " + (typeof PhoneGap.plugins[pluginName]) );
+    debug.log( "P-Func: " + (typeof PhoneGap.plugins[pluginName][functionName]) );*/
+    //PhoneGap.plugins[pluginName][functionName](scId, ecId, parameters);
+    PhoneGap.plugins[pluginName][functionName].apply(this, parameters);
+}
+
+/*
+ * Execute a passed callback function, called by the native plugin-code
+ */
+PhoneGap.callback = function() {
+    var scId = arguments[0];
+
+    var parameters = [];
+    for( var i = 1; i < arguments.length; i++ ) {
+        //debug.log( "Adding parameter " + arguments[i] );
+        parameters[i-1] = arguments[i];
+    }
+
+    if( typeof PhoneGap.callbacks[scId] == "function" ) {
+        PhoneGap.callbacks[scId].apply( this, parameters );
+        PhoneGap.callbacks.splice( scId, 1 );
+    }
+}
+
+/*
+ * Register a plugin for use within PhoneGap
+ */
+PhoneGap.registerPlugin = function( pluginName, pluginObject ) {
+    /*if( typeof debug != "undefined" ) {
+        debug.log( "Registered " + pluginName + "!" );
+    }*/
+
+    // Keep a reference to the plugin object
+    PhoneGap.plugins[pluginName] = pluginObject;
+
+    // Run constructor for plugin if available
+    if( typeof PhoneGap.constructors[pluginName] == "function" ) PhoneGap.constructors[pluginName]();
+}
+
+/*
+ * Add a plugin-specific constructor function which is called once the plugin is loaded
+ */
+PhoneGap.addConstructor = function( pluginName, constructor ) {
+    PhoneGap.constructors[pluginName] = constructor;
+}
+
+/*
+  "OLD" JS CODE
+*/
 function Accelerometer() {
 
     this.getCurrentAcceleration = function(accelerometerSuccess, accelerometerError) {
@@ -277,13 +352,44 @@ function Device() {
 }
 
 
-if (typeof debug == "undefined") debug = new DebugConsole();
+/*
+ * Workaround for old JS functionality
+ */
+PhoneGap.addConstructor( "com.phonegap.Console",
+                        function() {
+                            if (typeof debug == "undefined") debug = new DebugConsole();
+                        }
+                        );
 
-if (typeof navigator.accelerometer == "undefined") navigator.accelerometer = new Accelerometer();
-if (typeof navigator.camera == "undefined" && typeof window.GapCamera != "undefined" ) navigator.camera = new Camera();
-if (typeof navigator.geolocation == "undefined") navigator.geolocation = new Geolocation();
+PhoneGap.addConstructor( "com.phonegap.Accelerometer",
+                        function() {
+                            if (typeof navigator.accelerometer == "undefined") navigator.accelerometer = new Accelerometer();
+                        }
+                        );
+
+PhoneGap.addConstructor( "com.phonegap.Camera",
+                        function() {
+                            if (typeof navigator.camera == "undefined" && typeof window.GapCamera != "undefined" ) navigator.camera = new Camera();
+                        }
+                        );
+
+PhoneGap.addConstructor( "com.phonegap.Geolocation",
+                        function() {
+                            if (typeof navigator.geolocation == "undefined") navigator.geolocation = new Geolocation();
+                        }
+                        );
+
+PhoneGap.addConstructor( "com.phonegap.Notification",
+                        function() {
+                            if (typeof navigator.notification == "undefined") navigator.notification = new Notification();
+                        }
+                        );
+
+PhoneGap.addConstructor( "com.phonegap.Utility",
+                        function() {
+                            if (typeof navigator.utility == "undefined") navigator.utility = new Utility();
+                        }
+                        );
+
 if (typeof navigator.network == "undefined") navigator.network = new Network();
-if (typeof navigator.notification == "undefined") navigator.notification = new Notification();
-if (typeof navigator.utility == "undefined") navigator.utility = new Utility();
-
 if (typeof window.device == "undefined") window.device = new Device();

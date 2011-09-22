@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "Loading file: " << templateDir.filePath("index.html");
 
     webView->load(QUrl::fromUserInput(templateDir.filePath("index.html")));
+    //webView->load(QUrl::fromUserInput("http://jquerymobile.com/demos/1.0b3/"));
     webView->settings()->enablePersistentStorage();
 }
 

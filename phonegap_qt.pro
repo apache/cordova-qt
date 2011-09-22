@@ -22,7 +22,9 @@ SOURCES += \
     extensions/geolocation.cpp \
     extensions/hash.cpp \
     extensions/notification.cpp \
-	extensions/utility.cpp
+	extensions/utility.cpp \
+    pgplugin.cpp \
+    plugins/fileapi.cpp
 
 HEADERS += \
     cookiejar.h \
@@ -36,7 +38,9 @@ HEADERS += \
     extensions/geolocation.h \
     extensions/hash.h \
     extensions/notification.h \
-	extensions/utility.h
+	extensions/utility.h \
+    pgplugin.h \
+    plugins/fileapi.h
 
 CONFIG += mobility
 MOBILITY = bearer location sensors
@@ -73,7 +77,27 @@ OTHER_FILES += \
     www/index.html \
     www/basic.js \
     www/basic.css \
-    www/js/phonegap.js
+    www/js/phonegap.js \
+    xml/plugins.xml \
+    www/js/file.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
