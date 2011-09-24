@@ -30,6 +30,7 @@ function ping_google()
 function test_vibra()
 {
 	navigator.notification.vibrate(vibration_length);
+    navigator.notification.beep(5);
 }
 
 function getCurrentPosition() {

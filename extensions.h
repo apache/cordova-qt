@@ -4,8 +4,6 @@
 #include <QMap>
 #include <QWebView>
 
-#include "plugins/fileapi.h"
-
 class Extensions : public QObject {
 
     Q_OBJECT

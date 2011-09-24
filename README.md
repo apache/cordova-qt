@@ -23,3 +23,7 @@ Know Issues
 When calling navigator.network.isReachable, if the device if not connected, it
 will connect to the internet using the default access point *without warning the
 user* or letting the user choose what access point to use.
+
+Notes
+=====
+Notification.alert and Notification.confirm need a native implementation

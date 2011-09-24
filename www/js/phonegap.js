@@ -311,29 +311,6 @@ Geolocation.prototype.stop = function() {
 };
 
 
-function Notification() {
-
-    this.vibrate = function(milis) {
-        GapNotification.vibrate(milis);
-    };
-    
-    this.alert = function(message, callback, title, button) {
-        alert(message);
-        callback();
-    };
-    
-    this.confirm = function(message, callback, title, buttons) {
-        var result = confirm(message);
-        callback();
-        return result;
-    };
-    
-    this.beep = function (times) {
-        alert("not implemented");
-    };
-}
-
-
 function Utility() {
 
     this.exit = function() {
