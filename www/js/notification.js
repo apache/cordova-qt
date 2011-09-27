@@ -39,6 +39,6 @@ Notification.prototype.vibrate = function( milliseconds ) {
 /**
  * Add the notification object to the navigator
  */
-PhoneGap.addConstructor( "com.phonegap.File", function () {
+PhoneGap.addConstructor( "com.phonegap.Notification", function () {
                             navigator.notification = new Notification();
                         } );

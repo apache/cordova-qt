@@ -19,12 +19,13 @@ SOURCES += \
     extensions/accelerometer.cpp \
     extensions/debugconsole.cpp \
     extensions/deviceinfo.cpp \
-    extensions/geolocation.cpp \
     extensions/hash.cpp \
 	extensions/utility.cpp \
     pgplugin.cpp \
     plugins/fileapi.cpp \
-    plugins/notification.cpp
+    plugins/notification.cpp \
+    plugins/geolocation.cpp \
+    plugins/powermanagement.cpp
 
 HEADERS += \
     cookiejar.h \
@@ -35,15 +36,16 @@ HEADERS += \
     extensions/accelerometer.h \
     extensions/debugconsole.h \
     extensions/deviceinfo.h \
-    extensions/geolocation.h \
     extensions/hash.h \
 	extensions/utility.h \
     pgplugin.h \
     plugins/fileapi.h \
-    plugins/notification.h
+    plugins/notification.h \
+    plugins/geolocation.h \
+    plugins/powermanagement.h
 
 CONFIG += mobility
-MOBILITY = bearer location sensors feedback
+MOBILITY = bearer location systeminfo sensors feedback
 
 symbian {
     TARGET.UID3 = 0xeceb982e
@@ -77,10 +79,38 @@ OTHER_FILES += \
     www/index.html \
     www/basic.js \
     www/basic.css \
-    www/js/phonegap.js \
     xml/plugins.xml \
     www/js/file.js \
-    www/js/notification.js
+    www/js/notification.js \
+    www/js/phonegap.new.js \
+    www/js/phonegap.js \
+    www/js/phonegap.old.js \
+    www/js/geolocation.js \
+    www/js/powermanagement.js \
+    www/js/phonegap.qt.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

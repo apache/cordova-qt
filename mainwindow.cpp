@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     templateDir.cdUp();
     templateDir.cd("phonegap-qt");      // Dirty hack for now...
 #endif
+    //templateDir.cd("www_gofg");
     templateDir.cd("www");
 
     qDebug() << "Loading file: " << templateDir.filePath("index.html");

@@ -1,2 +1,6 @@
 
 /phonegap_qt.pro.user
+/www_gofg
+/www/js/powermanagement.js
+/plugins/powermanagement.h
+/plugins/powermanagement.cpp

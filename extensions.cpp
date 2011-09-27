@@ -2,7 +2,6 @@
 #include "extensions/accelerometer.h"
 #include "extensions/debugconsole.h"
 #include "extensions/deviceinfo.h"
-#include "extensions/geolocation.h"
 #include "extensions/hash.h"
 #include "extensions/utility.h"
 
@@ -19,6 +18,8 @@
 
 #include "plugins/fileapi.h"
 #include "plugins/notification.h"
+#include "plugins/geolocation.h"
+#include "plugins/powermanagement.h"
 
 Extensions::Extensions(QWebView *webView) :
     QObject(webView) {
@@ -28,13 +29,16 @@ Extensions::Extensions(QWebView *webView) :
 
     m_extensions["GapAccelerometer"] = new Accelerometer(this);
     m_extensions["GapDeviceInfo"] = new DeviceInfo(this);
-    m_extensions["GapGeolocation"] = new Geolocation(this);
 
     m_extensions["GapDebugConsole"] = new DebugConsole(this);
     m_extensions["GapHash"] = new Hash(this);
     m_extensions["GapUtility"] = new Utility(this);
+
     m_extensions["File"] = new FileAPI(m_frame);
     m_extensions["Notification"] = new Notification(m_frame);
+    m_extensions["Geolocation"] = new Geolocation(m_frame);
+
+    m_extensions["Powermanagement"] = new PowerManagement(m_frame);
 
 #ifdef Q_WS_S60
     m_extensions["GapCamera"] = new Camera(this);
@@ -68,11 +72,15 @@ void Extensions::attachExtensions() {
                 if( attribs.hasAttribute("name") && attribs.hasAttribute("value") ) {
                     QString attribName = attribs.value( "name" ).toString();
                     QString attribValue = attribs.value( "value" ).toString();
+                    QString objectName = attribName; // + "_native";
+
+                    if( !objectName.startsWith( "Gap" ) ) objectName += "_native";
 
                     qDebug() << "Adding Plugin '" << attribName << "' with '" << attribValue << "'";
                     if( m_extensions.contains( attribName ) ) {
-                        m_frame->addToJavaScriptWindowObject(attribName, m_extensions[attribName]);
-                        m_frame->evaluateJavaScript( "PhoneGap.registerPlugin( '" + attribValue + "', " + attribName + " )" );
+                        m_frame->addToJavaScriptWindowObject(objectName, m_extensions[attribName]);
+                        m_frame->evaluateJavaScript( "PhoneGap.Qt.registerObject( '" + attribValue + "', " + objectName + " )" );
+                        m_frame->evaluateJavaScript( "PhoneGap.enablePlugin( '" + attribValue + "' )" );
                     }
                     else {
                         qDebug() << "Unknown Plugin " << attribName;
@@ -81,4 +89,7 @@ void Extensions::attachExtensions() {
             }
         }
     }
+
+    // Device is now ready to rumble
+    m_frame->evaluateJavaScript( "PhoneGap.deviceready();" );
 }
