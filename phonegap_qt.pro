@@ -18,14 +18,14 @@ SOURCES += \
     webpage.cpp \
     extensions/accelerometer.cpp \
     extensions/debugconsole.cpp \
-    extensions/deviceinfo.cpp \
     extensions/hash.cpp \
 	extensions/utility.cpp \
     pgplugin.cpp \
     plugins/fileapi.cpp \
     plugins/notification.cpp \
     plugins/geolocation.cpp \
-    plugins/powermanagement.cpp
+    plugins/powermanagement.cpp \
+    plugins/device.cpp
 
 HEADERS += \
     cookiejar.h \
@@ -35,14 +35,14 @@ HEADERS += \
     webpage.h \
     extensions/accelerometer.h \
     extensions/debugconsole.h \
-    extensions/deviceinfo.h \
     extensions/hash.h \
 	extensions/utility.h \
     pgplugin.h \
     plugins/fileapi.h \
     plugins/notification.h \
     plugins/geolocation.h \
-    plugins/powermanagement.h
+    plugins/powermanagement.h \
+    plugins/device.h
 
 CONFIG += mobility
 MOBILITY = bearer location systeminfo sensors feedback
@@ -53,12 +53,10 @@ symbian {
     TARGET.CAPABILITY = Location NetworkServices ReadUserData UserEnvironment ReadDeviceData WriteDeviceData WriteUserData PowerMgmt
     TARGET.EPOCHEAPSIZE = 0x20000 0x2000000
 
-    htmlfiles.sources = ./../template/
-    phonegap_js.sources = ./../js/*
+    htmlfiles.sources = ./../www/*
+    phonegap_js.sources = ./../www/js/*
     phonegap_js.path = ./template/
     DEPLOYMENT += htmlfiles phonegap_js
-
-    include(vibra/vibra.pri)
 
     HEADERS += \
         extensions/camera.h \
@@ -87,7 +85,13 @@ OTHER_FILES += \
     www/js/phonegap.old.js \
     www/js/geolocation.js \
     www/js/powermanagement.js \
-    www/js/phonegap.qt.js
+    www/js/phonegap.qt.js \
+    www/js/device.js
+
+
+
+
+
 
 
 

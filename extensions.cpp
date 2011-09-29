@@ -20,6 +20,7 @@
 #include "plugins/notification.h"
 #include "plugins/geolocation.h"
 #include "plugins/powermanagement.h"
+#include "plugins/device.h"
 
 Extensions::Extensions(QWebView *webView) :
     QObject(webView) {
@@ -28,7 +29,6 @@ Extensions::Extensions(QWebView *webView) :
     connect(m_frame, SIGNAL(loadFinished(bool)), SLOT(attachExtensions()));
 
     m_extensions["GapAccelerometer"] = new Accelerometer(this);
-    m_extensions["GapDeviceInfo"] = new DeviceInfo(this);
 
     m_extensions["GapDebugConsole"] = new DebugConsole(this);
     m_extensions["GapHash"] = new Hash(this);
@@ -37,6 +37,7 @@ Extensions::Extensions(QWebView *webView) :
     m_extensions["File"] = new FileAPI(m_frame);
     m_extensions["Notification"] = new Notification(m_frame);
     m_extensions["Geolocation"] = new Geolocation(m_frame);
+    m_extensions["Device"] = new Device(m_frame);
 
     m_extensions["Powermanagement"] = new PowerManagement(m_frame);
 

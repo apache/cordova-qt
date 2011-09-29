@@ -3,7 +3,6 @@
     <plugin name="GapDebugConsole" value="com.phonegap.Console"/>
     <plugin name="GapAccelerometer" value="com.phonegap.Accelerometer"/>
     <plugin name="GapCamera" value="com.phonegap.Camera"/>
-    <plugin name="GapDeviceInfo" value="com.phonegap.Device"/>
     <plugin name="GapHash" value="com.phonegap.Hash"/>
     <plugin name="GapUtility" value="com.phonegap.Utility"/>
     <plugin name="GapMemoryWatcher" value="com.phonegap.MemoryWatcher"/>
@@ -11,6 +10,7 @@
     <plugin name="File" value="com.phonegap.File"/>
     <plugin name="Notification" value="com.phonegap.Notification"/>
     <plugin name="Geolocation" value="com.phonegap.Geolocation"/>
+    <plugin name="Device" value="com.phonegap.Device"/>
 
     <plugin name="Powermanagement" value="com.phonegap.plugin.Powermanagement"/>
 

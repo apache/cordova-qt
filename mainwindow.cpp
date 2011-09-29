@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setCentralWidget(webView);
     webView->page()->settings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
 
-    new Extensions(webView);
+    //new Extensions(webView);
 
     QDir templateDir = QDir::current();
 #ifdef Q_WS_SIMULATOR
@@ -29,8 +29,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     qDebug() << "Loading file: " << templateDir.filePath("index.html");
 
-    webView->load(QUrl::fromUserInput(templateDir.filePath("index.html")));
-    //webView->load(QUrl::fromUserInput("http://jquerymobile.com/demos/1.0b3/"));
+    //webView->load(QUrl::fromUserInput(templateDir.filePath("index.html")));
+    webView->load(QUrl::fromUserInput("http://html5test.com/"));
     webView->settings()->enablePersistentStorage();
 }
 
