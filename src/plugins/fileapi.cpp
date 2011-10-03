@@ -7,21 +7,30 @@
 
 #include "fileapi.h"
 
+#include "../pluginregistry.h"
+
 #include <QFile>
 #include <QDebug>
 #include <QDateTime>
 #include <QUrl>
 #include <QTextStream>
 
-FileAPI::FileAPI(QWebFrame *p_webFrame) :
-    PGPlugin(p_webFrame)
-{
+// Create static instance of ourself
+FileAPI* FileAPI::m_fileAPI = new FileAPI();
+
+/**
+ * Constructor - NOTE: Never do anything except registering the plugin
+ */
+FileAPI::FileAPI() : PGPlugin() {
+    PluginRegistry::getRegistry()->registerPlugin( "com.phonegap.File", this );
 }
 
 /**
  * LocalFileSystem.requestFileSystem - http://www.w3.org/TR/file-system-api/#widl-LocalFileSystem-requestFileSystem
  */
 void FileAPI::requestFileSystem( int scId, int ecId, unsigned short p_type ) {
+    Q_UNUSED(ecId)
+
     QDir dir;
 
     // Get correct system path

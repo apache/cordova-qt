@@ -16,7 +16,7 @@ class FileAPI : public PGPlugin
 {
     Q_OBJECT
 public:
-    explicit FileAPI(QWebFrame *p_webFrame);
+    explicit FileAPI();
 
 signals:
 
@@ -37,6 +37,9 @@ public slots:
 
 protected:
     static bool rmDir( QDir p_dir );
+
+private:
+    static FileAPI* m_fileAPI;
 };
 
 #endif // FILEAPI_H

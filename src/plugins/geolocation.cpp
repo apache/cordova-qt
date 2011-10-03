@@ -7,13 +7,22 @@
 
 #include "geolocation.h"
 
+#include "../pluginregistry.h"
+
 #include <QGeoPositionInfo>
 #include <QGeoCoordinate>
 
-Geolocation::Geolocation(QWebFrame *p_webFrame) :
-    PGPlugin(p_webFrame)
-{
-    m_geoPositionInfoSource = QGeoPositionInfoSource::createDefaultSource( p_webFrame );
+Geolocation* Geolocation::m_geolocation = new Geolocation();
+
+/**
+ * Constructor - NOTE: Never do anything except registering the plugin
+ */
+Geolocation::Geolocation() : PGPlugin() {
+    PluginRegistry::getRegistry()->registerPlugin( "com.phonegap.Geolocation", this );
+}
+
+void Geolocation::init() {
+    m_geoPositionInfoSource = QGeoPositionInfoSource::createDefaultSource( m_webFrame );
     if( m_geoPositionInfoSource != 0 ) {
         QObject::connect( m_geoPositionInfoSource, SIGNAL(positionUpdated(QGeoPositionInfo)), this, SLOT(positionUpdated(QGeoPositionInfo)) );
         QObject::connect( m_geoPositionInfoSource, SIGNAL(updateTimeout()), this, SLOT(updateTimeout()) );
@@ -21,6 +30,8 @@ Geolocation::Geolocation(QWebFrame *p_webFrame) :
 }
 
 void Geolocation::getCurrentPosition( int scId, int ecId, QVariantMap p_options ) {
+    Q_UNUSED(p_options)
+
     m_successCallbacks << scId;
     m_errorCallbacks << ecId;
 

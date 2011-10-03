@@ -8,7 +8,12 @@ class PGPlugin : public QObject
 {
     Q_OBJECT
 public:
-    explicit PGPlugin(QWebFrame *p_webFrame);
+    explicit PGPlugin();
+
+    void setWebFrame(QWebFrame *p_webFrame);
+
+    // This function should be overwritten, if the Plugin requires startup initialisation
+    virtual void init();
 
 signals:
 

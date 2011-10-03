@@ -13,7 +13,7 @@ function Device() {
                       me.platform = p_platform;
                       me.uuid = p_uuid;
                       me.version = p_version;
-                  }, null, "com.phonegap.Device", "init", [] );
+                  }, null, "com.phonegap.Device", "getInfo", [] );
 };
 
 Device.prototype.name = "";

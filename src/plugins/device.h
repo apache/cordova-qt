@@ -7,12 +7,15 @@ class Device : public PGPlugin
 {
     Q_OBJECT
 public:
-    explicit Device(QWebFrame *p_webFrame);
+    explicit Device();
 
 signals:
 
 public slots:
-    void init( int scId, int ecId );
+    void getInfo( int scId, int ecId );
+
+private:
+    static Device* m_device;
 };
 
 #endif // DEVICE_H

@@ -20,7 +20,9 @@ class Geolocation : public PGPlugin
 {
     Q_OBJECT
 public:
-    explicit Geolocation(QWebFrame *p_webFrame);
+    explicit Geolocation();
+
+    void init();
 
 signals:
 
@@ -36,6 +38,8 @@ private:
 
     QList<int> m_successCallbacks;
     QList<int> m_errorCallbacks;
+
+    static Geolocation *m_geolocation;
 };
 
 #endif // GEOLOCATION_H

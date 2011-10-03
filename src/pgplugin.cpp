@@ -2,12 +2,28 @@
 
 #include <QDebug>
 
-PGPlugin::PGPlugin(QWebFrame *p_webFrame) :
-    QObject(0)
-{
-    m_webFrame = p_webFrame;
+PGPlugin::PGPlugin() : QObject(0) {
 }
 
+/**
+ * Receive a reference to the currently active webframe
+ */
+void PGPlugin::setWebFrame(QWebFrame *p_webFrame) {
+    m_webFrame = p_webFrame;
+
+    // Initialize the plugin
+    init();
+}
+
+/**
+ * Override this function if your plugin requires startup initialisation
+ */
+void PGPlugin::init() {
+}
+
+/**
+ * Execute a callback on the javascript end
+ */
 void PGPlugin::callback( int p_callbackId, QString p_jsParameters ) {
     QString javascript;
 
