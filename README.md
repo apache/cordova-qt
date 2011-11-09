@@ -20,3 +20,7 @@ Supported APIs
 - Notification
 - Storage (supported by native WebKit implementation)
 
+License
+---
+Licensed under the APACHE-2.0 license. See LICENSE file for details.
+
