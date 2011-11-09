@@ -1,7 +1,7 @@
-PhoneGap/Qt
+Callback/Qt
 ===
 
-PhoneGap/Qt is the Qt port of the phonegap framework. It should compile on any platform which is compatible with Qt & Qt mobility.
+Callback/Qt is the Qt port of the phonegap (Callback) framework. It should compile on any platform which is compatible with Qt & Qt mobility.
 
 Requires
 ---
@@ -19,3 +19,4 @@ Supported APIs
 - Geolocation
 - Notification
 - Storage (supported by native WebKit implementation)
+
