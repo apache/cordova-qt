@@ -109,23 +109,6 @@ function fileError( p_fileError ) {
     get("debug_output").innerHTML = p_filerError.code;
 }
 
-function pmAcquire() {
-    Powermanagement.acquire( function() {}, pmError );
-}
-
-function pmRelease() {
-    Powermanagement.release( function() {}, pmError );
-}
-
-function pmDim() {
-    Powermanagement.dim( function() {}, pmError );
-}
-
-function pmError( p_powermanagementError ) {
-    get( "pm_val" ).innerHTML = p_powermanagementError.code + ": " + p_powermanagementError.message;
-}
-
-
 /*
  * Register for the device ready event
  */

@@ -14,13 +14,24 @@
  *  limitations under the License.
  */
 
-function Console() {
-}
+#ifndef PGWEBPAGE_H
+#define PGWEBPAGE_H
 
-Console.prototype.log = function( p_message ) {
-    PhoneGap.exec( null, null, "com.phonegap.Console", "log", [p_message] );
-}
+#include <QWebPage>
 
-PhoneGap.addConstructor( "com.phonegap.Console", function() {
-                            window.console = new Console();
-                        } );
+class PGWebPage : public QWebPage
+{
+    Q_OBJECT
+public:
+    explicit PGWebPage(QObject *parent = 0);
+
+protected:
+    void javaScriptConsoleMessage( const QString & message, int lineNumber, const QString & sourceID );
+
+signals:
+
+public slots:
+
+};
+
+#endif // PGWEBPAGE_H

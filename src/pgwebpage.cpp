@@ -14,13 +14,15 @@
  *  limitations under the License.
  */
 
-function Console() {
+#include "pgwebpage.h"
+
+#include <QDebug>
+
+PGWebPage::PGWebPage(QObject *parent) :
+    QWebPage(parent)
+{
 }
 
-Console.prototype.log = function( p_message ) {
-    PhoneGap.exec( null, null, "com.phonegap.Console", "log", [p_message] );
+void PGWebPage::javaScriptConsoleMessage( const QString & message, int lineNumber, const QString & sourceID ) {
+    qDebug() << sourceID << lineNumber << message;
 }
-
-PhoneGap.addConstructor( "com.phonegap.Console", function() {
-                            window.console = new Console();
-                        } );

@@ -33,7 +33,8 @@ SOURCES += main.cpp mainwindow.cpp \
     src/plugins/fileapi.cpp \
     src/plugins/device.cpp \
     src/pluginregistry.cpp \
-    src/plugins/console.cpp
+    src/plugins/console.cpp \
+    src/pgwebpage.cpp
 HEADERS += mainwindow.h \
     src/pgplugin.h \
     src/phonegap.h \
@@ -42,7 +43,8 @@ HEADERS += mainwindow.h \
     src/plugins/fileapi.h \
     src/plugins/device.h \
     src/pluginregistry.h \
-    src/plugins/console.h
+    src/plugins/console.h \
+    src/pgwebpage.h
 FORMS += mainwindow.ui
 
 QT += webkit
@@ -52,6 +54,9 @@ include(deployment.pri)
 qtcAddDeployment()
 
 OTHER_FILES +=
+
+
+
 
 
 
