@@ -26,24 +26,24 @@ CONFIG += mobility
 MOBILITY += feedback location systeminfo
 
 SOURCES += main.cpp mainwindow.cpp \
-    src/pgplugin.cpp \
-    src/phonegap.cpp \
     src/plugins/notification.cpp \
     src/plugins/geolocation.cpp \
     src/plugins/fileapi.cpp \
     src/plugins/device.cpp \
     src/pluginregistry.cpp \
     src/plugins/console.cpp \
+    src/phonegap.cpp \
+    src/pgplugin.cpp \
     src/pgwebpage.cpp
 HEADERS += mainwindow.h \
-    src/pgplugin.h \
-    src/phonegap.h \
     src/plugins/notification.h \
     src/plugins/geolocation.h \
     src/plugins/fileapi.h \
     src/plugins/device.h \
     src/pluginregistry.h \
     src/plugins/console.h \
+    src/phonegap.h \
+    src/pgplugin.h \
     src/pgwebpage.h
 FORMS += mainwindow.ui
 
@@ -54,6 +54,30 @@ include(deployment.pri)
 qtcAddDeployment()
 
 OTHER_FILES +=
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
