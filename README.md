@@ -14,6 +14,7 @@ Download the source-code and open the project file with QtCreator. Add your html
 Supported APIs
 ---
 - Console
+- Connection
 - Device
 - File
 - Geolocation

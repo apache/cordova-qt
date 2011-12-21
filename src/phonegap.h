@@ -22,7 +22,7 @@
 #include <QMap>
 #include <QDir>
 
-#include "src/pgplugin.h"
+#include "pgplugin.h"
 
 class PhoneGap : public QObject
 {
