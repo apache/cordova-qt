@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugins>
+    <plugin name="File" value="com.phonegap.File"/>
+    <plugin name="Notification" value="com.phonegap.Notification"/>
+    <plugin name="Geolocation" value="com.phonegap.Geolocation"/>
+    <plugin name="Device" value="com.phonegap.Device"/>
+    <plugin name="Console" value="com.phonegap.Console"/>
+    <plugin name="Connection" value="com.phonegap.Connection"/>
+
+<!--    <plugin name="Compass" value="com.phonegap.CompassListener"/>
+    <plugin name="Media" value="com.phonegap.AudioHandler"/>
+    <plugin name="Contacts" value="com.phonegap.ContactManager"/>
+    <plugin name="Crypto" value="com.phonegap.CryptoHandler"/>
+    <plugin name="Network Status" value="com.phonegap.NetworkManager"/>
+    <plugin name="Storage" value="com.phonegap.Storage"/>
+    <plugin name="Temperature" value="com.phonegap.TempListener"/>
+    <plugin name="FileTransfer" value="com.phonegap.FileTransfer"/>
+    <plugin name="Capture" value="com.phonegap.Capture"/>
+    <plugin name="Battery" value="com.phonegap.BatteryListener"/>-->
+</plugins>

@@ -1,25 +1,27 @@
-PhoneGap/Qt
-================
-PhoneGap/Qt is a Qt application library that allows for PhoneGap based projects
-to be built for the Qt Platform. PhoneGap based applications are, at the core,
-an application written with web technology: HTML, CSS and JavaScript.
+Callback/Qt
+===
 
-What works
-================
+Callback/Qt is the Qt port of the phonegap (Callback) framework. It should compile on any platform which is compatible with Qt & Qt mobility.
 
-Only the Accelerometer, Camera*, Geolocation, Notification* and Network modules
-are working, but we are looking forward to support the other modules as well.
+Requires
+---
+- QtSDK
 
-In addition to the regular PhoneGap API there are the Hash and MemoryWatcher*
-modules. These allow for calculating HMAC-SHA1 hashes (which is too slow to
-perform in JavaScript on Nokia hardware) and monitoring the memory usage of the
-application, respectively.
+Create project
+----
+Download the source-code and open the project file with QtCreator. Add your html / js files to the www folder. Edit xml/plugins.xml to enable / disable any required plugins. Compiling / deployment / packaging works as described in the QtCreator documentation.
 
-(*) These modules are supported on Symbian only.
+Supported APIs
+---
+- Console
+- Connection
+- Device
+- File
+- Geolocation
+- Notification
+- Storage (supported by native WebKit implementation)
 
-Know Issues
-================
+License
+---
+Licensed under the APACHE-2.0 license. See LICENSE file for details.
 
-When calling navigator.network.isReachable, if the device if not connected, it
-will connect to the internet using the default access point *without warning the
-user* or letting the user choose what access point to use.

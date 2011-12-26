@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>PhoneGap-Qt Test Page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <script language="javascript" type="text/javascript" src="js/phonegap.js"></script>
+        <script language="javascript" type="text/javascript" src="js/phonegap.qt.js"></script>
+        <script language="javascript" type="text/javascript" src="js/file.js"></script>
+        <script language="javascript" type="text/javascript" src="js/notification.js"></script>
+        <script language="javascript" type="text/javascript" src="js/geolocation.js"></script>
+        <script language="javascript" type="text/javascript" src="js/device.js"></script>
+        <script language="javascript" type="text/javascript" src="js/connection.js"></script>
+
+        <script language="javascript" type="text/javascript" src="basic.js"></script>
+    </head>
+    <body>
+        <input type="button" value="Vibrate!" onclick="test_vibra();"/>
+        <br />
+        <br />
+        <div id="accel_val"> AAA </div>
+        <br />
+        <br />
+        <input type="button" value="Ping Google!" onclick="ping_google();">
+        <br />
+        <br />
+        <input type="button" value="RequestFileSystem" onclick="test_requestFileSystem();">
+        <br />
+        <div id="debug_output"> Unknown </div>
+        <br />
+        <input type="button" value="getCurrentPosition" onclick="getCurrentPosition();">
+        <br />
+        <div id="position_val"> Location </div>
+        <br />
+    </body>
+</html>
