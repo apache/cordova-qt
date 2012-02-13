@@ -14,17 +14,17 @@
  *  limitations under the License.
  */
 
-#include "pgplugin.h"
+#include "cplugin.h"
 
 #include <QDebug>
 
-PGPlugin::PGPlugin() : QObject(0) {
+CPlugin::CPlugin() : QObject(0) {
 }
 
 /**
  * Receive a reference to the currently active webframe
  */
-void PGPlugin::setWebFrame(QWebFrame *p_webFrame) {
+void CPlugin::setWebFrame(QWebFrame *p_webFrame) {
     m_webFrame = p_webFrame;
 
     // Initialize the plugin
@@ -34,13 +34,13 @@ void PGPlugin::setWebFrame(QWebFrame *p_webFrame) {
 /**
  * Override this function if your plugin requires startup initialisation
  */
-void PGPlugin::init() {
+void CPlugin::init() {
 }
 
 /**
  * Execute a callback on the javascript end
  */
-void PGPlugin::callback( int p_callbackId, QString p_jsParameters ) {
+void CPlugin::callback( int p_callbackId, QString p_jsParameters ) {
     QString javascript;
 
     if( p_jsParameters.length() > 0 ) {

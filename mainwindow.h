@@ -17,7 +17,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "src/phonegap.h"
+#include "src/cordova.h"
 
 #include <QtGui/QMainWindow>
 
@@ -45,7 +45,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    PhoneGap *m_phoneGap;
+    Cordova *m_cordova;
 };
 
 #endif // MAINWINDOW_H

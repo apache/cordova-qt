@@ -17,9 +17,9 @@
 #ifndef NOTIFICATION_H
 #define NOTIFICATION_H
 
-#include "../pgplugin.h"
+#include "../cplugin.h"
 
-class Notification : public PGPlugin
+class Notification : public CPlugin
 {
     Q_OBJECT
 public:

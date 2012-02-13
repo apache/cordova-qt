@@ -26,7 +26,7 @@ Connection *Connection::m_connection = new Connection();
 /**
  * Constructor - NOTE: Never do anything except registering the plugin
  */
-Connection::Connection() : PGPlugin() {
+Connection::Connection() : CPlugin() {
     PluginRegistry::getRegistry()->registerPlugin( "com.phonegap.Connection", this );
 }
 

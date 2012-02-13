@@ -17,7 +17,7 @@
 #ifndef GEOLOCATION_H
 #define GEOLOCATION_H
 
-#include "../pgplugin.h"
+#include "../cplugin.h"
 
 #include <QGeoPositionInfoSource>
 #include <QGeoPositionInfo>
@@ -25,7 +25,7 @@
 
 QTM_USE_NAMESPACE
 
-class Geolocation : public PGPlugin
+class Geolocation : public CPlugin
 {
     Q_OBJECT
 public:

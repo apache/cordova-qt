@@ -14,14 +14,14 @@
  *  limitations under the License.
  */
 
-#include "phonegap.h"
+#include "cordova.h"
 #include "pluginregistry.h"
-#include "pgwebpage.h"
+#include "cwebpage.h"
 
 #include <QDebug>
 #include <QXmlStreamReader>
 
-PhoneGap::PhoneGap(QWebView *webView) : QObject(webView) {
+Cordova::Cordova(QWebView *webView) : QObject(webView) {
     m_webView = webView;
     // Configure web view
     m_webView->settings()->enablePersistentStorage();
@@ -33,7 +33,7 @@ PhoneGap::PhoneGap(QWebView *webView) : QObject(webView) {
     QObject::connect( m_webView, SIGNAL(loadFinished(bool)), this, SLOT(loadFinished(bool)) );
 
     // Set our own WebPage class
-    m_webView->setPage( new PGWebPage() );
+    m_webView->setPage( new CWebPage() );
 
     // Determine index file path
     m_workingDir = QDir::current();
@@ -48,7 +48,7 @@ PhoneGap::PhoneGap(QWebView *webView) : QObject(webView) {
 /**
  * Called when the webview finished loading a new page
  */
-void PhoneGap::loadFinished( bool ok ) {
+void Cordova::loadFinished( bool ok ) {
     Q_UNUSED(ok)
 
     // Change into the xml-directory
@@ -84,7 +84,7 @@ void PhoneGap::loadFinished( bool ok ) {
 
                     qDebug() << "Adding Plugin " << attribName << " with " << attribValue;
                     // Check for such a plugin
-                    PGPlugin *currPlugin = PluginRegistry::getRegistry()->getPlugin( attribValue );
+                    CPlugin *currPlugin = PluginRegistry::getRegistry()->getPlugin( attribValue );
                     if( currPlugin != NULL ) {
                         currPlugin->setWebFrame( webFrame );
                         webFrame->addToJavaScriptWindowObject( objectName, currPlugin );

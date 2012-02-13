@@ -1,7 +1,7 @@
-Callback/Qt
+Cordova/Qt
 ===
 
-Callback/Qt is the Qt port of the phonegap (Callback) framework. It should compile on any platform which is compatible with Qt & Qt mobility.
+Cordova/Qt is the Qt port of the cordova (formerly phonegap) framework. It should compile on any platform which is compatible with Qt & Qt mobility.
 
 Requires
 ---
