@@ -122,7 +122,7 @@ Geolocation.prototype.getCurrentPosition = function( successCallback, errorCallb
     if( typeof options.enableHighAccuracy != "undefined" ) positionOptions.enableHighAccuracy = options.enableHighAccuracy;
 
     // Check if the cached object is sufficient
-    if( this.cachedPosition !== null && this.cachedPosition.timestamp > ((new Date()).getMilliseconds() - positionOptions.maximumAge) ) {
+    if( this.cachedPosition !== null && this.cachedPosition.timestamp > ((new Date()).getTime() - positionOptions.maximumAge) ) {
         successCallback( this.cachedPosition );
         return;
     }
