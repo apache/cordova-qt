@@ -33,7 +33,7 @@ Device* Device::m_device = new Device();
 /**
  * Constructor - NOTE: Never do anything except registering the plugin
  */
-Device::Device() : PGPlugin() {
+Device::Device() : CPlugin() {
     PluginRegistry::getRegistry()->registerPlugin( "com.phonegap.Device", this );
 }
 

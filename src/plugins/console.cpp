@@ -26,7 +26,7 @@ Console *Console::m_console = new Console();
 /**
  * Constructor - NOTE: Never do anything except registering the plugin
  */
-Console::Console() : PGPlugin() {
+Console::Console() : CPlugin() {
     PluginRegistry::getRegistry()->registerPlugin( "com.phonegap.Console", this );
 }
 

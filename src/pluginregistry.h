@@ -20,7 +20,7 @@
 #include <QMap>
 #include <QString>
 
-#include "pgplugin.h"
+#include "cplugin.h"
 
 class PluginRegistry
 {
@@ -29,13 +29,13 @@ public:
 
     static PluginRegistry* getRegistry();
 
-    void registerPlugin( QString p_name, PGPlugin *p_plugin );
+    void registerPlugin( QString p_name, CPlugin *p_plugin );
 
-    PGPlugin* getPlugin( QString p_name );
+    CPlugin* getPlugin( QString p_name );
 
 private:
     static PluginRegistry* m_pluginRegistry;
-    QMap<QString,PGPlugin*> *m_plugins;
+    QMap<QString,CPlugin*> *m_plugins;
 };
 
 #endif // PLUGINREGISTRY_H

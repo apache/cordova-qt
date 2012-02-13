@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    m_phoneGap = new PhoneGap(ui->webView);
+    m_cordova = new Cordova(ui->webView);
 }
 
 MainWindow::~MainWindow()

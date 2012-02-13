@@ -17,9 +17,9 @@
 #ifndef DEVICE_H
 #define DEVICE_H
 
-#include "../pgplugin.h"
+#include "../cplugin.h"
 
-class Device : public PGPlugin
+class Device : public CPlugin
 {
     Q_OBJECT
 public:

@@ -17,11 +17,11 @@
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
-#include "../pgplugin.h"
+#include "../cplugin.h"
 
 #include <QString>
 
-class Console : public PGPlugin
+class Console : public CPlugin
 {
     Q_OBJECT
 public:

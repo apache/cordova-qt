@@ -17,11 +17,11 @@
 #ifndef FILEAPI_H
 #define FILEAPI_H
 
-#include "../pgplugin.h"
+#include "../cplugin.h"
 
 #include <QDir>
 
-class FileAPI : public PGPlugin
+class FileAPI : public CPlugin
 {
     Q_OBJECT
 public:

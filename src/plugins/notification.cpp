@@ -29,7 +29,7 @@ Notification* Notification::m_notification = new Notification();
 /**
  * Constructor - NOTE: Never do anything except registering the plugin
  */
-Notification::Notification() : PGPlugin(){
+Notification::Notification() : CPlugin(){
     PluginRegistry::getRegistry()->registerPlugin( "com.phonegap.Notification", this );
 }
 

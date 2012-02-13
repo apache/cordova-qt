@@ -32,10 +32,10 @@ SOURCES += main.cpp mainwindow.cpp \
     src/plugins/device.cpp \
     src/pluginregistry.cpp \
     src/plugins/console.cpp \
-    src/phonegap.cpp \
-    src/pgplugin.cpp \
-    src/pgwebpage.cpp \
-    src/plugins/connection.cpp
+    src/plugins/connection.cpp \
+    src/cordova.cpp \
+    src/cplugin.cpp \
+    src/cwebpage.cpp
 HEADERS += mainwindow.h \
     src/plugins/notification.h \
     src/plugins/geolocation.h \
@@ -43,10 +43,10 @@ HEADERS += mainwindow.h \
     src/plugins/device.h \
     src/pluginregistry.h \
     src/plugins/console.h \
-    src/phonegap.h \
-    src/pgplugin.h \
-    src/pgwebpage.h \
-    src/plugins/connection.h
+    src/plugins/connection.h \
+    src/cordova.h \
+    src/cplugin.h \
+    src/cwebpage.h
 FORMS += mainwindow.ui
 
 QT += webkit

@@ -14,17 +14,17 @@
  *  limitations under the License.
  */
 
-#ifndef PGPLUGIN_H
-#define PGPLUGIN_H
+#ifndef CPLUGIN_H
+#define CPLUGIN_H
 
 #include <QObject>
 #include <QWebFrame>
 
-class PGPlugin : public QObject
+class CPlugin : public QObject
 {
     Q_OBJECT
 public:
-    explicit PGPlugin();
+    explicit CPlugin();
 
     void setWebFrame(QWebFrame *p_webFrame);
 
@@ -41,4 +41,4 @@ protected:
     QWebFrame *m_webFrame;
 };
 
-#endif // PGPLUGIN_H
+#endif // CPLUGIN_H

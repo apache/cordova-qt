@@ -14,21 +14,21 @@
  *  limitations under the License.
  */
 
-#ifndef PHONEGAP_H
-#define PHONEGAP_H
+#ifndef CORDOVA_H
+#define CORDOVA_H
 
 #include <QObject>
 #include <QWebView>
 #include <QMap>
 #include <QDir>
 
-#include "pgplugin.h"
+#include "cplugin.h"
 
-class PhoneGap : public QObject
+class Cordova : public QObject
 {
     Q_OBJECT
 public:
-    explicit PhoneGap(QWebView *webView);
+    explicit Cordova(QWebView *webView);
 
 signals:
 
@@ -40,4 +40,4 @@ private:
     QDir m_workingDir;
 };
 
-#endif // PHONEGAP_H
+#endif // CORDOVA_H

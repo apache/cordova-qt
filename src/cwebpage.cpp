@@ -14,15 +14,15 @@
  *  limitations under the License.
  */
 
-#include "pgwebpage.h"
+#include "cwebpage.h"
 
 #include <QDebug>
 
-PGWebPage::PGWebPage(QObject *parent) :
+CWebPage::CWebPage(QObject *parent) :
     QWebPage(parent)
 {
 }
 
-void PGWebPage::javaScriptConsoleMessage( const QString & message, int lineNumber, const QString & sourceID ) {
+void CWebPage::javaScriptConsoleMessage( const QString & message, int lineNumber, const QString & sourceID ) {
     qDebug() << sourceID << lineNumber << message;
 }

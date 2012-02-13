@@ -17,13 +17,13 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
-#include "../pgplugin.h"
+#include "../cplugin.h"
 
 #include <QSystemNetworkInfo>
 
 QTM_USE_NAMESPACE
 
-class Connection : public PGPlugin
+class Connection : public CPlugin
 {
     Q_OBJECT
 public:

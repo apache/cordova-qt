@@ -14,16 +14,16 @@
  *  limitations under the License.
  */
 
-#ifndef PGWEBPAGE_H
-#define PGWEBPAGE_H
+#ifndef CWEBPAGE_H
+#define CWEBPAGE_H
 
 #include <QWebPage>
 
-class PGWebPage : public QWebPage
+class CWebPage : public QWebPage
 {
     Q_OBJECT
 public:
-    explicit PGWebPage(QObject *parent = 0);
+    explicit CWebPage(QObject *parent = 0);
 
 protected:
     void javaScriptConsoleMessage( const QString & message, int lineNumber, const QString & sourceID );
@@ -34,4 +34,4 @@ public slots:
 
 };
 
-#endif // PGWEBPAGE_H
+#endif // CWEBPAGE_H
