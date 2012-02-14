@@ -19,9 +19,15 @@
 
 #include "../cplugin.h"
 
+#if QT_VERSION < 0x050000
 #include <QSystemNetworkInfo>
+#else
+#include <QtSystemInfo>
+#endif
 
+#ifdef QTM_NAMESPACE
 QTM_USE_NAMESPACE
+#endif
 
 class Connection : public CPlugin
 {
@@ -36,15 +42,25 @@ signals:
 public slots:
     void setChangeCallback( int scId, int ecId );
 
+#if QT_VERSION < 0x050000
     void cellDataTechnologyChanged( QSystemNetworkInfo::CellDataTechnology cellTech );
     void networkModeChanged( QSystemNetworkInfo::NetworkMode mode );
     void networkStatusChanged( QSystemNetworkInfo::NetworkMode mode, QSystemNetworkInfo::NetworkStatus status );
+#else
+    void currentCellDataTechnologyChanged( int interface, QNetworkInfo::CellDataTechnology cellTech );
+    void currentNetworkModeChanged( QNetworkInfo::NetworkMode mode );
+    void networkStatusChanged( QNetworkInfo::NetworkMode mode, int interface, QNetworkInfo::NetworkStatus status );
+#endif
 
 private:
     void typeChanged();
 
     int m_changeCallback;
+#if QT_VERSION < 0x050000
     QSystemNetworkInfo *m_systemNetworkInfo;
+#else
+    QNetworkInfo *m_systemNetworkInfo;
+#endif
     bool m_bInitialized;
 
     static Connection *m_connection;

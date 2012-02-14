@@ -49,6 +49,14 @@ HEADERS += mainwindow.h \
     src/cwebpage.h
 FORMS += mainwindow.ui
 
+# Needed for Qt 5
+greaterThan(QT_MAJOR_VERSION, 4) {
+QT += widgets
+QT += location
+QT += feedback
+QT += systeminfo
+}
+
 QT += webkit
 
 # Please do not modify the following two lines. Required for deployment.
@@ -56,65 +64,3 @@ include(deployment.pri)
 qtcAddDeployment()
 
 OTHER_FILES +=
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

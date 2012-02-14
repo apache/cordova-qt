@@ -21,7 +21,9 @@
 #include <QApplication>
 #include <QFeedbackHapticsEffect>
 
+#ifdef QTM_NAMESPACE
 QTM_USE_NAMESPACE
+#endif
 
 // Create static instance of ourself
 Notification* Notification::m_notification = new Notification();
