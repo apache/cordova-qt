@@ -23,7 +23,9 @@
 #include <QGeoPositionInfo>
 #include <QList>
 
+#ifdef QTM_NAMESPACE
 QTM_USE_NAMESPACE
+#endif
 
 class Geolocation : public CPlugin
 {

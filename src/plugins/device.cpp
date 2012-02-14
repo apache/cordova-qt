@@ -14,18 +14,25 @@
  *  limitations under the License.
  */
 
-#include "device.h"
+#include"device.h"
 
 #include "../pluginregistry.h"
 
+#if QT_VERSION < 0x050000
 #include <QSystemDeviceInfo>
 #include <QSystemInfo>
+#else
+#include <QDeviceInfo>
+#include <QtSystemInfo>
+#endif
 
 #include <QDebug>
 
-#define PHONEGAP "1.0.0"
+#define PHONEGAP "1.3.0"
 
+#ifdef QTM_NAMESPACE
 QTM_USE_NAMESPACE
+#endif
 
 // Create static instance of ourself
 Device* Device::m_device = new Device();
@@ -43,8 +50,13 @@ Device::Device() : CPlugin() {
 void Device::getInfo( int scId, int ecId ) {
     Q_UNUSED(ecId)
 
+#if QT_VERSION < 0x050000
     QSystemDeviceInfo *systemDeviceInfo = new QSystemDeviceInfo(this);
     QSystemInfo *systemInfo = new QSystemInfo(this);
+#else
+    QDeviceInfo *systemDeviceInfo = new QDeviceInfo(this);
+    QDeviceInfo *systemInfo = new QDeviceInfo(this);
+#endif
 
 #ifdef Q_OS_SYMBIAN
     QString platform = "Symbian";
@@ -59,5 +71,9 @@ void Device::getInfo( int scId, int ecId ) {
     QString platform = "Linux";
 #endif
 
+#if QT_VERSION < 0x050000
     this->callback( scId, "'" + systemDeviceInfo->model() + "', '" + PHONEGAP + "', '" + platform + "', '" + systemDeviceInfo->uniqueDeviceID() + "', '" + systemInfo->version( QSystemInfo::Os ) + "'" );
+#else
+    this->callback( scId, "'" + systemDeviceInfo->model() + "', '" + PHONEGAP + "', '" + platform + "', '" + systemDeviceInfo->uniqueDeviceID() + "', '" + systemInfo->version( QDeviceInfo::Os ) + "'" );
+#endif
 }
