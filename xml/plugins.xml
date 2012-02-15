@@ -6,6 +6,7 @@
     <plugin name="Device" value="com.phonegap.Device"/>
     <plugin name="Console" value="com.phonegap.Console"/>
     <plugin name="Connection" value="com.phonegap.Connection"/>
+    <plugin name="Compass" value="com.phonegap.Compass"/>
 
 <!--    <plugin name="Compass" value="com.phonegap.CompassListener"/>
     <plugin name="Media" value="com.phonegap.AudioHandler"/>

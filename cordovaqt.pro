@@ -23,7 +23,7 @@ symbian:TARGET.CAPABILITY += NetworkServices
 # the following lines and add the respective components to the 
 # MOBILITY variable.
 CONFIG += mobility
-MOBILITY += feedback location systeminfo
+MOBILITY += feedback location systeminfo sensors
 
 SOURCES += main.cpp mainwindow.cpp \
     src/plugins/notification.cpp \
@@ -33,6 +33,7 @@ SOURCES += main.cpp mainwindow.cpp \
     src/pluginregistry.cpp \
     src/plugins/console.cpp \
     src/plugins/connection.cpp \
+    src/plugins/compass.cpp \
     src/cordova.cpp \
     src/cplugin.cpp \
     src/cwebpage.cpp
@@ -44,6 +45,7 @@ HEADERS += mainwindow.h \
     src/pluginregistry.h \
     src/plugins/console.h \
     src/plugins/connection.h \
+    src/plugins/compass.h \
     src/cordova.h \
     src/cplugin.h \
     src/cwebpage.h
@@ -63,4 +65,11 @@ QT += webkit
 include(deployment.pri)
 qtcAddDeployment()
 
-OTHER_FILES +=
+OTHER_FILES += \
+    qtc_packaging/debian_harmattan/rules \
+    qtc_packaging/debian_harmattan/README \
+    qtc_packaging/debian_harmattan/manifest.aegis \
+    qtc_packaging/debian_harmattan/copyright \
+    qtc_packaging/debian_harmattan/control \
+    qtc_packaging/debian_harmattan/compat \
+    qtc_packaging/debian_harmattan/changelog
