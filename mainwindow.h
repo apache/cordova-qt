@@ -18,7 +18,7 @@
 #define MAINWINDOW_H
 
 #include "src/cordova.h"
-
+#include <QWebSettings>
 #include <QMainWindow>
 
 namespace Ui {

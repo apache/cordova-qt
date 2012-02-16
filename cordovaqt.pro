@@ -47,7 +47,7 @@ SOURCES += main.cpp \
     src/cordova.cpp \
     src/cplugin.cpp \
     src/cwebpage.cpp
-HEADERS += mainwindow.h \
+HEADERS += \
     src/plugins/notification.h \
     src/plugins/geolocation.h \
     src/plugins/fileapi.h \

@@ -5,8 +5,8 @@ import "cordova_wrapper.js" as CordovaWrapper
 
 WebView {
     id: webView
-    width: 400
-    height: 450
+    width: 854
+    height: 480
 
 
     experimental.preferences.navigatorQtObjectEnabled: true
