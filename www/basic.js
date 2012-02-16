@@ -43,6 +43,16 @@ function getCurrentPosition() {
                                              { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true } );
 }
 
+function getCurrentHeading() {
+    navigator.compass.getCurrentHeading( function( heading ) {
+                                            get( "heading_val" ).innerHTML = heading.dir;
+                                             },
+                                             function( error ) {
+                                                 get( "heading_val" ).innerHTML = error.code + ": "  + error.message;
+                                             },
+                                             {timestamp: (new Date()).getTime()} );
+}
+
 function test_requestFileSystem() {
     window.requestFileSystem( LocalFileSystem.PERSISTENT, 0, function( p_fileSystem ) {
                                  get( "debug_output" ).innerHTML = p_fileSystem.name + " / " + p_fileSystem.root.fullPath;
