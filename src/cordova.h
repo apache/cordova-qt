@@ -18,26 +18,44 @@
 #define CORDOVA_H
 
 #include <QObject>
-#include <QWebView>
 #include <QMap>
 #include <QDir>
+
+#if QT_VERSION < 0x050000
+# include <QWebSettings>
+#endif
 
 #include "cplugin.h"
 
 class Cordova : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString mainUrl READ mainUrl CONSTANT)
+
 public:
-    explicit Cordova(QWebView *webView);
+    static Cordova *instance();
+
+    QString mainUrl() const;
 
 signals:
+    void javaScriptExecNeeded(const QString &js);
+    void pluginWantsToBeAdded(const QString &pluginName, QObject *pluginObject, const QString &pluginShortName);
+#if QT_VERSION < 0x050000
+    void webViewAttributeChanged(QWebSettings::WebAttribute attribute, bool on);
+#endif
 
 public slots:
     void loadFinished( bool ok );
+    void execJS(const QString &js);
 
 private:
-    QWebView *m_webView;
+    explicit Cordova(QObject *parent = 0);
+    Q_DISABLE_COPY(Cordova)
+
+    static Cordova *m_instance;
+
     QDir m_workingDir;
+    QString m_mainUrl;
 };
 
 #endif // CORDOVA_H

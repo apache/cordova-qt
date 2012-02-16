@@ -43,9 +43,13 @@ public:
 
     void showExpanded();
 
+public slots:
+    void onJavaScriptExecNeeded(const QString &js);
+    void onPluginWantsToBeAdded(const QString &pluginName, QObject *pluginObject, const QString &pluginShortName);
+    void onWebViewAttributeChanged(QWebSettings::WebAttribute attribute, bool on);
+
 private:
     Ui::MainWindow *ui;
-    Cordova *m_cordova;
 };
 
 #endif // MAINWINDOW_H

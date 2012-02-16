@@ -31,7 +31,7 @@ Geolocation::Geolocation() : CPlugin() {
 }
 
 void Geolocation::init() {
-    m_geoPositionInfoSource = QGeoPositionInfoSource::createDefaultSource( m_webFrame );
+    m_geoPositionInfoSource = QGeoPositionInfoSource::createDefaultSource( this );
     if( m_geoPositionInfoSource != 0 ) {
         QObject::connect( m_geoPositionInfoSource, SIGNAL(positionUpdated(QGeoPositionInfo)), this, SLOT(positionUpdated(QGeoPositionInfo)) );
         QObject::connect( m_geoPositionInfoSource, SIGNAL(updateTimeout()), this, SLOT(updateTimeout()) );

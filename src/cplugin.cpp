@@ -15,21 +15,13 @@
  */
 
 #include "cplugin.h"
+#include "cordova.h"
 
 #include <QDebug>
 
 CPlugin::CPlugin() : QObject(0) {
 }
 
-/**
- * Receive a reference to the currently active webframe
- */
-void CPlugin::setWebFrame(QWebFrame *p_webFrame) {
-    m_webFrame = p_webFrame;
-
-    // Initialize the plugin
-    init();
-}
 
 /**
  * Override this function if your plugin requires startup initialisation
@@ -51,5 +43,5 @@ void CPlugin::callback( int p_callbackId, QString p_jsParameters ) {
     }
 
     qDebug() << "Running: " << javascript;
-    m_webFrame->evaluateJavaScript( javascript );
+    Cordova::instance()->execJS(javascript);
 }

@@ -14,17 +14,33 @@
  *  limitations under the License.
  */
 
-#include "mainwindow.h"
 
 #include <QApplication>
+
+#include "src/cordova.h"
+
+#if QT_VERSION < 0x050000
+# include "mainwindow.h"
+#else
+# include <QQuickView>
+# include <QDeclarativeContext>
+# include <QDeclarativeEngine>
+#endif
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
+#if QT_VERSION < 0x050000
     MainWindow mainWindow;
     mainWindow.setOrientation(MainWindow::ScreenOrientationAuto);
     mainWindow.showExpanded();
+#else
+    QQuickView view;
+    view.rootContext()->setContextProperty("cordova", Cordova::instance());
+    view.setSource(QUrl(QString("%1/qml/main.qml").arg(QApplication::applicationDirPath())));
+    view.show();
+#endif
 
     return app.exec();
 }
