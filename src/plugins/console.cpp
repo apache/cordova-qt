@@ -27,7 +27,7 @@ Console *Console::m_console = new Console();
  * Constructor - NOTE: Never do anything except registering the plugin
  */
 Console::Console() : CPlugin() {
-    PluginRegistry::getRegistry()->registerPlugin( "com.phonegap.Console", this );
+    PluginRegistry::getRegistry()->registerPlugin( "com.cordova.Console", this );
 }
 
 void Console::log( int scId, int ecId, QString p_message ) {

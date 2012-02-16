@@ -125,7 +125,7 @@ void MainWindow::onPluginWantsToBeAdded(const QString &pluginName, QObject *plug
 {
     QString objectName = pluginShortName + "_native";
     ui->webView->page()->mainFrame()->addToJavaScriptWindowObject( objectName, pluginObject );
-    ui->webView->page()->mainFrame()->evaluateJavaScript( "PhoneGap.Qt.registerObject( '" + pluginName + "', " + objectName + " )" );
+    ui->webView->page()->mainFrame()->evaluateJavaScript( "Cordova.Qt.registerObject( '" + pluginName + "', " + objectName + " )" );
 }
 
 void MainWindow::onWebViewAttributeChanged(QWebSettings::WebAttribute attribute, bool on)

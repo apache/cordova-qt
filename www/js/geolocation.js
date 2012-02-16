@@ -148,7 +148,7 @@ Geolocation.prototype.getCurrentPosition = function( successCallback, errorCallb
 
     // Call the native function and query for a new position
     var me = this;
-    PhoneGap.exec( function( p_position ) {
+    Cordova.exec( function( p_position ) {
                       received = true;
 
                       // Cancel timeout
@@ -161,7 +161,7 @@ Geolocation.prototype.getCurrentPosition = function( successCallback, errorCallb
 
                       // Execute the successCallback if not timed out
                       if( !timedOut ) successCallback( p_position );
-                  }, errorCallback, "com.phonegap.Geolocation", "getCurrentPosition", [ positionOptions ] );
+                  }, errorCallback, "com.cordova.Geolocation", "getCurrentPosition", [ positionOptions ] );
 };
 
 Geolocation.prototype.watchPosition = function( successCallback, errorCallback, options ) {
@@ -204,6 +204,6 @@ Geolocation.prototype.clearWatch = function( watchId ) {
 /**
  * Add the geolocation object to the navigator
  */
-PhoneGap.addConstructor( "com.phonegap.Geolocation", function () {
+Cordova.addConstructor( "com.cordova.Geolocation", function () {
                             navigator.geolocation = new Geolocation();
 } );

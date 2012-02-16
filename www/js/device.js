@@ -16,21 +16,21 @@
 
 function Device() {
     var me = this;
-    PhoneGap.exec( function( p_name, p_phonegap, p_platform, p_uuid, p_version ) {
+    Cordova.exec( function( p_name, p_cordova, p_platform, p_uuid, p_version ) {
                       me.name = p_name;
-                      me.phonegap = p_phonegap;
+                      me.cordova = p_cordova;
                       me.platform = p_platform;
                       me.uuid = p_uuid;
                       me.version = p_version;
-                  }, null, "com.phonegap.Device", "getInfo", [] );
+                  }, null, "com.cordova.Device", "getInfo", [] );
 };
 
 Device.prototype.name = "";
-Device.prototype.phonegap = "";
+Device.prototype.cordova = "";
 Device.prototype.platform = "";
 Device.prototype.uuid = "";
 Device.prototype.version = "";
 
-PhoneGap.addConstructor( "com.phonegap.Device", function() {
+Cordova.addConstructor( "com.cordova.Device", function() {
                             window.device = new Device();
                         } );

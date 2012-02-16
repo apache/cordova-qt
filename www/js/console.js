@@ -18,9 +18,9 @@ function Console() {
 }
 
 Console.prototype.log = function( p_message ) {
-    PhoneGap.exec( null, null, "com.phonegap.Console", "log", [p_message] );
+    Cordova.exec( null, null, "com.cordova.Console", "log", [p_message] );
 }
 
-PhoneGap.addConstructor( "com.phonegap.Console", function() {
+Cordova.addConstructor( "com.cordova.Console", function() {
                             window.console = new Console();
                         } );

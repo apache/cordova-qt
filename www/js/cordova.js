@@ -14,16 +14,16 @@
  *  limitations under the License.
  */
 
-PhoneGap = {
+Cordova = {
     plugins: {},
     constructors: {},
     callbacks: [],
 };
 
 /*
- * Execute a callback function & remove it from the PhoneGap object
+ * Execute a callback function & remove it from the Cordova object
  */
-PhoneGap.callback = function() {
+Cordova.callback = function() {
     var scId = arguments[0];
     var callbackRef = null;
 
@@ -33,58 +33,58 @@ PhoneGap.callback = function() {
         parameters[i-1] = arguments[i];
     }
     // Keep reference to callback
-    callbackRef = PhoneGap.callbacks[scId];
+    callbackRef = Cordova.callbacks[scId];
 
     // Even IDs are success-, odd are error-callbacks - make sure we remove both
     if( (scId % 2) !== 0 ) {
         scId = scId - 1;
     }
     // Remove both the success as well as the error callback from the stack
-    PhoneGap.callbacks.splice( scId, 2 );
+    Cordova.callbacks.splice( scId, 2 );
 
     // Finally run the callback
     if( typeof callbackRef == "function" ) callbackRef.apply( this, parameters );
 };
 
 /*
- * Enable a plugin for use within PhoneGap
+ * Enable a plugin for use within Cordova
  */
-PhoneGap.enablePlugin = function( pluginName ) {
+Cordova.enablePlugin = function( pluginName ) {
     // Enable the plugin
-    PhoneGap.plugins[pluginName] = true;
+    Cordova.plugins[pluginName] = true;
 
     // Run constructor for plugin if available
-    if( typeof PhoneGap.constructors[pluginName] == "function" ) PhoneGap.constructors[pluginName]();
+    if( typeof Cordova.constructors[pluginName] == "function" ) Cordova.constructors[pluginName]();
 }
 
 /*
  * Add a plugin-specific constructor function which is called once the plugin is loaded
  */
-PhoneGap.addConstructor = function( pluginName, constructor ) {
-    PhoneGap.constructors[pluginName] = constructor;
+Cordova.addConstructor = function( pluginName, constructor ) {
+    Cordova.constructors[pluginName] = constructor;
 }
 
 /**
  * Event interface - http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-Event
  */
-PhoneGap.Event = function() {
+Cordova.Event = function() {
 };
 
-PhoneGap.Event.CAPTURING_PHASE = 1;
-PhoneGap.Event.AT_TARGET = 2;
-PhoneGap.Event.BUBBLING_PHASE = 3;
+Cordova.Event.CAPTURING_PHASE = 1;
+Cordova.Event.AT_TARGET = 2;
+Cordova.Event.BUBBLING_PHASE = 3;
 
-PhoneGap.Event.prototype.type = "unknown";
-PhoneGap.Event.prototype.target = PhoneGap;
-PhoneGap.Event.prototype.currentTarget = PhoneGap;
-PhoneGap.Event.prototype.eventPhase = PhoneGap.Event.AT_TARGET;
-PhoneGap.Event.prototype.bubbles = false;
-PhoneGap.Event.prototype.cancelable = false;
-PhoneGap.Event.prototype.timeStamp = 0;
+Cordova.Event.prototype.type = "unknown";
+Cordova.Event.prototype.target = Cordova;
+Cordova.Event.prototype.currentTarget = Cordova;
+Cordova.Event.prototype.eventPhase = Cordova.Event.AT_TARGET;
+Cordova.Event.prototype.bubbles = false;
+Cordova.Event.prototype.cancelable = false;
+Cordova.Event.prototype.timeStamp = 0;
 
-PhoneGap.Event.prototype.stopPropagation = function() {};
-PhoneGap.Event.prototype.preventDefault = function() {};
-PhoneGap.Event.prototype.initEvent = function( eventTypeArg, canBubbleArg, cancelableArg ) {
+Cordova.Event.prototype.stopPropagation = function() {};
+Cordova.Event.prototype.preventDefault = function() {};
+Cordova.Event.prototype.initEvent = function( eventTypeArg, canBubbleArg, cancelableArg ) {
     this.type = eventTypeArg;
     this.timeStamp = (new Date()).getMilliseconds();
 };
@@ -93,13 +93,13 @@ PhoneGap.Event.prototype.initEvent = function( eventTypeArg, canBubbleArg, cance
  * EventHandler interface - handles one type of event
  * Not W3C defined, but required in order to handle our custom events
  */
-PhoneGap.EventHandler = function( p_type ) {
+Cordova.EventHandler = function( p_type ) {
     this.type = p_type;
 }
 
-PhoneGap.EventHandler.prototype.type = "unknown";
-PhoneGap.EventHandler.prototype.listeners = [];
-PhoneGap.EventHandler.prototype.addEventListener = function( p_listener, p_capture ) {
+Cordova.EventHandler.prototype.type = "unknown";
+Cordova.EventHandler.prototype.listeners = [];
+Cordova.EventHandler.prototype.addEventListener = function( p_listener, p_capture ) {
     if( p_capture ) {
         this.listeners.unshift( p_listener );
     }
@@ -108,7 +108,7 @@ PhoneGap.EventHandler.prototype.addEventListener = function( p_listener, p_captu
     }
 };
 
-PhoneGap.EventHandler.prototype.removeEventListener = function( p_listener, p_capture ) {
+Cordova.EventHandler.prototype.removeEventListener = function( p_listener, p_capture ) {
     // Try to find the event listener in our list
     for( var i = 0; i < this.listeners.length; i++ ) {
         if( this.listeners[i] == p_listener ) {
@@ -119,8 +119,8 @@ PhoneGap.EventHandler.prototype.removeEventListener = function( p_listener, p_ca
     }
 };
 
-PhoneGap.EventHandler.prototype.dispatchEvent = function() {
-    var event = new PhoneGap.Event();
+Cordova.EventHandler.prototype.dispatchEvent = function() {
+    var event = new Cordova.Event();
     event.initEvent( this.type, false, false );
 
     // Translate arguments into an array including the custom event as first element
@@ -131,57 +131,57 @@ PhoneGap.EventHandler.prototype.dispatchEvent = function() {
 
     // Notify all listeners about this event
     for( var i = 0; i < this.listeners.length; i++ ) {
-        this.listeners[i].apply(PhoneGap, parameters);
+        this.listeners[i].apply(Cordova, parameters);
     }
 };
 
 /*
- * Create the custom phonegap events
+ * Create the custom Cordova events
  */
-PhoneGap.events = {
-    deviceready: new PhoneGap.EventHandler( "deviceready" ),
-    resume: new PhoneGap.EventHandler( "resume" ),
-    pause: new PhoneGap.EventHandler( "pause" )
+Cordova.events = {
+    deviceready: new Cordova.EventHandler( "deviceready" ),
+    resume: new Cordova.EventHandler( "resume" ),
+    pause: new Cordova.EventHandler( "pause" )
 };
 
 /*
  * EventTarget interface - http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-EventTarget
  */
 //Keep references to the original EventTarget implementations
-PhoneGap.doc_addEventListener = document.addEventListener;
-PhoneGap.doc_removeEventListener = document.removeEventListener;
-PhoneGap.doc_dispatchEvent = document.dispatchEvent;
+Cordova.doc_addEventListener = document.addEventListener;
+Cordova.doc_removeEventListener = document.removeEventListener;
+Cordova.doc_dispatchEvent = document.dispatchEvent;
 
 document.addEventListener = function( type, listener, useCapture ) {
-    if( typeof PhoneGap.events[type] != "undefined" ) {
-        PhoneGap.events[type].addEventListener( listener, useCapture );
+    if( typeof Cordova.events[type] != "undefined" ) {
+        Cordova.events[type].addEventListener( listener, useCapture );
     }
     else {
-        PhoneGap.doc_addEventListener.call(document, type, listener, useCapture);
+        Cordova.doc_addEventListener.call(document, type, listener, useCapture);
     }
 };
 
 document.removeEventListener = function( type, listener, useCapture ) {
-    if( typeof PhoneGap.events[type] != "undefined" ) {
-        PhoneGap.events[type].removeEventListener( listener, useCapture );
+    if( typeof Cordova.events[type] != "undefined" ) {
+        Cordova.events[type].removeEventListener( listener, useCapture );
     }
     else {
-        PhoneGap.doc_removeEventListener.call(document, type, listener, useCapture);
+        Cordova.doc_removeEventListener.call(document, type, listener, useCapture);
     }
 };
 
 document.dispatchEvent = function( evt ) {
-    if( typeof PhoneGap.events[evt.type] != "undefined" ) {
-        PhoneGap.events[evt.type].dispatchEvent();
+    if( typeof Cordova.events[evt.type] != "undefined" ) {
+        Cordova.events[evt.type].dispatchEvent();
     }
     else {
-        PhoneGap.doc_dispatchEvent.call(document, evt);
+        Cordova.doc_dispatchEvent.call(document, evt);
     }
 };
 
 /*
  * Trigger the global deviceready event - fired from native code
  */
-PhoneGap.deviceready = function() {
-    PhoneGap.events.deviceready.dispatchEvent();
+Cordova.deviceready = function() {
+    Cordova.events.deviceready.dispatchEvent();
 }

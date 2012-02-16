@@ -14,38 +14,38 @@
  *  limitations under the License.
  */
 
-PhoneGap.Qt = {};
+Cordova.Qt = {};
 
 /**
  * Execute a call to a plugin function
  * @return bool true on success, false on error (e.g. function doesn't exist)
  */
-PhoneGap.Qt.exec = function( successCallback, errorCallback, pluginName, functionName, parameters ) {
+Cordova.Qt.exec = function( successCallback, errorCallback, pluginName, functionName, parameters ) {
     // Check if plugin is enabled
-    if( PhoneGap.plugins[pluginName] !== true ) {
+    if( Cordova.plugins[pluginName] !== true ) {
         return false;
     }
 
     // Check if we can find the function
-    if( typeof PhoneGap.Qt.objects[pluginName][functionName] != "function" ) {
+    if( typeof Cordova.Qt.objects[pluginName][functionName] != "function" ) {
         return false;
     }
 
     // Store a reference to the callback functions
-    var scId = PhoneGap.callbacks.length;
+    var scId = Cordova.callbacks.length;
     var ecId = scId + 1;
-    PhoneGap.callbacks[scId] = successCallback;
-    PhoneGap.callbacks[ecId] = errorCallback;
+    Cordova.callbacks[scId] = successCallback;
+    Cordova.callbacks[ecId] = errorCallback;
 
     parameters.unshift( ecId );
     parameters.unshift( scId );
 
     // Call the function
     /*debug.log( "Call: " + pluginName + " / " + functionName );
-    debug.log( "P-Obj: " + (typeof PhoneGap.plugins[pluginName]) );
-    debug.log( "P-Func: " + (typeof PhoneGap.plugins[pluginName][functionName]) );*/
-    //PhoneGap.plugins[pluginName][functionName](scId, ecId, parameters);
-    PhoneGap.Qt.objects[pluginName][functionName].apply(this, parameters);
+    debug.log( "P-Obj: " + (typeof Cordova.plugins[pluginName]) );
+    debug.log( "P-Func: " + (typeof Cordova.plugins[pluginName][functionName]) );*/
+    //Cordova.plugins[pluginName][functionName](scId, ecId, parameters);
+    Cordova.Qt.objects[pluginName][functionName].apply(this, parameters);
 
     return true;
 }
@@ -53,9 +53,9 @@ PhoneGap.Qt.exec = function( successCallback, errorCallback, pluginName, functio
 /**
  * Function which is called from the native bridge in order to register the QtWebKit bridge objects
  */
-PhoneGap.Qt.objects = {};
-PhoneGap.Qt.registerObject = function( pluginName, pluginObject ) {
-    PhoneGap.Qt.objects[pluginName] = pluginObject;
+Cordova.Qt.objects = {};
+Cordova.Qt.registerObject = function( pluginName, pluginObject ) {
+    Cordova.Qt.objects[pluginName] = pluginObject;
 }
 
-PhoneGap.exec = PhoneGap.Qt.exec;
+Cordova.exec = Cordova.Qt.exec;

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>PhoneGap</string>
+   <string>Cordova</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="mainLayout">
