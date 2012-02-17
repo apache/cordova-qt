@@ -34,7 +34,7 @@ Connection.prototype.setChangeCallback = function() {
 
     console.log( "connection - setChangeCallback" );
 
-    PhoneGap.exec( function( p_type ) {
+    Cordova.exec( function( p_type ) {
                       // Save new type
                       me.type = p_type;
 
@@ -42,10 +42,10 @@ Connection.prototype.setChangeCallback = function() {
 
                       // Register new callback instance in order to receive future updates
                       setTimeout( navigator.network.connection.setChangeCallback, 100 );
-                  }, null, "com.phonegap.Connection", "setChangeCallback", [] );
+                  }, null, "com.cordova.Connection", "setChangeCallback", [] );
 }
 
-PhoneGap.addConstructor( "com.phonegap.Connection", function() {
+Cordova.addConstructor( "com.cordova.Connection", function() {
                             if( typeof navigator.network === "undefined" ) navigator.network = {};
 
                             navigator.network.connection = new Connection();

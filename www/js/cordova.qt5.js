@@ -14,23 +14,23 @@
  *  limitations under the License.
  */
 
-PhoneGap.Qt = {};
+Cordova.Qt = {};
 
 /**
  * Execute a call to a plugin function
  * @return bool true on success, false on error (e.g. function doesn't exist)
  */
-PhoneGap.Qt.exec = function( successCallback, errorCallback, pluginName, functionName, parameters ) {
+Cordova.Qt.exec = function( successCallback, errorCallback, pluginName, functionName, parameters ) {
     // Check if plugin is enabled
-    if( PhoneGap.plugins[pluginName] !== true ) {
+    if( Cordova.plugins[pluginName] !== true ) {
         return false;
     }
 
     // Store a reference to the callback functions
-    var scId = PhoneGap.callbacks.length;
+    var scId = Cordova.callbacks.length;
     var ecId = scId + 1;
-    PhoneGap.callbacks[scId] = successCallback;
-    PhoneGap.callbacks[ecId] = errorCallback;
+    Cordova.callbacks[scId] = successCallback;
+    Cordova.callbacks[ecId] = errorCallback;
 
     parameters.unshift( ecId );
     parameters.unshift( scId );
@@ -40,7 +40,7 @@ PhoneGap.Qt.exec = function( successCallback, errorCallback, pluginName, functio
     return true;
 }
 
-PhoneGap.exec = PhoneGap.Qt.exec;
+Cordova.exec = Cordova.Qt.exec;
 
 navigator.qt.onmessage = function(ev) {
             var received = eval('('+ev.data+')')

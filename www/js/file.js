@@ -92,7 +92,7 @@ Entry.prototype.fullPath = "";
 Entry.prototype.filesystem = null;
 Entry.prototype.getMetadata = function( successCallback, errorCallback ) {
         // Get metadata for this entry
-        PhoneGap.exec(successCallback, errorCallback, "com.phonegap.File", "getMetadata", [this.fullPath]);
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "getMetadata", [this.fullPath]);
 }
 Entry.prototype.moveTo = function( parent, newName, successCallback, errorCallback ) {
 }
@@ -103,11 +103,11 @@ Entry.prototype.toURL = function( mimeType ) {
 }
 Entry.prototype.remove = function( successCallback, errorCallback ) {
         // Remove this entry
-        PhoneGap.exec(successCallback, errorCallback, "com.phonegap.File", "remove", [this.fullPath]);
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "remove", [this.fullPath]);
 }
 Entry.prototype.getParent = function( successCallback, errorCallback ) {
         // Ask the system for our parent
-        PhoneGap.exec(successCallback, errorCallback, "com.phonegap.File", "getParent", [this.fullPath]);
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "getParent", [this.fullPath]);
 }
 
 /**
@@ -207,7 +207,7 @@ FileWriter.prototype.write = function( data ) {
 
         // Finally do the writing
         var me = this;
-        PhoneGap.exec(function(p_position, p_length) {
+        Cordova.exec(function(p_position, p_length) {
                 // Update position & length for file
                 me.position = p_position;
                 me.length = p_length;
@@ -230,7 +230,7 @@ FileWriter.prototype.write = function( data ) {
                 // Dispatch missing events
                 if( typeof me.onerror === "function" ) me.onerror( FileWriter.createEvent("error", me) );
                 if( typeof me.onwriteend === "function" ) me.onwriteend( FileWriter.createEvent("writeend", me) );
-        }, "com.phonegap.File", "write", [this.fullPath, this.position, data]);
+        }, "com.cordova.File", "write", [this.fullPath, this.position, data]);
 }
 
 FileWriter.prototype.seek = function( offset ) {
@@ -259,7 +259,7 @@ FileWriter.prototype.truncate = function( size ) {
 
         // Finally do the writing
         var me = this;
-        PhoneGap.exec(function(p_position, p_length) {
+        Cordova.exec(function(p_position, p_length) {
                 // Update position & length for file
                 me.position = p_position;
                 me.length = p_length;
@@ -282,7 +282,7 @@ FileWriter.prototype.truncate = function( size ) {
                 // Dispatch missing events
                 if( typeof me.onerror === "function" ) me.onerror( FileSaver.createEvent("error", me) );
                 if( typeof me.onwriteend === "function" ) me.onwriteend( FileSaver.createEvent("writeend", me) );
-        }, "com.phonegap.File", "truncate", [this.fullPath, size]);
+        }, "com.cordova.File", "truncate", [this.fullPath, size]);
 }
 
 /**
@@ -321,7 +321,7 @@ FileReader.prototype.readAsText = function( file ) {
         var me = this;
 
         // Lets read the file...
-        PhoneGap.exec(function( p_data ) {
+        Cordova.exec(function( p_data ) {
                 me.readyState = FileReader.DONE;
                 me.result = atob( p_data );
 
@@ -334,7 +334,7 @@ FileReader.prototype.readAsText = function( file ) {
 
                 if( typeof me.onloadend === "function" ) me.onloadend( FileSaver.createEvent( "loadend", me) );
                 if( typeof me.onerror === "function" ) me.onerror( FileSaver.createEvent( "error", me) );
-        }, "com.phonegap.File", "readAsDataURL", [file.fullPath]);
+        }, "com.cordova.File", "readAsDataURL", [file.fullPath]);
 }
 FileReader.prototype.readAsDataURL = function( file ) {
         this.readyState = FileReader.EMPTY;
@@ -347,7 +347,7 @@ FileReader.prototype.readAsDataURL = function( file ) {
         var me = this;
 
         // Lets read the file...
-        PhoneGap.exec(function( p_data ) {
+        Cordova.exec(function( p_data ) {
                 me.readyState = FileReader.DONE;
                 me.result = p_data;
 
@@ -359,7 +359,7 @@ FileReader.prototype.readAsDataURL = function( file ) {
 
                 if( typeof me.onloadend === "function" ) me.onloadend( FileSaver.createEvent( "loadend", me) );
                 if( typeof me.onerror === "function" ) me.onerror( FileSaver.createEvent( "error", me) );
-        }, "com.phonegap.File", "readAsDataURL", [file.fullPath]);
+        }, "com.cordova.File", "readAsDataURL", [file.fullPath]);
 }
 FileReader.prototype.abort = function() {
         this.readyState = FileReader.DONE;
@@ -398,7 +398,7 @@ FileEntry.prototype.createWriter = function( successCallback, errorCallback ) {
 }
 FileEntry.prototype.file = function( successCallback, errorCallback ) {
         // Lets get the fileinfo
-        PhoneGap.exec(successCallback, errorCallback, "com.phonegap.File", "file", [this.fullPath]);
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "file", [this.fullPath]);
 }
 
 /**
@@ -418,7 +418,7 @@ DirectoryReader.cast = function( p_fullPath ) {
 DirectoryReader.prototype.fullPath = "";	// Not W3C conform, but required
 DirectoryReader.prototype.readEntries = function( successCallback, errorCallback ) {
         // Get all entries for the directory
-        PhoneGap.exec(successCallback, errorCallback, "com.phonegap.File", "readEntries", [this.fullPath]);
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "readEntries", [this.fullPath]);
 }
 
 /**
@@ -450,7 +450,7 @@ DirectoryEntry.prototype.getFile = function( path, options, successCallback, err
         if( requestPath.charAt(0) != '/' ) requestPath = this.fullPath + requestPath;
 
         // Lets get the file
-        PhoneGap.exec(successCallback, errorCallback, "com.phonegap.File", "getFile", [requestPath, options]);
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "getFile", [requestPath, options]);
 }
 DirectoryEntry.prototype.getDirectory = function( path, options, successCallback, errorCallback ) {
         var requestPath = path;
@@ -461,11 +461,11 @@ DirectoryEntry.prototype.getDirectory = function( path, options, successCallback
         if( requestPath.charAt(requestPath.length - 1) != '/' ) requestPath = requestPath + "/";
 
         // Lets get the directory
-        PhoneGap.exec(successCallback, errorCallback, "com.phonegap.File", "getDirectory", [requestPath, options]);
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "getDirectory", [requestPath, options]);
 }
 DirectoryEntry.prototype.removeRecursively = function( successCallback, errorCallback ) {
         // Remove the directory
-        PhoneGap.exec(successCallback, errorCallback, "com.phonegap.File", "removeRecursively", [this.fullPath]);
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "removeRecursively", [this.fullPath]);
 }
 
 /**
@@ -497,16 +497,16 @@ LocalFileSystem.TEMPORARY = 0;
 LocalFileSystem.PERSISTENT = 1;
 
 LocalFileSystem.prototype.requestFileSystem = function( type, size, successCallback, errorCallback ) {
-        PhoneGap.exec(successCallback, errorCallback, "com.phonegap.File", "requestFileSystem", [type, size]);
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "requestFileSystem", [type, size]);
 }
 LocalFileSystem.prototype.resolveLocalFileSystemURL = function( url, successCallback, errorCallback ) {
-        PhoneGap.exec(successCallback, errorCallback, "com.phonegap.File", "resolveLocalFileSystemURL", [url]);
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "resolveLocalFileSystemURL", [url]);
 }
 
 /**
  * Let window implement the localfilesystem
  */
-PhoneGap.addConstructor( "com.phonegap.File", function () {
+Cordova.addConstructor( "com.cordova.File", function () {
     var localFileSystem = new LocalFileSystem();
     window.requestFileSystem = localFileSystem.requestFileSystem;
     window.resolveLocalFileSystemURI = localFileSystem.resolveLocalFileSystemURL;

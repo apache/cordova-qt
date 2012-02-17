@@ -31,7 +31,7 @@ FileAPI* FileAPI::m_fileAPI = new FileAPI();
  * Constructor - NOTE: Never do anything except registering the plugin
  */
 FileAPI::FileAPI() : CPlugin() {
-    PluginRegistry::getRegistry()->registerPlugin( "com.phonegap.File", this );
+    PluginRegistry::getRegistry()->registerPlugin( "com.cordova.File", this );
 }
 
 /**

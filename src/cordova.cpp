@@ -84,7 +84,7 @@ void Cordova::loadFinished( bool ok ) {
                     if(currPlugin) {
                         currPlugin->init();
                         emit pluginWantsToBeAdded(attribValue, currPlugin, attribName);
-                        execJS( "PhoneGap.enablePlugin( '" + attribValue + "' )" );
+                        execJS( "Cordova.enablePlugin( '" + attribValue + "' )" );
                     }
                     else {
                         qDebug() << "Unknown Plugin " << attribName;
@@ -95,7 +95,7 @@ void Cordova::loadFinished( bool ok ) {
     }
 
     // Device is now ready to rumble
-    execJS( "PhoneGap.deviceready();" );
+    execJS( "Cordova.deviceready();" );
 }
 
 void Cordova::execJS(const QString &js)

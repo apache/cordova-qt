@@ -28,7 +28,7 @@
 
 #include <QDebug>
 
-#define PHONEGAP "1.3.0"
+#define CORDOVA "1.3.0"
 
 #ifdef QTM_NAMESPACE
 QTM_USE_NAMESPACE
@@ -41,7 +41,7 @@ Device* Device::m_device = new Device();
  * Constructor - NOTE: Never do anything except registering the plugin
  */
 Device::Device() : CPlugin() {
-    PluginRegistry::getRegistry()->registerPlugin( "com.phonegap.Device", this );
+    PluginRegistry::getRegistry()->registerPlugin( "com.cordova.Device", this );
 }
 
 /**
@@ -72,8 +72,8 @@ void Device::getInfo( int scId, int ecId ) {
 #endif
 
 #if QT_VERSION < 0x050000
-    this->callback( scId, "'" + systemDeviceInfo->model() + "', '" + PHONEGAP + "', '" + platform + "', '" + systemDeviceInfo->uniqueDeviceID() + "', '" + systemInfo->version( QSystemInfo::Os ) + "'" );
+    this->callback( scId, "'" + systemDeviceInfo->model() + "', '" + CORDOVA + "', '" + platform + "', '" + systemDeviceInfo->uniqueDeviceID() + "', '" + systemInfo->version( QSystemInfo::Os ) + "'" );
 #else
-    this->callback( scId, "'" + systemDeviceInfo->model() + "', '" + PHONEGAP + "', '" + platform + "', '" + systemDeviceInfo->uniqueDeviceID() + "', '" + systemInfo->version( QDeviceInfo::Os ) + "'" );
+    this->callback( scId, "'" + systemDeviceInfo->model() + "', '" + CORDOVA + "', '" + platform + "', '" + systemDeviceInfo->uniqueDeviceID() + "', '" + systemInfo->version( QDeviceInfo::Os ) + "'" );
 #endif
 }

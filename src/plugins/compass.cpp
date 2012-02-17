@@ -23,7 +23,7 @@ Compass* Compass::m_compass = new Compass();
 
 Compass::Compass() :CPlugin()
 {
-    PluginRegistry::getRegistry()->registerPlugin( "com.phonegap.Compass", this );
+    PluginRegistry::getRegistry()->registerPlugin( "com.cordova.Compass", this );
 }
 
 void Compass::init() {

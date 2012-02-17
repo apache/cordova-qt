@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugins>
-    <plugin name="File" value="com.phonegap.File"/>
-    <plugin name="Notification" value="com.phonegap.Notification"/>
-    <plugin name="Geolocation" value="com.phonegap.Geolocation"/>
-    <plugin name="Device" value="com.phonegap.Device"/>
-    <plugin name="Console" value="com.phonegap.Console"/>
-    <plugin name="Connection" value="com.phonegap.Connection"/>
-    <plugin name="Compass" value="com.phonegap.Compass"/>
+    <plugin name="File" value="com.cordova.File"/>
+    <plugin name="Notification" value="com.cordova.Notification"/>
+    <plugin name="Geolocation" value="com.cordova.Geolocation"/>
+    <plugin name="Device" value="com.cordova.Device"/>
+    <plugin name="Console" value="com.cordova.Console"/>
+    <plugin name="Connection" value="com.cordova.Connection"/>
+    <plugin name="Compass" value="com.cordova.Compass"/>
 
-<!--    <plugin name="Compass" value="com.phonegap.CompassListener"/>
-    <plugin name="Media" value="com.phonegap.AudioHandler"/>
-    <plugin name="Contacts" value="com.phonegap.ContactManager"/>
-    <plugin name="Crypto" value="com.phonegap.CryptoHandler"/>
-    <plugin name="Network Status" value="com.phonegap.NetworkManager"/>
-    <plugin name="Storage" value="com.phonegap.Storage"/>
-    <plugin name="Temperature" value="com.phonegap.TempListener"/>
-    <plugin name="FileTransfer" value="com.phonegap.FileTransfer"/>
-    <plugin name="Capture" value="com.phonegap.Capture"/>
-    <plugin name="Battery" value="com.phonegap.BatteryListener"/>-->
+<!--    <plugin name="Compass" value="com.cordova.CompassListener"/>
+    <plugin name="Media" value="com.cordova.AudioHandler"/>
+    <plugin name="Contacts" value="com.cordova.ContactManager"/>
+    <plugin name="Crypto" value="com.cordova.CryptoHandler"/>
+    <plugin name="Network Status" value="com.cordova.NetworkManager"/>
+    <plugin name="Storage" value="com.cordova.Storage"/>
+    <plugin name="Temperature" value="com.cordova.TempListener"/>
+    <plugin name="FileTransfer" value="com.cordova.FileTransfer"/>
+    <plugin name="Capture" value="com.cordova.Capture"/>
+    <plugin name="Battery" value="com.cordova.BatteryListener"/>-->
 </plugins>

@@ -38,16 +38,16 @@ Notification.prototype.confirm = function( message, confirmCallback, title, butt
 }
 
 Notification.prototype.beep = function( times ) {
-    PhoneGap.exec( null, null, "com.phonegap.Notification", "beep", [times] );
+    Cordova.exec( null, null, "com.cordova.Notification", "beep", [times] );
 }
 
 Notification.prototype.vibrate = function( milliseconds ) {
-    PhoneGap.exec( null, null, "com.phonegap.Notification", "vibrate", [milliseconds] );
+    Cordova.exec( null, null, "com.cordova.Notification", "vibrate", [milliseconds] );
 }
 
 /**
  * Add the notification object to the navigator
  */
-PhoneGap.addConstructor( "com.phonegap.Notification", function () {
+Cordova.addConstructor( "com.cordova.Notification", function () {
                             navigator.notification = new Notification();
                         } );

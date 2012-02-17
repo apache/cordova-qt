@@ -27,7 +27,7 @@ Geolocation* Geolocation::m_geolocation = new Geolocation();
  * Constructor - NOTE: Never do anything except registering the plugin
  */
 Geolocation::Geolocation() : CPlugin() {
-    PluginRegistry::getRegistry()->registerPlugin( "com.phonegap.Geolocation", this );
+    PluginRegistry::getRegistry()->registerPlugin( "com.cordova.Geolocation", this );
 }
 
 void Geolocation::init() {

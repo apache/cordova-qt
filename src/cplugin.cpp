@@ -36,10 +36,10 @@ void CPlugin::callback( int p_callbackId, QString p_jsParameters ) {
     QString javascript;
 
     if( p_jsParameters.length() > 0 ) {
-        javascript = "PhoneGap.callback( " + QString::number( p_callbackId ) + ", " + p_jsParameters + " );";
+        javascript = "Cordova.callback( " + QString::number( p_callbackId ) + ", " + p_jsParameters + " );";
     }
     else {
-        javascript = "PhoneGap.callback( " + QString::number( p_callbackId ) + " );";
+        javascript = "Cordova.callback( " + QString::number( p_callbackId ) + " );";
     }
 
     qDebug() << "Running: " << javascript;

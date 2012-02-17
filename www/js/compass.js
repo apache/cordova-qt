@@ -85,11 +85,11 @@ Compass.prototype.getCurrentHeading = function( successCallback, errorCallback, 
 
     // Call the native function and query for a new heading
     var me = this;
-    PhoneGap.exec( function( p_heading ) {
+    Cordova.exec( function( p_heading ) {
                       received = true;
                       me.cachedHeading = p_heading;
                       successCallback( p_heading );
-                  }, errorCallback, "com.phonegap.Compass", "getCurrentHeading", [ headingOptions ] );
+                  }, errorCallback, "com.cordova.Compass", "getCurrentHeading", [ headingOptions ] );
 };
 
 Compass.prototype.watchHeading = function( successCallback, errorCallback, options ) {
@@ -129,5 +129,5 @@ Compass.prototype.clearWatch = function( watchId ) {
 /**
  * Add the compass object to the navigator
  */
-PhoneGap.addConstructor( "com.phonegap.Compass", function () {
+Cordova.addConstructor( "com.cordova.Compass", function () {
                             navigator.compass = new Compass();} );
