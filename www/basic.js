@@ -6,17 +6,17 @@ var vibration_length = 1000;
 
 function get(id)
 {
-	return document.getElementById(id);
+    return document.getElementById(id);
 }
 
-function init() 
+function init()
 {
     navigator.accelerometer.watchAcceleration(function (v) {
         get("accel_val").innerHTML = v.x + '   ' + v.y + '    ' + v.z;
     }, null, {});
 }
 
-function ping_google() 
+function ping_google()
 {
     navigator.network.isReachable('http://www.google.com', function (state) {
         if (state == NetworkStatus.NOT_REACHABLE) {
@@ -29,7 +29,7 @@ function ping_google()
 
 function test_vibra()
 {
-	navigator.notification.vibrate(vibration_length);
+    navigator.notification.vibrate(vibration_length);
     navigator.notification.beep(5);
 }
 
@@ -123,6 +123,6 @@ function fileError( p_fileError ) {
  * Register for the device ready event
  */
 document.addEventListener( "deviceready", function() {
-                              get( "debug_output" ).innerHTML = "Device Ready!";
+                              get( "debug_output" ).innerHTML += "Device Ready!<br/>";
                           }, false );
 

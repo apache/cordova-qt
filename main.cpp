@@ -20,25 +20,34 @@
 #include "src/cordova.h"
 
 #if QT_VERSION < 0x050000
-# include "mainwindow.h"
+# include <QDeclarativeView>
 #else
 # include <QQuickView>
-# include <QDeclarativeContext>
-# include <QDeclarativeEngine>
 #endif
+
+#include <QDeclarativeContext>
+#include <QDeclarativeEngine>
+#include <qplatformdefs.h>
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
 #if QT_VERSION < 0x050000
-    MainWindow mainWindow;
-    mainWindow.setOrientation(MainWindow::ScreenOrientationAuto);
-    mainWindow.showExpanded();
+    QDeclarativeView view;
+    view.setResizeMode(QDeclarativeView::SizeRootObjectToView);
+    view.rootContext()->setContextProperty("cordova", Cordova::instance());
+#ifdef MEEGO_EDITION_HARMATTAN
+    view.setSource(QUrl(QString("%1/qml/main_harmattan.qml").arg(Cordova::instance()->workingDir())));
+#else
+    view.setSource(QUrl(QString("%1/qml/main.qml").arg(Cordova::instance()->workingDir())));
+#endif
+    view.show();
 #else
     QQuickView view;
+    view.setResizeMode(QQuickView::SizeRootObjectToView);
     view.rootContext()->setContextProperty("cordova", Cordova::instance());
-    view.setSource(QUrl(QString("%1/qml/main.qml").arg(QApplication::applicationDirPath())));
+    view.setSource(QUrl(QString("%1/qml/main_qt5.qml").arg(Cordova::instance()->workingDir())));
     view.show();
 #endif
 
