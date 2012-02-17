@@ -2,6 +2,7 @@
 <plugins>
     <plugin name="File" value="com.cordova.File"/>
     <plugin name="Notification" value="com.cordova.Notification"/>
+    <plugin name="Accelerometer" value="com.cordova.Accelerometer"/>
     <plugin name="Geolocation" value="com.cordova.Geolocation"/>
     <plugin name="Device" value="com.cordova.Device"/>
     <plugin name="Console" value="com.cordova.Console"/>
