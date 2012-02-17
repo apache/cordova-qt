@@ -26,11 +26,6 @@ Cordova.Qt.exec = function( successCallback, errorCallback, pluginName, function
         return false;
     }
 
-    // Check if we can find the function
-    if( typeof Cordova.Qt.objects[pluginName][functionName] != "function" ) {
-        return false;
-    }
-
     // Store a reference to the callback functions
     var scId = Cordova.callbacks.length;
     var ecId = scId + 1;
@@ -40,13 +35,7 @@ Cordova.Qt.exec = function( successCallback, errorCallback, pluginName, function
     parameters.unshift( ecId );
     parameters.unshift( scId );
 
-    // Call the function
-    /*debug.log( "Call: " + pluginName + " / " + functionName );
-    debug.log( "P-Obj: " + (typeof Cordova.plugins[pluginName]) );
-    debug.log( "P-Func: " + (typeof Cordova.plugins[pluginName][functionName]) );*/
-    //Cordova.plugins[pluginName][functionName](scId, ecId, parameters);
-    Cordova.Qt.objects[pluginName][functionName].apply(this, parameters);
-
+    window.qmlWrapper.callPluginFunction(pluginName, functionName, JSON.stringify(parameters))
     return true;
 }
 

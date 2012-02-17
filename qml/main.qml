@@ -1,38 +1,38 @@
-import QtQuick 2.0
-import QtWebKit 3.0
-import QtWebKit.experimental 3.0
+import QtQuick 1.1
+import QtWebKit 1.0
 import "cordova_wrapper.js" as CordovaWrapper
 
 WebView {
+
     id: webView
     width: 854
     height: 480
+    url: cordova.mainUrl
+    settings.javascriptEnabled: true
+    settings.localStorageDatabaseEnabled: true
+    settings.offlineStorageDatabaseEnabled: true
+    settings.localContentCanAccessRemoteUrls: true
+    javaScriptWindowObjects: [QtObject{
+        WebView.windowObjectName: "qmlWrapper"
 
+        function callPluginFunction(pluginName, functionName, parameters) {
+            parameters = eval("("+parameters+")")
+            CordovaWrapper.execMethodOld(pluginName, functionName, parameters)
+        }
+    }]
 
-    experimental.preferences.navigatorQtObjectEnabled: true
-    experimental.onMessageReceived: {
-        console.log("WebView received Message: " + message.data)
-        CordovaWrapper.messageHandler(message)
-    }
-    //Uncomment when it will be available
-    //experimental.setFlickableViewportEnabled: false
-    experimental.useTraditionalDesktopBehaviour: true
-
-
-    Component.onCompleted: {
-        webView.load(cordova.mainUrl)
-    }
-
-    onLoadSucceeded: cordova.loadFinished(true)
+    onLoadFinished: cordova.loadFinished(true)
     onLoadFailed: cordova.loadFinished(false)
 
     Connections {
         target: cordova
         onJavaScriptExecNeeded: {
-            webView.experimental.postMessage(JSON.stringify({messageType: "evalJS", jsData: js}))
+            console.log("onJavaScriptExecNeeded: " + js)
+            webView.evaluateJavaScript(js)
         }
 
         onPluginWantsToBeAdded: {
+            console.log("onPluginWantsToBeAdded: " + pluginName)
             CordovaWrapper.addPlugin(pluginName, pluginObject)
         }
     }

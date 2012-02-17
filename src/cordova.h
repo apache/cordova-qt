@@ -35,6 +35,7 @@ class Cordova : public QObject
 public:
     static Cordova *instance();
 
+    QString workingDir() const;
     QString mainUrl() const;
 
 signals:

@@ -1,5 +1,6 @@
 var pluginObjects = {}
 
+
 function addPlugin(pluginName, pluginObject) {
     pluginObjects[pluginName] = pluginObject
 }
@@ -27,3 +28,15 @@ function execMethod(pluginName, functionName, params) {
     return true
 }
 
+
+function execMethodOld(pluginName, functionName, params) {
+    if( typeof pluginObjects[pluginName][functionName] != "function" )
+        return false
+
+    var paramsString = JSON.stringify(params)
+    if (paramsString.charAt(0) == "[")
+        paramsString = paramsString.substring(1, paramsString.length-1)
+
+    eval("pluginObjects[pluginName][functionName]("+paramsString+")")
+    return true
+}

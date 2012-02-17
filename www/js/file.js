@@ -497,7 +497,7 @@ LocalFileSystem.TEMPORARY = 0;
 LocalFileSystem.PERSISTENT = 1;
 
 LocalFileSystem.prototype.requestFileSystem = function( type, size, successCallback, errorCallback ) {
-        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "requestFileSystem", [type, size]);
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "requestFileSystem", [type]);
 }
 LocalFileSystem.prototype.resolveLocalFileSystemURL = function( url, successCallback, errorCallback ) {
         Cordova.exec(successCallback, errorCallback, "com.cordova.File", "resolveLocalFileSystemURL", [url]);
