@@ -1,31 +1,41 @@
-# Add files and directories to ship with the application 
+# Add files and directories to ship with the application
 # by adapting the examples below.
 # file1.source = myfile
 # dir1.source = mydir
 wwwDir.source = www
 xmlDir.source = xml
+qmlDir.source = qml
 
-DEPLOYMENTFOLDERS = wwwDir xmlDir # file1 dir1
+DEPLOYMENTFOLDERS = wwwDir xmlDir qmlDir # file1 dir1
 
-symbian:TARGET.UID3 = 0xE3522943
 
-# Smart Installer package's UID
-# This UID is from the protected range 
-# and therefore the package will fail to install if self-signed
-# By default qmake uses the unprotected range value if unprotected UID is defined for the application
-# and 0x2002CCCF value if protected UID is given to the application
-#symbian:DEPLOYMENT.installer_header = 0x2002CCCF
+greaterThan(QT_MAJOR_VERSION, 4) {
+    QT += widgets
+    QT += location
+    QT += feedback
+    QT += systeminfo
+    QT += sensors
+    QT += quick declarative
+    OTHER_FILES += \
+        qml/main.qml \
+        qml/cordova_wrapper.js
+} else {
+    SOURCES += mainwindow.cpp
+    HEADERS += mainwindow.h
+    FORMS += mainwindow.ui
 
-# Allow network access on Symbian
-symbian:TARGET.CAPABILITY += NetworkServices
+    symbian:TARGET.UID3 = 0xE3522943
+    #symbian:DEPLOYMENT.installer_header = 0x2002CCCF
+    symbian:TARGET.CAPABILITY += NetworkServices
 
-# If your application uses the Qt Mobility libraries, uncomment
-# the following lines and add the respective components to the 
-# MOBILITY variable.
-CONFIG += mobility
-MOBILITY += feedback location systeminfo sensors
+    CONFIG += mobility
+    MOBILITY += feedback location systeminfo sensors
 
-SOURCES += main.cpp mainwindow.cpp \
+}
+
+QT += webkit
+
+SOURCES += main.cpp \
     src/plugins/notification.cpp \
     src/plugins/geolocation.cpp \
     src/plugins/fileapi.cpp \
@@ -37,7 +47,7 @@ SOURCES += main.cpp mainwindow.cpp \
     src/cordova.cpp \
     src/cplugin.cpp \
     src/cwebpage.cpp
-HEADERS += mainwindow.h \
+HEADERS += \
     src/plugins/notification.h \
     src/plugins/geolocation.h \
     src/plugins/fileapi.h \
@@ -50,16 +60,6 @@ HEADERS += mainwindow.h \
     src/cplugin.h \
     src/cwebpage.h
 FORMS += mainwindow.ui
-
-# Needed for Qt 5
-greaterThan(QT_MAJOR_VERSION, 4) {
-QT += widgets
-QT += location
-QT += feedback
-QT += systeminfo
-}
-
-QT += webkit
 
 # Please do not modify the following two lines. Required for deployment.
 include(deployment.pri)

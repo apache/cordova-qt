@@ -26,8 +26,6 @@ class CPlugin : public QObject
 public:
     explicit CPlugin();
 
-    void setWebFrame(QWebFrame *p_webFrame);
-
     // This function should be overwritten, if the Plugin requires startup initialisation
     virtual void init();
 
@@ -37,8 +35,6 @@ public slots:
 
 protected:
     void callback( int p_callbackId, QString p_jsParameters );
-
-    QWebFrame *m_webFrame;
 };
 
 #endif // CPLUGIN_H

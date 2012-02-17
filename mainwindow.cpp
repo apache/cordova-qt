@@ -16,6 +16,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "src/cwebpage.h"
 
 #include <QtCore/QCoreApplication>
 
@@ -24,7 +25,23 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    m_cordova = new Cordova(ui->webView);
+    // Configure web view
+    ui->webView->settings()->enablePersistentStorage();
+    ui->webView->settings()->setAttribute( QWebSettings::LocalStorageEnabled, true );
+    ui->webView->settings()->setAttribute( QWebSettings::OfflineStorageDatabaseEnabled, true );
+    ui->webView->settings()->setAttribute( QWebSettings::LocalContentCanAccessRemoteUrls, true );
+    ui->webView->setPage( new CWebPage() );
+
+    // Listen to load finished signal
+    connect(ui->webView, SIGNAL(loadFinished(bool)),
+            Cordova::instance(), SLOT(loadFinished(bool)));
+    connect(Cordova::instance(), SIGNAL(javaScriptExecNeeded(QString)),
+            this, SLOT(onJavaScriptExecNeeded(QString)));
+    connect(Cordova::instance(), SIGNAL(pluginWantsToBeAdded(QString,QObject*,QString)),
+            this, SLOT(onPluginWantsToBeAdded(QString,QObject*,QString)));
+    connect(Cordova::instance(), SIGNAL(webViewAttributeChanged(QWebSettings::WebAttribute,bool)),
+            this, SLOT(onWebViewAttributeChanged(QWebSettings::WebAttribute,bool)));
+    ui->webView->load( Cordova::instance()->mainUrl() );
 }
 
 MainWindow::~MainWindow()
@@ -97,4 +114,21 @@ void MainWindow::showExpanded()
 #else
     show();
 #endif
+}
+
+void MainWindow::onJavaScriptExecNeeded(const QString &js)
+{
+    ui->webView->page()->mainFrame()->evaluateJavaScript(js);
+}
+
+void MainWindow::onPluginWantsToBeAdded(const QString &pluginName, QObject *pluginObject, const QString &pluginShortName)
+{
+    QString objectName = pluginShortName + "_native";
+    ui->webView->page()->mainFrame()->addToJavaScriptWindowObject( objectName, pluginObject );
+    ui->webView->page()->mainFrame()->evaluateJavaScript( "PhoneGap.Qt.registerObject( '" + pluginName + "', " + objectName + " )" );
+}
+
+void MainWindow::onWebViewAttributeChanged(QWebSettings::WebAttribute attribute, bool on)
+{
+    ui->webView->settings()->setAttribute(attribute, on);
 }

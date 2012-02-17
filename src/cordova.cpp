@@ -21,28 +21,28 @@
 #include <QDebug>
 #include <QXmlStreamReader>
 
-Cordova::Cordova(QWebView *webView) : QObject(webView) {
-    m_webView = webView;
-    // Configure web view
-    m_webView->settings()->enablePersistentStorage();
-    m_webView->settings()->setAttribute( QWebSettings::LocalStorageEnabled, true );
-    m_webView->settings()->setAttribute( QWebSettings::OfflineStorageDatabaseEnabled, true );
-    m_webView->settings()->setAttribute( QWebSettings::LocalContentCanAccessRemoteUrls, true );
+Cordova *Cordova::m_instance = 0;
 
-    // Listen to load finished signal
-    QObject::connect( m_webView, SIGNAL(loadFinished(bool)), this, SLOT(loadFinished(bool)) );
+Cordova::Cordova(QObject *parent) : QObject(parent) {
 
-    // Set our own WebPage class
-    m_webView->setPage( new CWebPage() );
 
     // Determine index file path
     m_workingDir = QDir::current();
     QDir wwwDir( m_workingDir );
     wwwDir.cd( "www" );
 
-    // Load the correct startup file
-    m_webView->load( QUrl::fromUserInput(wwwDir.absoluteFilePath("index.html")) );
-    //m_webView->load( QUrl::fromUserInput("http://html5test.com/") );
+#if QT_VERSION < 0x050000
+    m_mainUrl = QUrl::fromUserInput(wwwDir.absoluteFilePath("index.html")).toString();
+#else
+    m_mainUrl = QUrl::fromUserInput(wwwDir.absoluteFilePath("index_qt5.html")).toString();
+#endif
+}
+
+Cordova *Cordova::instance()
+{
+    if (!m_instance)
+        m_instance = new Cordova;
+    return m_instance;
 }
 
 /**
@@ -66,9 +66,6 @@ void Cordova::loadFinished( bool ok ) {
     QXmlStreamReader plugins;
     plugins.setDevice( &pluginsXml );
 
-    // Get a reference to the current main-frame
-    QWebFrame *webFrame = m_webView->page()->mainFrame();
-
     // Iterate over plugins-configuration and load all according plugins
     while(!plugins.atEnd()) {
         if( plugins.readNext() == QXmlStreamReader::StartElement ) {
@@ -80,17 +77,14 @@ void Cordova::loadFinished( bool ok ) {
                     // Construct object & attribute names
                     QString attribName = attribs.value( "name" ).toString();
                     QString attribValue = attribs.value( "value" ).toString();
-                    QString objectName = attribName + "_native";
 
                     qDebug() << "Adding Plugin " << attribName << " with " << attribValue;
                     // Check for such a plugin
                     CPlugin *currPlugin = PluginRegistry::getRegistry()->getPlugin( attribValue );
-                    if( currPlugin != NULL ) {
-                        currPlugin->setWebFrame( webFrame );
-                        webFrame->addToJavaScriptWindowObject( objectName, currPlugin );
-
-                        webFrame->evaluateJavaScript( "PhoneGap.Qt.registerObject( '" + attribValue + "', " + objectName + " )" );
-                        webFrame->evaluateJavaScript( "PhoneGap.enablePlugin( '" + attribValue + "' )" );
+                    if(currPlugin) {
+                        currPlugin->init();
+                        emit pluginWantsToBeAdded(attribValue, currPlugin, attribName);
+                        execJS( "PhoneGap.enablePlugin( '" + attribValue + "' )" );
                     }
                     else {
                         qDebug() << "Unknown Plugin " << attribName;
@@ -101,5 +95,16 @@ void Cordova::loadFinished( bool ok ) {
     }
 
     // Device is now ready to rumble
-    webFrame->evaluateJavaScript( "PhoneGap.deviceready();" );
+    execJS( "PhoneGap.deviceready();" );
+}
+
+void Cordova::execJS(const QString &js)
+{
+    emit javaScriptExecNeeded(js);
+}
+
+
+QString Cordova::mainUrl() const
+{
+    return m_mainUrl;
 }
