@@ -1,7 +1,9 @@
 import QtQuick 1.1
-import com.nokia.meego 1.0
+import com.nokia.meego 1.1
 import QtWebKit 1.0
 import "cordova_wrapper.js" as CordovaWrapper
+
+
 
 PageStackWindow {
     id: appWindow
@@ -15,8 +17,7 @@ PageStackWindow {
 
             id: webView
             anchors.fill: parent
-            //TODO: remove it later when toolbar problem will be fixed
-            anchors.topMargin: 16
+
             url: cordova.mainUrl
             settings.javascriptEnabled: true
             settings.localStorageDatabaseEnabled: true

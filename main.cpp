@@ -39,10 +39,11 @@ int main(int argc, char *argv[])
     view.rootContext()->setContextProperty("cordova", Cordova::instance());
 #ifdef MEEGO_EDITION_HARMATTAN
     view.setSource(QUrl(QString("%1/qml/main_harmattan.qml").arg(Cordova::instance()->workingDir())));
+    view.showFullScreen();
 #else
     view.setSource(QUrl(QString("%1/qml/main.qml").arg(Cordova::instance()->workingDir())));
-#endif
     view.show();
+#endif
 #else
     QQuickView view;
     view.setResizeMode(QQuickView::SizeRootObjectToView);
