@@ -23,7 +23,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
         qml/cordova_wrapper.js
 
     QT += declarative
-    CONFIG += mobility
+    CONFIG += mobility qdeclarative-boostable
     MOBILITY += feedback location systeminfo sensors
 } else {
     OTHER_FILES += qml/main.qml \
