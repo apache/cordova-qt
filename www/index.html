@@ -13,18 +13,16 @@
         <script language="javascript" type="text/javascript" src="js/geolocation.js"></script>
         <script language="javascript" type="text/javascript" src="js/notification.js"></script>
         <script language="javascript" type="text/javascript" src="js/compass.js"></script>
+        <script language="javascript" type="text/javascript" src="js/accelerometer.js"></script>
 
         <script language="javascript" type="text/javascript" src="basic.js"></script>
     </head>
     <body>
+        <input type="button" value="Init Watchers!" onclick="init();"/>
+        <br />
         <input type="button" value="Vibrate!" onclick="test_vibra();"/>
         <br />
-        <br />
-        <div id="accel_val"> AAA </div>
-        <br />
-        <br />
         <input type="button" value="Ping Google!" onclick="ping_google();">
-        <br />
         <br />
         <input type="button" value="RequestFileSystem" onclick="test_requestFileSystem();">
         <br />
@@ -34,6 +32,9 @@
         <br />
         <div id="position_val"> Location </div>
         <br />
+        <input type="button" value="Get Acceleration" onclick="getCurrentAcceleration();">
+        <br />
+        <div id="accel_val"> Acceleration </div>
         <input type="button" value="getCurrentHeading" onclick="getCurrentHeading();">
         <br />
         <div id="heading_val"> Heading </div>

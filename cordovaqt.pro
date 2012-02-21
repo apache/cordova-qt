@@ -50,6 +50,7 @@ SOURCES += main.cpp \
     src/plugins/console.cpp \
     src/plugins/connection.cpp \
     src/plugins/compass.cpp \
+    src/plugins/accelerometer.cpp \
     src/cordova.cpp \
     src/cplugin.cpp \
     src/cwebpage.cpp
@@ -62,6 +63,7 @@ HEADERS += \
     src/plugins/console.h \
     src/plugins/connection.h \
     src/plugins/compass.h \
+    src/plugins/accelerometer.h \
     src/cordova.h \
     src/cplugin.h \
     src/cwebpage.h

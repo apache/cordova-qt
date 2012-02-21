@@ -13,7 +13,8 @@ function init()
 {
     navigator.accelerometer.watchAcceleration(function (v) {
         get("accel_val").innerHTML = v.x + '   ' + v.y + '    ' + v.z;
-    }, null, {});
+    }, null, {frequency:100});
+
 }
 
 function ping_google()
@@ -52,6 +53,17 @@ function getCurrentHeading() {
                                              },
                                              {timestamp: (new Date()).getTime()} );
 }
+
+function getCurrentAcceleration() {
+    navigator.accelerometer.getCurrentAcceleration( function( acceleration ) {
+                                                 get("accel_val").innerHTML = acceleration.x + ' ' + acceleration.y + ' ' + acceleration.z;
+                                             },
+                                             function( error ) {
+                                             });
+
+}
+
+
 
 function test_requestFileSystem() {
     window.requestFileSystem( LocalFileSystem.PERSISTENT, 0, function( p_fileSystem ) {
