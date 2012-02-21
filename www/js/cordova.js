@@ -94,7 +94,8 @@ Cordova.Event.prototype.initEvent = function( eventTypeArg, canBubbleArg, cancel
  * Not W3C defined, but required in order to handle our custom events
  */
 Cordova.EventHandler = function( p_type ) {
-    this.type = p_type;
+    this.type = p_type
+    this.listeners = []
 }
 
 Cordova.EventHandler.prototype.type = "unknown";
@@ -123,25 +124,32 @@ Cordova.EventHandler.prototype.dispatchEvent = function() {
     var event = new Cordova.Event();
     event.initEvent( this.type, false, false );
 
-    // Translate arguments into an array including the custom event as first element
-    var parameters = [ event ];
-    for( var i = 0; i < arguments.length; i++ ) {
-        parameters[i+1] = arguments[i];
-    }
-
     // Notify all listeners about this event
     for( var i = 0; i < this.listeners.length; i++ ) {
-        this.listeners[i].apply(Cordova, parameters);
+        this.listeners[i].apply(Cordova, arguments);
     }
 };
 
 /*
  * Create the custom Cordova events
  */
+
 Cordova.events = {
     deviceready: new Cordova.EventHandler( "deviceready" ),
     resume: new Cordova.EventHandler( "resume" ),
-    pause: new Cordova.EventHandler( "pause" )
+    pause: new Cordova.EventHandler( "pause" ),
+    online: new Cordova.EventHandler( "online" ),
+    offline: new Cordova.EventHandler( "offline" ),
+    backbutton: new Cordova.EventHandler( "backbutton" ),
+    batterycritical: new Cordova.EventHandler( "batterycritical" ),
+    batterylow: new Cordova.EventHandler( "batterylow" ),
+    batterystatus: new Cordova.EventHandler( "batterystatus" ),
+    menubutton: new Cordova.EventHandler( "menubutton" ),
+    searchbutton: new Cordova.EventHandler( "searchbutton" ),
+    startcallbutton: new Cordova.EventHandler( "startcallbutton" ),
+    endcallbutton: new Cordova.EventHandler( "endcallbutton" ),
+    volumedownbutton: new Cordova.EventHandler( "volumedownbutton" ),
+    volumeupbutton: new Cordova.EventHandler( "volumeupbutton" )
 };
 
 /*
@@ -185,3 +193,60 @@ document.dispatchEvent = function( evt ) {
 Cordova.deviceready = function() {
     Cordova.events.deviceready.dispatchEvent();
 }
+
+
+Cordova.resumeOccured = function() {
+            console.log("Cordova.resumeOccured")
+            Cordova.events.resume.dispatchEvent();
+        }
+Cordova.pauseOccured = function() {
+            console.log("Cordova.pauseOccured")
+            Cordova.events.pause.dispatchEvent();
+        }
+Cordova.onlineOccured = function() {
+            console.log("Cordova.onlineOccured")
+            Cordova.events.online.dispatchEvent();
+        }
+Cordova.offlineOccured = function() {
+            console.log("Cordova.offlineOccured")
+            Cordova.events.offline.dispatchEvent();
+        }
+
+
+Cordova.batteryStatusChanged = function(level, isPlugged, forceStatus) {
+    console.log("Cordova.batteryStatusChanged: " + level + ", " + isPlugged + ", " + forceStatus)
+    if (level < 3 && !forceStatus)
+        Cordova.events.batterycritical.dispatchEvent({level: level, isPlugged: isPlugged})
+    else if (level < 40 && !forceStatus)
+        Cordova.events.batterylow.dispatchEvent({level: level, isPlugged: isPlugged})
+    Cordova.events.batterystatus.dispatchEvent({level: level, isPlugged: isPlugged})
+}
+
+Cordova.menuKeyPressed = function() {
+            console.log("Cordova.menuKeyPressed")
+            Cordova.events.menubutton.dispatchEvent();
+        }
+Cordova.backKeyPressed = function() {
+            console.log("Cordova.backKeyPressed")
+            Cordova.events.backbutton.dispatchEvent();
+        }
+Cordova.searchKeyPressed = function() {
+            console.log("Cordova.searchKeyPressed")
+            Cordova.events.searchbutton.dispatchEvent();
+        }
+Cordova.callKeyPressed = function() {
+            console.log("Cordova.callKeyPressed")
+            Cordova.events.startcallbutton.dispatchEvent();
+        }
+Cordova.hangupKeyPressed = function() {
+            console.log("Cordova.hangupKeyPressed")
+            Cordova.events.endcallbutton.dispatchEvent();
+        }
+Cordova.volumeUpKeyPressed = function() {
+            console.log("Cordova.volumeUpKeyPressed")
+            Cordova.events.volumeupbutton.dispatchEvent();
+        }
+Cordova.volumeDownKeyPressed = function() {
+            console.log("Cordova.volumeDownKeyPressed")
+            Cordova.events.volumedownbutton.dispatchEvent();
+        }

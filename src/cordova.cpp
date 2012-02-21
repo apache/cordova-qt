@@ -27,8 +27,7 @@
 Cordova *Cordova::m_instance = 0;
 
 Cordova::Cordova(QObject *parent) : QObject(parent) {
-
-
+    m_topLevelEventsReceiver = 0;
     // Determine index file path
     m_workingDir = QApplication::applicationDirPath();
 #ifdef MEEGO_EDITION_HARMATTAN
@@ -119,4 +118,14 @@ void Cordova::execJS(const QString &js)
 QString Cordova::mainUrl() const
 {
     return m_mainUrl;
+}
+
+void Cordova::setTopLevelEventsReceiver(QObject *obj)
+{
+    m_topLevelEventsReceiver = obj;
+}
+
+QObject *Cordova::topLevelEventsReceiver()
+{
+    return m_topLevelEventsReceiver;
 }

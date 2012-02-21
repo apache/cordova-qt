@@ -52,6 +52,7 @@ int main(int argc, char *argv[])
 # else
     QScopedPointer<QDeclarativeView> view(new QDeclarativeView());
 # endif
+    Cordova::instance()->setTopLevelEventsReceiver(view.data());
     view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
     view->rootContext()->setContextProperty("cordova", Cordova::instance());
 # ifdef MEEGO_EDITION_HARMATTAN
@@ -63,6 +64,7 @@ int main(int argc, char *argv[])
 # endif
 #else // QT_VERSION >= 0x050000
     QQuickView view;
+    Cordova::instance()->setTopLevelEventsReceiver(&view);
     view.setResizeMode(QQuickView::SizeRootObjectToView);
     view.rootContext()->setContextProperty("cordova", Cordova::instance());
     view.setSource(QUrl(QString("%1/qml/main_qt5.qml").arg(Cordova::instance()->workingDir())));
