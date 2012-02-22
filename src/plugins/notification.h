@@ -31,6 +31,9 @@ public slots:
     void beep( int scId, int ecId, int p_times );
     void vibrate( int scId, int ecId, int p_milliseconds );
 
+private slots:
+    void deleteEffectAtStateStopped();
+
 private:
     static Notification *m_notification;
 };
