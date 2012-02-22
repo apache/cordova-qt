@@ -17,15 +17,19 @@ function init()
 
 }
 
-function ping_google()
-{
-    navigator.network.isReachable('http://www.google.com', function (state) {
-        if (state == NetworkStatus.NOT_REACHABLE) {
-            alert('Google not found');
-        } else {
-            alert('Google says: Pong!');
-        }
-    }, {});
+function getCurrentConnectionType() {
+    var networkState = navigator.network.connection.type;
+
+    var states = {};
+    states[Connection.UNKNOWN]  = 'Unknown connection';
+    states[Connection.ETHERNET] = 'Ethernet connection';
+    states[Connection.WIFI]     = 'WiFi connection';
+    states[Connection.CELL_2G]  = 'Cell 2G connection';
+    states[Connection.CELL_3G]  = 'Cell 3G connection';
+    states[Connection.CELL_4G]  = 'Cell 4G connection';
+    states[Connection.NONE]     = 'No network connection';
+    get( "debug_output" ).innerHTML = states[networkState]
+    console.log("network state = " + states[networkState])
 }
 
 function test_vibra()

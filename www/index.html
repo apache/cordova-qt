@@ -16,6 +16,13 @@
         <script language="javascript" type="text/javascript" src="js/accelerometer.js"></script>
 
         <script language="javascript" type="text/javascript" src="basic.js"></script>
+
+        <style type="text/css">
+            input {
+                height: 60px;
+                margin-top: 15px;
+            }
+        </style>
     </head>
     <body>
         <input type="button" value="Init Watchers!" onclick="init();"/>
@@ -24,16 +31,14 @@
         <br />
         <input type="button" value="Alert/Confirm" onclick="test_alert_confirm();">
         <br />
-        <input type="button" value="Ping Google!" onclick="ping_google();">
+        <input type="button" value="Check connection" onclick="getCurrentConnectionType();">
         <br />
         <input type="button" value="RequestFileSystem" onclick="test_requestFileSystem();">
         <br />
         <div id="debug_output"> </div>
-        <br />
         <input type="button" value="getCurrentPosition" onclick="getCurrentPosition();">
         <br />
         <div id="position_val"> Location </div>
-        <br />
         <input type="button" value="Get Acceleration" onclick="getCurrentAcceleration();">
         <br />
         <div id="accel_val"> Acceleration </div>

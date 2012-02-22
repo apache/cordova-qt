@@ -13,38 +13,51 @@ PageStackWindow {
     Page {
         id: mainPage
 
-        WebView {
+        Flickable {
+            id: webFlickable
 
-            id: webView
             anchors.fill: parent
 
-            url: cordova.mainUrl
-            settings.javascriptEnabled: true
-            settings.localStorageDatabaseEnabled: true
-            settings.offlineStorageDatabaseEnabled: true
-            settings.localContentCanAccessRemoteUrls: true
-            javaScriptWindowObjects: [QtObject{
-                WebView.windowObjectName: "qmlWrapper"
+            contentHeight: webView.height
+            contentWidth: webView.width
 
-                function callPluginFunction(pluginName, functionName, parameters) {
-                    parameters = eval("("+parameters+")")
-                    CordovaWrapper.execMethodOld(pluginName, functionName, parameters)
-                }
-            }]
+            boundsBehavior: "StopAtBounds"
+            clip: true
 
-            onLoadFinished: cordova.loadFinished(true)
-            onLoadFailed: cordova.loadFinished(false)
+            WebView {
 
-            Connections {
-                target: cordova
-                onJavaScriptExecNeeded: {
-                    console.log("onJavaScriptExecNeeded: " + js)
-                    webView.evaluateJavaScript(js)
-                }
+                id: webView
+                preferredWidth: mainPage.width
+                preferredHeight: mainPage.height
 
-                onPluginWantsToBeAdded: {
-                    console.log("onPluginWantsToBeAdded: " + pluginName)
-                    CordovaWrapper.addPlugin(pluginName, pluginObject)
+                url: cordova.mainUrl
+                settings.javascriptEnabled: true
+                settings.localStorageDatabaseEnabled: true
+                settings.offlineStorageDatabaseEnabled: true
+                settings.localContentCanAccessRemoteUrls: true
+                javaScriptWindowObjects: [QtObject{
+                    WebView.windowObjectName: "qmlWrapper"
+
+                    function callPluginFunction(pluginName, functionName, parameters) {
+                        parameters = eval("("+parameters+")")
+                        CordovaWrapper.execMethodOld(pluginName, functionName, parameters)
+                    }
+                }]
+
+                onLoadFinished: cordova.loadFinished(true)
+                onLoadFailed: cordova.loadFinished(false)
+
+                Connections {
+                    target: cordova
+                    onJavaScriptExecNeeded: {
+                        console.log("onJavaScriptExecNeeded: " + js)
+                        webView.evaluateJavaScript(js)
+                    }
+
+                    onPluginWantsToBeAdded: {
+                        console.log("onPluginWantsToBeAdded: " + pluginName)
+                        CordovaWrapper.addPlugin(pluginName, pluginObject)
+                    }
                 }
             }
         }

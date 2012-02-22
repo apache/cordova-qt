@@ -6,31 +6,44 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <script language="javascript" type="text/javascript" src="js/cordova.js"></script>
         <script language="javascript" type="text/javascript" src="js/cordova.qt5.js"></script>
-        <script language="javascript" type="text/javascript" src="js/file.js"></script>
-        <script language="javascript" type="text/javascript" src="js/notification.js"></script>
-        <script language="javascript" type="text/javascript" src="js/geolocation.js"></script>
-        <script language="javascript" type="text/javascript" src="js/device.js"></script>
         <script language="javascript" type="text/javascript" src="js/connection.js"></script>
+        <script language="javascript" type="text/javascript" src="js/console.js"></script>
+        <script language="javascript" type="text/javascript" src="js/device.js"></script>
+        <script language="javascript" type="text/javascript" src="js/file.js"></script>
+        <script language="javascript" type="text/javascript" src="js/geolocation.js"></script>
+        <script language="javascript" type="text/javascript" src="js/notification.js"></script>
+        <script language="javascript" type="text/javascript" src="js/compass.js"></script>
+        <script language="javascript" type="text/javascript" src="js/accelerometer.js"></script>
 
         <script language="javascript" type="text/javascript" src="basic.js"></script>
+
+        <style type="text/css">
+            input {
+                height: 30px;
+                margin-top: 15px;
+            }
+        </style>
     </head>
-    <body width=360 height=640>
+    <body>
+        <input type="button" value="Init Watchers!" onclick="init();"/>
+        <br />
         <input type="button" value="Vibrate!" onclick="test_vibra();"/>
         <br />
+        <input type="button" value="Alert/Confirm" onclick="test_alert_confirm();">
         <br />
-        <div id="accel_val"> AAA </div>
-        <br />
-        <br />
-        <input type="button" value="Ping Google!" onclick="ping_google();">
-        <br />
+        <input type="button" value="Check connection" onclick="getCurrentConnectionType();">
         <br />
         <input type="button" value="RequestFileSystem" onclick="test_requestFileSystem();">
         <br />
-        <div id="debug_output"> Unknown </div>
-        <br />
+        <div id="debug_output"> </div>
         <input type="button" value="getCurrentPosition" onclick="getCurrentPosition();">
         <br />
         <div id="position_val"> Location </div>
+        <input type="button" value="Get Acceleration" onclick="getCurrentAcceleration();">
         <br />
+        <div id="accel_val"> Acceleration </div>
+        <input type="button" value="getCurrentHeading" onclick="getCurrentHeading();">
+        <br />
+        <div id="heading_val"> Heading </div>
     </body>
 </html>

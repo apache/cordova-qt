@@ -21,6 +21,8 @@
 #include <QApplication>
 #include <QFeedbackHapticsEffect>
 
+#include <QDebug>
+
 #ifdef QTM_NAMESPACE
 QTM_USE_NAMESPACE
 #endif
@@ -54,8 +56,19 @@ void Notification::vibrate( int scId, int ecId, int p_milliseconds ) {
     Q_UNUSED(scId)
     Q_UNUSED(ecId)
 
-    QFeedbackHapticsEffect vibrate;
-    vibrate.setIntensity(1.0);
-    vibrate.setDuration(p_milliseconds);
-    vibrate.start();
+    QFeedbackHapticsEffect *vibrate = new QFeedbackHapticsEffect;
+    vibrate->setIntensity(1.0);
+    vibrate->setDuration(p_milliseconds);
+    connect(vibrate, SIGNAL(stateChanged()), this, SLOT(deleteEffectAtStateStopped()));
+    vibrate->start();
+}
+
+void Notification::deleteEffectAtStateStopped()
+{
+    qDebug() << Q_FUNC_INFO;
+    QFeedbackEffect *effect = qobject_cast<QFeedbackEffect *>(sender());
+    if (!effect)
+        return;
+    if (effect->state() == QFeedbackEffect::Stopped)
+        effect->deleteLater();
 }
