@@ -39,7 +39,9 @@ void Accelerometer::init(){
     connect(m_accelerometerSource,SIGNAL(readingChanged()), SLOT(updateSensor()));
 }
 
-void Accelerometer::getCurrentAcceleration( int scId, int ecId, QVariantMap p_options){
+void Accelerometer::getCurrentAcceleration( int scId, int ecId, QVariantMap p_options) {
+    Q_UNUSED(ecId);
+    Q_UNUSED(p_options);
 
     QString callbackArguments = "Acceleration.cast({ x: " + QString::number(m_x_accel) + "," +
                                 "                    y: " + QString::number(m_y_accel) + "," +

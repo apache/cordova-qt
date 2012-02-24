@@ -56,6 +56,7 @@ void Connection::init() {
 }
 
 void Connection::setChangeCallback( int scId, int ecId ) {
+    Q_UNUSED(ecId);
     m_changeCallback = scId;
 
     if( !m_bInitialized ) {
@@ -69,22 +70,32 @@ void Connection::setChangeCallback( int scId, int ecId ) {
  */
 #if QT_VERSION < 0x050000
 void Connection::cellDataTechnologyChanged( QSystemNetworkInfo::CellDataTechnology cellTech ) {
+    Q_UNUSED(cellTech);
     typeChanged();
 }
 void Connection::networkModeChanged( QSystemNetworkInfo::NetworkMode mode ) {
+    Q_UNUSED(mode);
     typeChanged();
 }
 void Connection::networkStatusChanged( QSystemNetworkInfo::NetworkMode mode, QSystemNetworkInfo::NetworkStatus status ) {
+    Q_UNUSED(mode);
+    Q_UNUSED(status);
     typeChanged();
 }
 #else
 void Connection::currentCellDataTechnologyChanged( int interface, QNetworkInfo::CellDataTechnology cellTech ) {
+    Q_UNUSED(interface);
+    Q_UNUSED(cellTech);
     typeChanged();
 }
 void Connection::currentNetworkModeChanged( QNetworkInfo::NetworkMode mode ) {
+    Q_UNUSED(mode);
     typeChanged();
 }
 void Connection::networkStatusChanged( QNetworkInfo::NetworkMode mode, int interface, QNetworkInfo::NetworkStatus status ) {
+    Q_UNUSED(mode);
+    Q_UNUSED(interface);
+    Q_UNUSED(status);
     typeChanged();
 }
 #endif // QT_VERSION < 0x050000
