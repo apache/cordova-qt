@@ -22,6 +22,7 @@
 #include <QGeoPositionInfoSource>
 #include <QGeoPositionInfo>
 #include <QList>
+#include <QVariantMap>
 
 #ifdef QTM_NAMESPACE
 QTM_USE_NAMESPACE

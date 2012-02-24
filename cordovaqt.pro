@@ -9,16 +9,50 @@ qmlDir.source = qml
 DEPLOYMENTFOLDERS = wwwDir xmlDir qmlDir # file1 dir1
 
 
+SOURCES += main.cpp \
+    src/plugins/notification.cpp \
+    src/plugins/geolocation.cpp \
+    src/plugins/fileapi.cpp \
+    src/plugins/device.cpp \
+    src/pluginregistry.cpp \
+    src/plugins/console.cpp \
+    src/plugins/connection.cpp \
+    src/plugins/compass.cpp \
+    src/plugins/accelerometer.cpp \
+    src/plugins/events.cpp \
+    src/cordova.cpp \
+    src/cplugin.cpp
+HEADERS += \
+    src/plugins/notification.h \
+    src/plugins/geolocation.h \
+    src/plugins/fileapi.h \
+    src/plugins/device.h \
+    src/pluginregistry.h \
+    src/plugins/console.h \
+    src/plugins/connection.h \
+    src/plugins/compass.h \
+    src/plugins/accelerometer.h \
+    src/plugins/events.h \
+    src/cordova.h \
+    src/cplugin.h
+
 greaterThan(QT_MAJOR_VERSION, 4) {
+    message("Qt5 build")
     QT += widgets
     QT += location
+    QT += sensors
     QT += feedback
     QT += systeminfo
-    QT += sensors
     QT += quick declarative
+
     OTHER_FILES += qml/main_qt5.qml \
+        qml/main_harmattan_qt5.qml \
         qml/cordova_wrapper.js
+
 } else:!isEmpty(MEEGO_VERSION_MAJOR) {
+    message("Qt4 build")
+    message("Harmattan build")
+
     OTHER_FILES += qml/main_harmattan.qml \
         qml/cordova_wrapper.js
 
@@ -26,6 +60,9 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     CONFIG += mobility qdeclarative-boostable
     MOBILITY += feedback location systeminfo sensors
 } else {
+    message("Qt4 build")
+    message("Non-harmattan build")
+
     OTHER_FILES += qml/main.qml \
         qml/cordova_wrapper.js
 
@@ -40,35 +77,6 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 }
 
 QT += webkit
-
-SOURCES += main.cpp \
-    src/plugins/notification.cpp \
-    src/plugins/geolocation.cpp \
-    src/plugins/fileapi.cpp \
-    src/plugins/device.cpp \
-    src/pluginregistry.cpp \
-    src/plugins/console.cpp \
-    src/plugins/connection.cpp \
-    src/plugins/compass.cpp \
-    src/plugins/accelerometer.cpp \
-    src/plugins/events.cpp \
-    src/cordova.cpp \
-    src/cplugin.cpp \
-    src/cwebpage.cpp
-HEADERS += \
-    src/plugins/notification.h \
-    src/plugins/geolocation.h \
-    src/plugins/fileapi.h \
-    src/plugins/device.h \
-    src/pluginregistry.h \
-    src/plugins/console.h \
-    src/plugins/connection.h \
-    src/plugins/compass.h \
-    src/plugins/accelerometer.h \
-    src/plugins/events.h \
-    src/cordova.h \
-    src/cplugin.h \
-    src/cwebpage.h
 
 # Please do not modify the following two lines. Required for deployment.
 include(deployment.pri)

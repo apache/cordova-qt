@@ -17,7 +17,7 @@
 function Connection() {
 }
 
-Connection.prototype.type = 0;
+Connection.prototype.type = 1;
 Connection.UNKNOWN = 1;
 Connection.ETHERNET = 2;
 Connection.WIFI = 3;

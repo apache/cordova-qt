@@ -74,6 +74,7 @@ void Device::getInfo( int scId, int ecId ) {
 #if QT_VERSION < 0x050000
     this->callback( scId, "'" + systemDeviceInfo->model() + "', '" + CORDOVA + "', '" + platform + "', '" + systemDeviceInfo->uniqueDeviceID() + "', '" + systemInfo->version( QSystemInfo::Os ) + "'" );
 #else
+    qDebug() << Q_FUNC_INFO << ":" << systemInfo->imei(0) << "; " << systemInfo->manufacturer() << "; " << systemInfo->model() << "; " << systemInfo->productName() << "; " << systemInfo->uniqueDeviceID() << "; " << systemInfo->version(QDeviceInfo::Os) << "; " << systemInfo->version(QDeviceInfo::Firmware);
     this->callback( scId, "'" + systemDeviceInfo->model() + "', '" + CORDOVA + "', '" + platform + "', '" + systemDeviceInfo->uniqueDeviceID() + "', '" + systemInfo->version( QDeviceInfo::Os ) + "'" );
 #endif
 }
