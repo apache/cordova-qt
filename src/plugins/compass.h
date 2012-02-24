@@ -18,7 +18,7 @@
 #define COMPASS_H
 
 #include "../cplugin.h"
-#include <QtSensors/QCompass>
+#include <QCompass>
 #include <QList>
 
 #ifdef QTM_NAMESPACE

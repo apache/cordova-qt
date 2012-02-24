@@ -19,7 +19,7 @@
 
 #include "../cplugin.h"
 #include "../pluginregistry.h"
-#include <QtSensors/QAccelerometer>
+#include <QAccelerometer>
 #include <QObject>
 #include <QMap>
 #include <QDebug>
