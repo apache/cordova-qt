@@ -60,7 +60,11 @@ int main(int argc, char *argv[])
     view->showFullScreen();
 # else
     view->setSource(QUrl(QString("%1/qml/main.qml").arg(Cordova::instance()->workingDir())));
+#  if defined(Q_OS_SYMBIAN) || defined(QT_SIMULATOR)
+    view->showFullScreen();
+#  else
     view->show();
+#  endif
 # endif
 #else // QT_VERSION >= 0x050000
     QQuickView view;
