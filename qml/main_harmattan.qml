@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import com.nokia.meego 1.1
+import com.nokia.meego 1.0
 import QtWebKit 1.0
 import "cordova_wrapper.js" as CordovaWrapper
 

@@ -16,13 +16,13 @@
 
 #include "cordova.h"
 #include "pluginregistry.h"
-#include "cwebpage.h"
 
 #include <qplatformdefs.h>
 
 #include <QDebug>
 #include <QXmlStreamReader>
 #include <QApplication>
+#include <QUrl>
 
 Cordova *Cordova::m_instance = 0;
 

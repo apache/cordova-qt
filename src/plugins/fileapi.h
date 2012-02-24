@@ -20,6 +20,7 @@
 #include "../cplugin.h"
 
 #include <QDir>
+#include <QVariantMap>
 
 class FileAPI : public CPlugin
 {

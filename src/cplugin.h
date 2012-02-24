@@ -18,7 +18,6 @@
 #define CPLUGIN_H
 
 #include <QObject>
-#include <QWebFrame>
 
 class CPlugin : public QObject
 {

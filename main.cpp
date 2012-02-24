@@ -22,6 +22,7 @@
 #if QT_VERSION < 0x050000
 # include <QDeclarativeView>
 #else
+# include <QDeviceInfo>
 # include <QQuickView>
 #endif
 
@@ -67,12 +68,30 @@ int main(int argc, char *argv[])
 #  endif
 # endif
 #else // QT_VERSION >= 0x050000
-    QQuickView view;
-    Cordova::instance()->setTopLevelEventsReceiver(&view);
-    view.setResizeMode(QQuickView::SizeRootObjectToView);
-    view.rootContext()->setContextProperty("cordova", Cordova::instance());
-    view.setSource(QUrl(QString("%1/qml/main_qt5.qml").arg(Cordova::instance()->workingDir())));
-    view.show();
+
+    //HACK: we don't have any solution to check for harmattan in qt5
+    // so we use check for LINUX OS and for "dfl61" substring in kernel version
+    // (at least pr1.1 and pr1.2 contains it)
+    QDeviceInfo info;
+    bool isHarmattan = info.version(QDeviceInfo::Firmware).contains("dfl61");
+#ifndef Q_OS_LINUX
+    isHarmattan = false;
+#endif
+
+    //TODO: look later at boostable possibility for this here
+    QScopedPointer<QQuickView> view(new QQuickView());;
+
+    Cordova::instance()->setTopLevelEventsReceiver(view.data());
+    view->setResizeMode(QQuickView::SizeRootObjectToView);
+    view->rootContext()->setContextProperty("cordova", Cordova::instance());
+
+    if (isHarmattan) {
+        view->setSource(QUrl(QString("%1/qml/main_harmattan_qt5.qml").arg(Cordova::instance()->workingDir())));
+        view->showFullScreen();
+    } else {
+        view->setSource(QUrl(QString("%1/qml/main_qt5.qml").arg(Cordova::instance()->workingDir())));
+        view->show();
+    }
 #endif
 
     return app->exec();
