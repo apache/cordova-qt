@@ -173,7 +173,7 @@ Contact.create = function(obj) {
             return result
         }
 
-Contact.prototype.id = ""
+Contact.prototype.id = null
 Contact.prototype.displayName = ""
 Contact.prototype.name = new ContactName()
 Contact.prototype.nickname = ""
@@ -189,10 +189,23 @@ Contact.prototype.categories = []
 Contact.prototype.urls = []
 
 Contact.prototype.clone = function() {
-
+            var newContact = Contact.create(this)
+            newContact.id = null
+            return newContact
         }
 
 Contact.prototype.remove = function(onSaveSuccess,onSaveError) {
+            if( typeof contactSuccess !== "function" ) return
+            if( typeof contactError !== "function" ) contactError = function() {}
+
+            //TODO: call onSaveError here
+            if (this.id == null || this.id == "")
+                return
+
+            Cordova.exec( function() {
+                              contactSuccess()
+                          }, contactError, "com.cordova.Contacts", "removeContact", [ this.id ] )
+
 
         }
 

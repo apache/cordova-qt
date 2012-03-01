@@ -81,6 +81,19 @@ void Contacts::saveContact(int scId, int ecId, const QVariantMap &params)
     qDeleteAll(detailsToDelete);
 }
 
+void Contacts::removeContact(int scId, int ecId, const QString &guid)
+{
+    Q_UNUSED(scId)
+    Q_UNUSED(ecId)
+
+    QContactDetailFilter idFilter;
+    idFilter.setDetailDefinitionName(QContactGuid::DefinitionName, QContactGuid::FieldGuid);
+    idFilter.setValue(guid);
+    idFilter.setMatchFlags(QContactFilter::MatchExactly);
+    QList<QContactLocalId> contacts = m_manager->contactIds(idFilter);
+    m_manager->removeContacts(contacts);
+}
+
 void Contacts::findContacts(int scId, int ecId, const QStringList &fields, const QString &filter, bool multiple)
 {
     qDebug() << Q_FUNC_INFO << filter << fields << multiple;

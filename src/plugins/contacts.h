@@ -15,15 +15,14 @@
 
 #ifdef QTM_NAMESPACE
 QTM_BEGIN_NAMESPACE
-#elif defined QTCONTACTS_USE_NAMESPACE
-QTCONTACTS_BEGIN_NAMESPACE
-#endif
 class QContact;
 class QContactManager;
-#ifdef QTM_NAMESPACE
 QTM_END_NAMESPACE
 QTM_USE_NAMESPACE
 #elif defined QTCONTACTS_USE_NAMESPACE
+QTCONTACTS_BEGIN_NAMESPACE
+class QContact;
+class QContactManager;
 QTCONTACTS_END_NAMESPACE
 QTCONTACTS_USE_NAMESPACE
 #endif
@@ -41,6 +40,7 @@ signals:
 
 public slots:
     void saveContact(int scId, int ecId, const QVariantMap &params);
+    void removeContact(int scId, int ecId, const QString &guid);
     void findContacts(int scId, int ecId, const QStringList &fields, const QString &filter, bool multiple);
 
 private:
