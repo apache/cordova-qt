@@ -9,6 +9,7 @@
     <plugin name="Console" value="com.cordova.Console"/>
     <plugin name="Connection" value="com.cordova.Connection"/>
     <plugin name="Compass" value="com.cordova.Compass"/>
+    <plugin name="Contacts" value="com.cordova.Contacts"/>
 
 <!--    <plugin name="Compass" value="com.cordova.CompassListener"/>
     <plugin name="Media" value="com.cordova.AudioHandler"/>

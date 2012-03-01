@@ -21,7 +21,8 @@ SOURCES += main.cpp \
     src/plugins/accelerometer.cpp \
     src/plugins/events.cpp \
     src/cordova.cpp \
-    src/cplugin.cpp
+    src/cplugin.cpp \
+    src/plugins/contacts.cpp
 HEADERS += \
     src/plugins/notification.h \
     src/plugins/geolocation.h \
@@ -34,7 +35,8 @@ HEADERS += \
     src/plugins/accelerometer.h \
     src/plugins/events.h \
     src/cordova.h \
-    src/cplugin.h
+    src/cplugin.h \
+    src/plugins/contacts.h
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     message("Qt5 build")
@@ -43,6 +45,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     QT += sensors
     QT += feedback
     QT += systeminfo
+    QT += contacts
     QT += quick declarative
 
     OTHER_FILES += qml/main_qt5.qml \
@@ -59,7 +62,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     QT += declarative
     QT += webkit
     CONFIG += mobility qdeclarative-boostable
-    MOBILITY += feedback location systeminfo sensors multimedia
+    MOBILITY += feedback location systeminfo sensors multimedia contacts
 } else {
     message("Qt4 build")
     message("Non-harmattan build")
@@ -74,7 +77,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     QT += declarative
     QT += webkit
     CONFIG += mobility
-    MOBILITY += feedback location systeminfo sensors multimedia
+    MOBILITY += feedback location systeminfo sensors multimedia contacts
 }
 
 # Please do not modify the following two lines. Required for deployment.

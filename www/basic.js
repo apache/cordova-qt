@@ -158,6 +158,16 @@ function fileError( p_fileError ) {
 document.addEventListener( "deviceready", function() {
                                               console.log("basicjs.deviceReady")
                                               get( "debug_output" ).innerHTML = "Device Ready!<br/>";
+
+                                              navigator.contacts.find(["name", "phoneNumbers", "nickname", "displayName", "emails"],
+                                                                      function(contacts){
+                                                                          var result = ""
+                                                                          for (var contact in contacts) {
+                                                                              result += contacts[contact].name.formatted + ": " + contacts[contact].phoneNumbers[0].value + "\n"
+                                                                          }
+
+                                                                          console.log(result)
+                                                                      }, 0, {filter:"mar", multiple: true})
                                           }, false );
 
 document.addEventListener( "resume", function() {
