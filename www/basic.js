@@ -2,6 +2,33 @@
  * JavaScript file
  */
 
+
+//TODO: remove later this method. Now it is needed for debugging
+function dump(arr,level) {
+    var dumped_text = "";
+    if(!level) level = 0;
+
+    //The padding given at the beginning of the line.
+    var level_padding = "";
+    for(var j=0;j<level+1;j++) level_padding += "    ";
+
+    if(typeof(arr) == 'object') { //Array/Hashes/Objects
+        for(var item in arr) {
+            var value = arr[item];
+
+            if(typeof(value) == 'object') { //If it is an array,
+                dumped_text += level_padding + "'" + item + "' ... :\n";
+                dumped_text += dump(value,level+1);
+            } else {
+                dumped_text += level_padding + "'" + item + "' => \"" + value + "\";\n";
+            }
+        }
+    } else { //Stings/Chars/Numbers etc.
+        dumped_text = "===>"+arr+"<===("+typeof(arr)+")";
+    }
+    return dumped_text;
+}
+
 var vibration_length = 1000;
 
 function get(id)
@@ -152,6 +179,20 @@ function fileError( p_fileError ) {
 }
 
 
+function displayGiven(contacts){
+    var result = ""
+    for (var contact in contacts) {
+        result += contacts[contact].name.formatted + ": " + contacts[contact].phoneNumbers[0].value + "\n"
+        contacts[contact].remove(function() {searchForGiven()})
+    }
+
+    console.log(result)
+}
+
+function searchForGiven() {
+    navigator.contacts.find(["name", "phoneNumbers", "nickname", "displayName", "emails", "ims", "addresses", "organizations", "birthday", "photos"], displayGiven, 0, {filter:"Given", multiple: true})
+}
+
 /*
  * Register for the device ready event
  */
@@ -159,15 +200,18 @@ document.addEventListener( "deviceready", function() {
                                               console.log("basicjs.deviceReady")
                                               get( "debug_output" ).innerHTML = "Device Ready!<br/>";
 
-                                              navigator.contacts.find(["name", "phoneNumbers", "nickname", "displayName", "emails"],
-                                                                      function(contacts){
-                                                                          var result = ""
-                                                                          for (var contact in contacts) {
-                                                                              result += contacts[contact].name.formatted + ": " + contacts[contact].phoneNumbers[0].value + "\n"
-                                                                          }
+                                              var created = navigator.contacts.create({"name": {familyName: "Family", givenName: "Given"}, phoneNumbers: [{"value": "+123456789", pref: false, type: "work"}], emails: [{"value": "given.family@gmail.com", pref: false, type: "email"}, {"value": "given@family.com", pref: false, type: "email"}], birthday: new Date(1985, 4, 3, 0, 0, 0)})
+                                              created.save(searchForGiven, 0)
 
-                                                                          console.log(result)
-                                                                      }, 0, {filter:"mar", multiple: true})
+//                                              navigator.contacts.find(["name", "phoneNumbers", "nickname", "displayName", "emails", "ims", "addresses", "organizations", "birthday", "photos"],
+//                                                                      function(contacts){
+//                                                                          var result = ""
+//                                                                          for (var contact in contacts) {
+//                                                                              result += contacts[contact].name.formatted + ": " + contacts[contact].phoneNumbers[0].value + "\n"
+//                                                                          }
+
+//                                                                          console.log(result)
+//                                                                      }, 0, {filter:"mar", multiple: true})
                                           }, false );
 
 document.addEventListener( "resume", function() {

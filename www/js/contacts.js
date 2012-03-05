@@ -194,22 +194,29 @@ Contact.prototype.clone = function() {
             return newContact
         }
 
-Contact.prototype.remove = function(onSaveSuccess,onSaveError) {
-            if( typeof contactSuccess !== "function" ) return
+Contact.prototype.remove = function(contactSuccess,contactError) {
+            console.log("Contact.remove 1: " + dump(this))
+            if( typeof contactSuccess !== "function" ) contactSuccess = function() {}
             if( typeof contactError !== "function" ) contactError = function() {}
 
             //TODO: call onSaveError here
             if (this.id == null || this.id == "")
                 return
+            console.log("Contact.remove 2")
 
-            Cordova.exec( function() {
-                              contactSuccess()
-                          }, contactError, "com.cordova.Contacts", "removeContact", [ this.id ] )
+            Cordova.exec( contactSuccess, contactError, "com.cordova.Contacts", "removeContact", [ this.id ] )
+            console.log("Contact.remove 3")
+}
 
+Contact.prototype.save = function(contactSuccess,contactError) {
+            console.log("Contact.save 1")
+            if( typeof contactSuccess !== "function" ) contactSuccess = function() {}
+            if( typeof contactError !== "function" ) contactError = function() {}
 
-        }
+            console.log("Contact.save 2: ")
 
-Contact.prototype.save = function(onSaveSuccess,onSaveError) {
+            Cordova.exec( contactSuccess, contactError, "com.cordova.Contacts", "saveContact", [ this ] )
+            console.log("Contact.save 3")
 
         }
 
@@ -220,26 +227,15 @@ function ContactsManager() {
 }
 
 ContactsManager.prototype.create = function(properties) {
-            var result = new Contact()
-            for (var property in properties) {
-                if (typeof result[property] != 'undefined')
-                    result[property] = properties[property]
-            }
-            return result
+            return Contact.create(properties)
         }
 
 ContactsManager.prototype.find = function(contactFields, contactSuccess, contactError, contactFindOptions) {
             // Check the callbacks
-            console.log("contacts.find 1")
             if( typeof contactSuccess !== "function" ) return
-            console.log("contacts.find 2")
             if( typeof contactError !== "function" ) contactError = function() {}
-            console.log("contacts.find 3")
 
-            Cordova.exec( function( contactsList ) {
-                              contactSuccess( contactsList )
-                          }, contactError, "com.cordova.Contacts", "findContacts", [ contactFields, contactFindOptions.filter, contactFindOptions.multiple ] )
-            console.log("contacts.find 4")
+            Cordova.exec( contactSuccess, contactError, "com.cordova.Contacts", "findContacts", [ contactFields, contactFindOptions.filter, contactFindOptions.multiple ] )
         }
 
 /**

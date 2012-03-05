@@ -40,7 +40,7 @@ signals:
 
 public slots:
     void saveContact(int scId, int ecId, const QVariantMap &params);
-    void removeContact(int scId, int ecId, const QString &guid);
+    void removeContact(int scId, int ecId, const QString &localId);
     void findContacts(int scId, int ecId, const QStringList &fields, const QString &filter, bool multiple);
 
 private:

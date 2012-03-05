@@ -2,7 +2,6 @@
 #include "../pluginregistry.h"
 
 #include <QMap>
-#include <QContactGuid>
 #include <QContactDisplayLabel>
 #include <QContactName>
 #include <QContactNickname>
@@ -19,7 +18,6 @@
 #include <QContactManager>
 #include <QContactUnionFilter>
 #include <QContactDetailFilter>
-
 #include <QDebug>
 
 #ifdef QTM_USE_NAMESPACE
@@ -41,7 +39,6 @@ Contacts::Contacts() :
 void Contacts::init()
 {
     m_fieldNamePairs.clear();
-    m_fieldNamePairs["id"] = (QLatin1String)QContactGuid::DefinitionName;
     m_fieldNamePairs["displayName"] = (QLatin1String)QContactDisplayLabel::DefinitionName;
     m_fieldNamePairs["name"] = (QLatin1String)QContactName::DefinitionName;
     m_fieldNamePairs["nickname"] = (QLatin1String)QContactNickname::DefinitionName;
@@ -62,36 +59,199 @@ void Contacts::init()
 
 void Contacts::saveContact(int scId, int ecId, const QVariantMap &params)
 {
-    Q_UNUSED(scId);
-    Q_UNUSED(ecId);
-
-    QContact *result = new QContact();
+    QContact result;
     QList<QContactDetail *> detailsToDelete;
-    foreach (const QString& paramName, params.keys()) {
-        QString mobilityDetailName = cordovaFieldNameToQtDefinitionName(paramName);
-        if (mobilityDetailName.isEmpty())
+    foreach (const QString& field, params.keys()) {
+        QString qtDefinitionName = cordovaFieldNameToQtDefinitionName(field);
+        if (qtDefinitionName.isEmpty())
             continue;
-        QContactDetail *detail = new QContactDetail(mobilityDetailName);
-//        detail->setValue(params[paramName]);
-        detailsToDelete << detail;
-        result->saveDetail(detail);
+
+        if (field == "nickname") {
+            QContactNickname *detail = new QContactNickname;
+            detail->setNickname(params[field].toString());
+            detailsToDelete << detail;
+            result.saveDetail(detail);
+        } else if (field == "note") {
+            QContactNote *detail = new QContactNote;
+            detail->setNote(params[field].toString());
+            detailsToDelete << detail;
+            result.saveDetail(detail);
+        } else if (field == "phoneNumbers") {
+            if (params[field].type() != QVariant::List)
+                continue;
+            QVariantList phonesList = params[field].toList();
+            foreach (const QVariant &phoneDesc, phonesList) {
+                if (phoneDesc.type() != QVariant::Map)
+                    continue;
+                QContactPhoneNumber *detail = new QContactPhoneNumber;
+                detail->setNumber(phoneDesc.toMap()["value"].toString());
+                if (!phoneDesc.toMap()["type"].toString().isEmpty() && phoneDesc.toMap()["type"].toString() != "phone")
+                    detail->setSubTypes(phoneDesc.toMap()["type"].toString());
+                detailsToDelete << detail;
+                result.saveDetail(detail);
+            }
+        } else if (field == "emails") {
+            if (params[field].type() != QVariant::List)
+                continue;
+            QVariantList emailsList = params[field].toList();
+            foreach (const QVariant &emailDesc, emailsList) {
+                if (emailDesc.type() != QVariant::Map)
+                    continue;
+                QContactEmailAddress *detail = new QContactEmailAddress;
+                detail->setEmailAddress(emailDesc.toMap()["value"].toString());
+                detailsToDelete << detail;
+                result.saveDetail(detail);
+            }
+        } else if (field == "ims") {
+            if (params[field].type() != QVariant::List)
+                continue;
+            QVariantList imsList = params[field].toList();
+            foreach (const QVariant &imDesc, imsList) {
+                if (imDesc.type() != QVariant::Map)
+                    continue;
+                QContactOnlineAccount *detail = new QContactOnlineAccount;
+                detail->setAccountUri(imDesc.toMap()["value"].toString());
+                if (!imDesc.toMap()["type"].toString().isEmpty())
+                    detail->setSubTypes(imDesc.toMap()["type"].toString());
+                detailsToDelete << detail;
+                result.saveDetail(detail);
+            }
+        } else if (field == "photos") {
+            if (params[field].type() != QVariant::List)
+                continue;
+            QVariantList photosList = params[field].toList();
+            foreach (const QVariant &photoDesc, photosList) {
+                if (photoDesc.type() != QVariant::Map)
+                    continue;
+                //TODO: we need to decide should we support base64 images or not
+                if (photoDesc.toMap()["type"].toString() != "url")
+                    continue;
+                QContactAvatar *detail = new QContactAvatar;
+                detail->setImageUrl(QUrl(photoDesc.toMap()["value"].toString()));
+                detailsToDelete << detail;
+                result.saveDetail(detail);
+            }
+        } else if (field == "urls") {
+            if (params[field].type() != QVariant::List)
+                continue;
+            QVariantList urlsList = params[field].toList();
+            foreach (const QVariant &urlDesc, urlsList) {
+                if (urlDesc.type() != QVariant::Map)
+                    continue;
+                QContactUrl *detail = new QContactUrl;
+                detail->setUrl(urlDesc.toMap()["value"].toString());
+                if (!urlDesc.toMap()["type"].toString().isEmpty())
+                    detail->setSubType(urlDesc.toMap()["type"].toString());
+                detailsToDelete << detail;
+                result.saveDetail(detail);
+            }
+        } else if (field == "birthday") {
+            QContactBirthday *detail = new QContactBirthday;
+            detail->setDateTime(QDateTime::fromString(params[field].toString(), "yyyy-MM-ddThh:mm:ss.zzzZ"));
+            detailsToDelete << detail;
+            result.saveDetail(detail);
+        } else if (field == "organizations") {
+
+            if (params[field].type() != QVariant::List)
+                continue;
+            QVariantList organizationsList = params[field].toList();
+            foreach (const QVariant &organizationDesc, organizationsList) {
+                if (organizationDesc.type() != QVariant::Map)
+                    continue;
+                QContactOrganization *detail = new QContactOrganization;
+                detail->setName(organizationDesc.toMap()["name"].toString());
+                detail->setDepartment(QStringList() << organizationDesc.toMap()["department"].toString());
+                detail->setRole(organizationDesc.toMap()["title"].toString());
+                detailsToDelete << detail;
+                result.saveDetail(detail);
+            }
+
+        } else if (field == "name") {
+            QContactName *detail = new QContactName;
+            QVariantMap nameMap = params[field].toMap();
+            detail->setLastName(nameMap["familyName"].toString());
+            detail->setFirstName(nameMap["givenName"].toString());
+            detail->setMiddleName(nameMap["middleName"].toString());
+            detail->setPrefix(nameMap["honorificPrefix"].toString());
+            detail->setSuffix(nameMap["honorificSuffix"].toString());
+            detailsToDelete << detail;
+            result.saveDetail(detail);
+        }
+
     }
-    m_manager->saveContact(result);
-    delete result;
+    result = m_manager->compatibleContact(result);
+    if (!m_manager->saveContact(&result)) {
+        switch (m_manager->error()) {
+        case QContactManager::DoesNotExistError:
+        case QContactManager::AlreadyExistsError:
+        case QContactManager::InvalidDetailError:
+        case QContactManager::InvalidRelationshipError:
+        case QContactManager::BadArgumentError:
+        case QContactManager::InvalidContactTypeError:
+            callback(ecId, "ContactError.INVALID_ARGUMENT_ERROR");
+            break;
+        case QContactManager::DetailAccessError:
+        case QContactManager::PermissionsError:
+            callback(ecId, "ContactError.PERMISSION_DENIED_ERROR");
+            break;
+        case QContactManager::NotSupportedError:
+            callback(ecId, "ContactError.NOT_SUPPORTED_ERROR");
+            break;
+        case QContactManager::TimeoutError:
+            callback(ecId, "ContactError.TIMEOUT_ERROR");
+            break;
+        case QContactManager::UnspecifiedError:
+        case QContactManager::LockedError:
+        case QContactManager::OutOfMemoryError:
+        case QContactManager::VersionMismatchError:
+        case QContactManager::LimitReachedError:
+        case QContactManager::NoError:
+        default:
+            callback(ecId, "ContactError.UNKNOWN_ERROR");
+            break;
+        }
+    } else {
+        callback(scId, "");
+    }
     qDeleteAll(detailsToDelete);
 }
 
-void Contacts::removeContact(int scId, int ecId, const QString &guid)
+void Contacts::removeContact(int scId, int ecId, const QString &localId)
 {
-    Q_UNUSED(scId)
-    Q_UNUSED(ecId)
+    if (!m_manager->removeContact(localId.toUInt())) {
+        switch (m_manager->error()) {
+        case QContactManager::DoesNotExistError:
+        case QContactManager::AlreadyExistsError:
+        case QContactManager::InvalidDetailError:
+        case QContactManager::InvalidRelationshipError:
+        case QContactManager::BadArgumentError:
+        case QContactManager::InvalidContactTypeError:
+            callback(ecId, "ContactError.INVALID_ARGUMENT_ERROR");
+            break;
+        case QContactManager::DetailAccessError:
+        case QContactManager::PermissionsError:
+            callback(ecId, "ContactError.PERMISSION_DENIED_ERROR");
+            break;
+        case QContactManager::NotSupportedError:
+            callback(ecId, "ContactError.NOT_SUPPORTED_ERROR");
+            break;
+        case QContactManager::TimeoutError:
+            callback(ecId, "ContactError.TIMEOUT_ERROR");
+            break;
+        case QContactManager::UnspecifiedError:
+        case QContactManager::LockedError:
+        case QContactManager::OutOfMemoryError:
+        case QContactManager::VersionMismatchError:
+        case QContactManager::LimitReachedError:
+        case QContactManager::NoError:
+        default:
+            callback(ecId, "ContactError.UNKNOWN_ERROR");
+            break;
+        }
 
-    QContactDetailFilter idFilter;
-    idFilter.setDetailDefinitionName(QContactGuid::DefinitionName, QContactGuid::FieldGuid);
-    idFilter.setValue(guid);
-    idFilter.setMatchFlags(QContactFilter::MatchExactly);
-    QList<QContactLocalId> contacts = m_manager->contactIds(idFilter);
-    m_manager->removeContacts(contacts);
+    } else {
+        callback(scId, "");
+    }
 }
 
 void Contacts::findContacts(int scId, int ecId, const QStringList &fields, const QString &filter, bool multiple)
@@ -150,14 +310,15 @@ QString Contacts::jsonedContact(const QContact &contact, const QStringList &fiel
     QStringList resultingFields = fields;
     if (resultingFields.empty())
         resultingFields.append(m_fieldNamePairs.keys());
+    if (!resultingFields.contains("id"))
+        resultingFields << "id";
     QStringList fieldValuesList;
     foreach (const QString &field, resultingFields) {
         QString qtDefinitionName = cordovaFieldNameToQtDefinitionName(field);
         if (field == "id") {
-            QContactGuid detail = contact.detail(qtDefinitionName);
             fieldValuesList << QString("%1: \"%2\"")
                                .arg(field)
-                               .arg(detail.guid());
+                               .arg(contact.localId());
         } else if (field == "displayName") {
             QContactDisplayLabel detail = contact.detail(qtDefinitionName);
             fieldValuesList << QString("%1: \"%2\"")
