@@ -39,6 +39,8 @@ Contacts::Contacts() :
 void Contacts::init()
 {
     m_fieldNamePairs.clear();
+
+#if QT_VERSION < 0x050000
     m_fieldNamePairs["displayName"] = (QLatin1String)QContactDisplayLabel::DefinitionName;
     m_fieldNamePairs["name"] = (QLatin1String)QContactName::DefinitionName;
     m_fieldNamePairs["nickname"] = (QLatin1String)QContactNickname::DefinitionName;
@@ -51,6 +53,20 @@ void Contacts::init()
     m_fieldNamePairs["note"] = (QLatin1String)QContactNote::DefinitionName;
     m_fieldNamePairs["photos"] = (QLatin1String)QContactAvatar::DefinitionName;
     m_fieldNamePairs["urls"] = (QLatin1String)QContactUrl::DefinitionName;
+#else
+    m_fieldNamePairs["displayName"] = QContactDisplayLabel::DefinitionName;
+    m_fieldNamePairs["name"] = QContactName::DefinitionName;
+    m_fieldNamePairs["nickname"] = QContactNickname::DefinitionName;
+    m_fieldNamePairs["phoneNumbers"] = QContactPhoneNumber::DefinitionName;
+    m_fieldNamePairs["emails"] = QContactEmailAddress::DefinitionName;
+    m_fieldNamePairs["addresses"] = QContactAddress::DefinitionName;
+    m_fieldNamePairs["ims"] = QContactOnlineAccount::DefinitionName;
+    m_fieldNamePairs["organizations"] = QContactOrganization::DefinitionName;
+    m_fieldNamePairs["birthday"] = QContactBirthday::DefinitionName;
+    m_fieldNamePairs["note"] = QContactNote::DefinitionName;
+    m_fieldNamePairs["photos"] = QContactAvatar::DefinitionName;
+    m_fieldNamePairs["urls"] = QContactUrl::DefinitionName;
+#endif
 
     m_notSupportedFields.clear();
     m_notSupportedFields << "categories";
@@ -218,7 +234,13 @@ void Contacts::saveContact(int scId, int ecId, const QVariantMap &params)
 
 void Contacts::removeContact(int scId, int ecId, const QString &localId)
 {
-    if (!m_manager->removeContact(localId.toUInt())) {
+#if QT_VERSION < 0x050000
+    quint32 id = localId.toUInt();
+#else
+    QContactId id = QContactId::fromString(localId);
+#endif
+
+    if (!m_manager->removeContact(id)) {
         switch (m_manager->error()) {
         case QContactManager::DoesNotExistError:
         case QContactManager::AlreadyExistsError:
@@ -316,9 +338,15 @@ QString Contacts::jsonedContact(const QContact &contact, const QStringList &fiel
     foreach (const QString &field, resultingFields) {
         QString qtDefinitionName = cordovaFieldNameToQtDefinitionName(field);
         if (field == "id") {
+#if QT_VERSION < 0x050000
             fieldValuesList << QString("%1: \"%2\"")
                                .arg(field)
                                .arg(contact.localId());
+#else
+            fieldValuesList << QString("%1: \"%2\"")
+                               .arg(field)
+                               .arg(contact.id().toString());
+#endif
         } else if (field == "displayName") {
             QContactDisplayLabel detail = contact.detail(qtDefinitionName);
             fieldValuesList << QString("%1: \"%2\"")

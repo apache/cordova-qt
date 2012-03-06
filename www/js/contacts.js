@@ -195,7 +195,7 @@ Contact.prototype.clone = function() {
         }
 
 Contact.prototype.remove = function(contactSuccess,contactError) {
-            console.log("Contact.remove 1: " + dump(this))
+            console.log("Contact.remove 1")
             if( typeof contactSuccess !== "function" ) contactSuccess = function() {}
             if( typeof contactError !== "function" ) contactError = function() {}
 
@@ -213,7 +213,7 @@ Contact.prototype.save = function(contactSuccess,contactError) {
             if( typeof contactSuccess !== "function" ) contactSuccess = function() {}
             if( typeof contactError !== "function" ) contactError = function() {}
 
-            console.log("Contact.save 2: ")
+            console.log("Contact.save 2")
 
             Cordova.exec( contactSuccess, contactError, "com.cordova.Contacts", "saveContact", [ this ] )
             console.log("Contact.save 3")

@@ -179,18 +179,46 @@ function fileError( p_fileError ) {
 }
 
 
-function displayGiven(contacts){
-    var result = ""
-    for (var contact in contacts) {
-        result += contacts[contact].name.formatted + ": " + contacts[contact].phoneNumbers[0].value + "\n"
-        contacts[contact].remove(function() {searchForGiven()})
-    }
-
-    console.log(result)
+function createTestContact() {
+    var created = navigator.contacts.create({"name": {familyName: "Family", givenName: "Given"}, phoneNumbers: [{"value": "+123456789", pref: false, type: "work"}], emails: [{"value": "given.family@gmail.com", pref: false, type: "email"}, {"value": "given@family.com", pref: false, type: "email"}], birthday: new Date(1985, 4, 3, 0, 0, 0)})
+    created.save(function() {
+                     get("create_contact_result").innerHTML = "Contact created"
+                 },
+                 function(error) {
+                     get("create_contact_result").innerHTML = "Error occured: " + error
+                 })
 }
 
-function searchForGiven() {
-    navigator.contacts.find(["name", "phoneNumbers", "nickname", "displayName", "emails", "ims", "addresses", "organizations", "birthday", "photos"], displayGiven, 0, {filter:"Given", multiple: true})
+function searchForTestContact() {
+    navigator.contacts.find(["name", "phoneNumbers", "nickname", "displayName", "emails", "ims", "addresses", "organizations", "birthday", "photos"],
+                            function(contacts) {
+                                var result = ""
+                                for (var contact in contacts) {
+                                    result += contacts[contact].name.formatted + ": " + contacts[contact].phoneNumbers[0].value + ", " + contacts[contact].emails[0].value + "<br />"
+                                }
+                                get("search_contact_result").innerHTML = result
+                            },
+                            function(error) {
+                                get("search_contact_result").innerHTML = "Error occured: " + error
+                            },
+                            {filter:"Given", multiple: true})
+}
+
+
+function removeTestContact() {
+    get("remove_contact_result").innerHTML = ""
+    navigator.contacts.find(["name"],
+                            function(contacts){
+                                for (var contact in contacts) {
+                                    contacts[contact].remove(function() {
+                                                                 get("remove_contact_result").innerHTML += "Contact removed; "
+                                                             },
+                                                             function(error) {
+                                                                 get("remove_contact_result").innerHTML += "Error occured: " + error + "; "
+                                                             })
+                                }
+                            },
+                            0, {filter:"Given", multiple: true})
 }
 
 /*
@@ -199,19 +227,6 @@ function searchForGiven() {
 document.addEventListener( "deviceready", function() {
                                               console.log("basicjs.deviceReady")
                                               get( "debug_output" ).innerHTML = "Device Ready!<br/>";
-
-                                              var created = navigator.contacts.create({"name": {familyName: "Family", givenName: "Given"}, phoneNumbers: [{"value": "+123456789", pref: false, type: "work"}], emails: [{"value": "given.family@gmail.com", pref: false, type: "email"}, {"value": "given@family.com", pref: false, type: "email"}], birthday: new Date(1985, 4, 3, 0, 0, 0)})
-                                              created.save(searchForGiven, 0)
-
-//                                              navigator.contacts.find(["name", "phoneNumbers", "nickname", "displayName", "emails", "ims", "addresses", "organizations", "birthday", "photos"],
-//                                                                      function(contacts){
-//                                                                          var result = ""
-//                                                                          for (var contact in contacts) {
-//                                                                              result += contacts[contact].name.formatted + ": " + contacts[contact].phoneNumbers[0].value + "\n"
-//                                                                          }
-
-//                                                                          console.log(result)
-//                                                                      }, 0, {filter:"mar", multiple: true})
                                           }, false );
 
 document.addEventListener( "resume", function() {
