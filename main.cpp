@@ -48,6 +48,12 @@ int main(int argc, char *argv[])
 #endif
 
 #if QT_VERSION < 0x050000
+#if defined(Q_OS_SYMBIAN)
+    //Workaround for symbian: without this HTMl5 localStorage is not persistent, and HTML5 client side database
+    // does not work (javascript execution stops due to error)
+    // Reason is probably that on symbian default path for storage is set incorrectly.
+    QWebSettings::globalSettings()->enablePersistentStorage(Cordova::instance()->workingDir());
+#endif
 # ifdef MEEGO_EDITION_HARMATTAN
     QScopedPointer<QDeclarativeView> view(MDeclarativeCache::qDeclarativeView());
 # else
