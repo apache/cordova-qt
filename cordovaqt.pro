@@ -57,6 +57,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
         qml/cordova_wrapper.js
 
     QT += declarative
+    QT += webkit
     CONFIG += mobility qdeclarative-boostable
     MOBILITY += feedback location systeminfo sensors
 } else {
@@ -71,12 +72,10 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     symbian:TARGET.CAPABILITY += NetworkServices
 
     QT += declarative
-
+    QT += webkit
     CONFIG += mobility
     MOBILITY += feedback location systeminfo sensors
 }
-
-QT += webkit
 
 # Please do not modify the following two lines. Required for deployment.
 include(deployment.pri)
