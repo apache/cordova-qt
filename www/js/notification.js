@@ -21,33 +21,29 @@
 function Notification() {
 }
 
+Notification.Callback = function() {};
+
 Notification.prototype.alert = function( message, alertCallback, title, buttonNamne ) {
-    alert( message );
-    alertCallback();
-}
+            alert( message );
+            alertCallback();
+        }
 
 Notification.prototype.confirm = function( message, confirmCallback, title, buttonLabels ) {
-    var result = confirm( message );
-    if( result ) {
-        result = 1;
-    }
-    else {
-        result = 0;
-    }
-    confirmCallback(result);
-}
+            Notification.Callback = confirmCallback;
+            window.qmlWrapper.callConfirm(message);
+        }
 
 Notification.prototype.beep = function( times ) {
-    Cordova.exec( null, null, "com.cordova.Notification", "beep", [times] );
-}
+            Cordova.exec( null, null, "com.cordova.Notification", "beep", [times] );
+        }
 
 Notification.prototype.vibrate = function( milliseconds ) {
-    Cordova.exec( null, null, "com.cordova.Notification", "vibrate", [milliseconds] );
-}
+            Cordova.exec( null, null, "com.cordova.Notification", "vibrate", [milliseconds] );
+        }
 
 /**
  * Add the notification object to the navigator
  */
 Cordova.addConstructor( "com.cordova.Notification", function () {
-                            navigator.notification = new Notification();
-                        } );
+                           navigator.notification = new Notification();
+                       } );

@@ -35,17 +35,26 @@ PageStackWindow {
                 settings.localStorageDatabaseEnabled: true
                 settings.offlineStorageDatabaseEnabled: true
                 settings.localContentCanAccessRemoteUrls: true
+                settings.developerExtrasEnabled: true
                 javaScriptWindowObjects: [QtObject{
-                    WebView.windowObjectName: "qmlWrapper"
+                        WebView.windowObjectName: "qmlWrapper"
 
-                    function callPluginFunction(pluginName, functionName, parameters) {
-                        parameters = eval("("+parameters+")")
-                        CordovaWrapper.execMethodOld(pluginName, functionName, parameters)
-                    }
-                }]
+                        function callPluginFunction(pluginName, functionName, parameters) {
+                            parameters = eval("("+parameters+")")
+                            CordovaWrapper.execMethodOld(pluginName, functionName, parameters)
+                        }
+                        function callConfirm(message){
+                            comfirmText.text = message;
+                            myConfirm.open();
+                        }
+                    }]
 
                 onLoadFinished: cordova.loadFinished(true)
                 onLoadFailed: cordova.loadFinished(false)
+                onAlert: {
+                    alertText.text = message
+                    myalert.open()
+                }
 
                 Connections {
                     target: cordova
@@ -59,9 +68,55 @@ PageStackWindow {
                         CordovaWrapper.addPlugin(pluginName, pluginObject)
                     }
                 }
-            }
-        }
 
+                Dialog {
+                    id: myalert
+                    content:Item {
+                        height: 50
+                        width: parent.width
+                        Text {
+                            id: alertText
+                            font.pixelSize: 22
+                            anchors.centerIn: parent
+                            color: "white"
+                            text: "Hello"
+                        }
+                    }
+
+                    buttons: ButtonRow {
+                        style: ButtonStyle { }
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        Button {text: "OK"; onClicked: myalert.accept()}
+                    }
+                }
+
+                Dialog {
+                    id: myConfirm
+                    property string js: "Notification.Callback"
+                    content:Item {
+                        height: 50
+                        width: parent.width
+                        Text {
+                            id: comfirmText
+                            font.pixelSize: 22
+                            anchors.centerIn: parent
+                            color: "white"
+                            text: "confirm"
+                        }
+                    }
+
+                    buttons: ButtonRow {
+                        style: ButtonStyle { }
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        Button {text: "OK"; onClicked:myConfirm.accept()}
+                        Button {text: "Cancel"; onClicked:myConfirm.reject()}
+                    }
+                    onAccepted: cordova.execJS(js + "(1)")
+                    onRejected: cordova.execJS(js + "(2)")
+                }
+            }
+
+        }
     }
 
 }

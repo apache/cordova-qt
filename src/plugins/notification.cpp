@@ -20,7 +20,7 @@
 
 #include <QApplication>
 #include <QFeedbackHapticsEffect>
-
+#include <QtMultimediaKit/QMediaPlayer>
 #include <QDebug>
 
 #ifdef QTM_NAMESPACE
@@ -43,10 +43,11 @@ Notification::Notification() : CPlugin(){
 void Notification::beep( int scId, int ecId, int p_times ) {
     Q_UNUSED(scId)
     Q_UNUSED(ecId)
-
-    for( int i = 0; i < p_times; i++ ) {
-        QApplication::beep();
-    }
+    Q_UNUSED(p_times)
+    QMediaPlayer* player = new QMediaPlayer;
+    player->setVolume(100);
+    player->setMedia(QUrl::fromLocalFile("/usr/share/sounds/ui-tones/snd_default_beep.wav"));
+    player->play();
 }
 
 /**

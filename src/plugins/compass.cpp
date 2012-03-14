@@ -16,7 +16,6 @@
 
 #include "compass.h"
 #include "../pluginregistry.h"
-#include <QCompass>
 
 Compass* Compass::m_compass = new Compass();
 

@@ -24,6 +24,7 @@ Flickable {
         settings.localStorageDatabaseEnabled: true
         settings.offlineStorageDatabaseEnabled: true
         settings.localContentCanAccessRemoteUrls: true
+        settings.developerExtrasEnabled: true
         javaScriptWindowObjects: [QtObject{
             WebView.windowObjectName: "qmlWrapper"
 

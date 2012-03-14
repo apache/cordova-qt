@@ -59,7 +59,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     QT += declarative
     QT += webkit
     CONFIG += mobility qdeclarative-boostable
-    MOBILITY += feedback location systeminfo sensors
+    MOBILITY += feedback location systeminfo sensors multimedia
 } else {
     message("Qt4 build")
     message("Non-harmattan build")
@@ -74,7 +74,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     QT += declarative
     QT += webkit
     CONFIG += mobility
-    MOBILITY += feedback location systeminfo sensors
+    MOBILITY += feedback location systeminfo sensors multimedia
 }
 
 # Please do not modify the following two lines. Required for deployment.

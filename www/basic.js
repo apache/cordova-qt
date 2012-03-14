@@ -47,9 +47,9 @@ function test_alert_confirm()
                                  }, "title", "buttonName");
     navigator.notification.confirm("This is a confirm.",
                                    function onConfirm(button) {
-                                       if ( button === 0) {
-                                           alert('User input: No');
-                                       } else {alert('User input: Yes');}
+                                       if ( button === 1) {
+                                           alert('User input: YES');
+                                       } else if( button === 2) {alert('User input: No');}
                                    }, "title", "buttonName");
 }
 
