@@ -22,17 +22,17 @@ Supported APIs
 - Contacts
 - Device
 - Events
-- File (File Transfer API has no direct support in Qt Mobility and is not be implemented for now)
+- File (Except for File Transfer API which has no direct support in Qt Mobility and is not implemented for now)
 - Geolocation (Uses the W3C Geolocation API specification which is supported by WebKit 2)
 - Notification (implemented for MeeGo Harmattan only)
 - Storage (Uses the W3C WebSQL Database and Web Storage API specifications which are supported by WebKit 2)
-- Camera (Basic support on MeeGo Harmattan but no gallery and no image settings)
+- Camera (Basic support on MeeGo Harmattan but no gallery or image settings)
 
 Unsupported APIs
 -----------------
 
 - Capture - in progress
-- Media (PhoneGap will be moving to follow the W3C specification which is supported by WebKit and these APIS are likley to be deprecated)
+- Media (PhoneGap will be moving to follow the W3C specification which is supported by WebKit and these APIS are likely to be deprecated)
 
 License
 -------
