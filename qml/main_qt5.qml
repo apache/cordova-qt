@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import QtWebKit 3.0
-import QtWebKit.experimental 3.0
+import QtWebKit.experimental 1.0
 import "cordova_wrapper.js" as CordovaWrapper
 
 WebView {
@@ -16,15 +16,19 @@ WebView {
     }
     //Uncomment when it will be available
     //experimental.setFlickableViewportEnabled: false
-    experimental.useTraditionalDesktopBehaviour: true
+//    experimental.useTraditionalDesktopBehaviour: true
 
 
     Component.onCompleted: {
-        webView.load(cordova.mainUrl)
+        webView.url = cordova.mainUrl
     }
 
-    onLoadSucceeded: cordova.loadFinished(true)
-    onLoadFailed: cordova.loadFinished(false)
+
+    //TODO: check here for errors
+    onLoadingChanged: cordova.loadFinished(true)
+
+//    onLoadSucceeded: cordova.loadFinished(true)
+//    onLoadFailed: cordova.loadFinished(false)
 
     Connections {
         target: cordova
