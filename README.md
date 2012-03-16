@@ -23,10 +23,10 @@ Supported APIs
 - Device
 - Events
 - File (Except for File Transfer API which has no direct support in Qt Mobility and is not implemented for now)
-- Geolocation (Uses the W3C Geolocation API specification which is supported by WebKit 2)
+- Geolocation (Uses the W3C Geolocation API specifications)
 - Notification (implemented for MeeGo Harmattan only)
-- Storage (Uses the W3C WebSQL Database and Web Storage API specifications which are supported by WebKit 2)
-- Camera (Basic support on MeeGo Harmattan but no gallery or image settings)
+- Storage (Uses the W3C WebSQL Database and Web Storage API specifications)
+- Camera (Basic support on Symbian and MeeGo Harmattan but no gallery or image settings)
 
 Unsupported APIs
 -----------------
