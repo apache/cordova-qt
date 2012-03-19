@@ -21,13 +21,15 @@
 
 #if QT_VERSION < 0x050000
 # include <QDeclarativeView>
+# include <QDeclarativeContext>
+# include <QDeclarativeEngine>
 #else
 # include <QDeviceInfo>
 # include <QQuickView>
+# include <QQmlContext>
+# include <QQmlEngine>
 #endif
 
-#include <QDeclarativeContext>
-#include <QDeclarativeEngine>
 #include <qplatformdefs.h>
 
 #ifdef MEEGO_EDITION_HARMATTAN

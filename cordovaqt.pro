@@ -46,6 +46,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     QT += feedback
     QT += systeminfo
     QT += contacts
+    QT += multimedia
     QT += quick declarative
 
     OTHER_FILES += qml/main_qt5.qml \

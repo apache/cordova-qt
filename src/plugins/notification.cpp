@@ -20,7 +20,12 @@
 
 #include <QApplication>
 #include <QFeedbackHapticsEffect>
-#include <QtMultimediaKit/QMediaPlayer>
+
+#if QT_VERSION < 0x050000
+# include <QtMultimediaKit/QMediaPlayer>
+#else
+# include <QtMultimedia/QMediaPlayer>
+#endif
 #include <QDebug>
 
 #ifdef QTM_NAMESPACE
