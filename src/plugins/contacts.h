@@ -11,6 +11,7 @@
 # include <qmobilityglobal.h>
 #else
 # include <qcontactsglobal.h>
+# include <QContactDetail>
 #endif
 
 #ifdef QTM_NAMESPACE
@@ -46,10 +47,24 @@ public slots:
 private:
     static Contacts *m_contacts;
 
-    QString cordovaFieldNameToQtDefinitionName(const QString &cordovaFieldName) const;
+#if QT_VERSION < 0x050000
+    QString cordovaFieldNameToQtDefinition(const QString &cordovaFieldName) const;
+#else
+    QContactDetail::DetailType cordovaFieldNameToQtDefinition(const QString &cordovaFieldName) const;
+    int subTypePhoneFromString(const QString &cordovaSubType) const;
+    int subTypeOnlineAccountFromString(const QString &cordovaSubType) const;
+    int subTypeUrlFromString(const QString &cordovaSubType) const;
+    QString subTypePhoneToString(int qtSubType) const;
+    QString subTypeOnlineAccountToString(int qtSubType) const;
+    QString subTypeUrlToString(int qtSubType) const;
+#endif
     QString jsonedContact(const QContact &contact, const QStringList &fields = QStringList()) const;
 
+#if QT_VERSION < 0x050000
     QHash<QString, QString> m_fieldNamePairs;
+#else
+    QHash<QString, QContactDetail::DetailType> m_fieldNamePairs;
+#endif
     QSet<QString> m_notSupportedFields;
     QContactManager *m_manager;
 };

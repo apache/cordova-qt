@@ -54,18 +54,18 @@ void Contacts::init()
     m_fieldNamePairs["photos"] = (QLatin1String)QContactAvatar::DefinitionName;
     m_fieldNamePairs["urls"] = (QLatin1String)QContactUrl::DefinitionName;
 #else
-    m_fieldNamePairs["displayName"] = QContactDisplayLabel::DefinitionName;
-    m_fieldNamePairs["name"] = QContactName::DefinitionName;
-    m_fieldNamePairs["nickname"] = QContactNickname::DefinitionName;
-    m_fieldNamePairs["phoneNumbers"] = QContactPhoneNumber::DefinitionName;
-    m_fieldNamePairs["emails"] = QContactEmailAddress::DefinitionName;
-    m_fieldNamePairs["addresses"] = QContactAddress::DefinitionName;
-    m_fieldNamePairs["ims"] = QContactOnlineAccount::DefinitionName;
-    m_fieldNamePairs["organizations"] = QContactOrganization::DefinitionName;
-    m_fieldNamePairs["birthday"] = QContactBirthday::DefinitionName;
-    m_fieldNamePairs["note"] = QContactNote::DefinitionName;
-    m_fieldNamePairs["photos"] = QContactAvatar::DefinitionName;
-    m_fieldNamePairs["urls"] = QContactUrl::DefinitionName;
+    m_fieldNamePairs["displayName"] = QContactDetail::TypeDisplayLabel;
+    m_fieldNamePairs["name"] = QContactDetail::TypeName;
+    m_fieldNamePairs["nickname"] = QContactDetail::TypeNickname;
+    m_fieldNamePairs["phoneNumbers"] = QContactDetail::TypePhoneNumber;
+    m_fieldNamePairs["emails"] = QContactDetail::TypeEmailAddress;
+    m_fieldNamePairs["addresses"] = QContactDetail::TypeAddress;
+    m_fieldNamePairs["ims"] = QContactDetail::TypeOnlineAccount;
+    m_fieldNamePairs["organizations"] = QContactDetail::TypeOrganization;
+    m_fieldNamePairs["birthday"] = QContactDetail::TypeBirthday;
+    m_fieldNamePairs["note"] = QContactDetail::TypeNote;
+    m_fieldNamePairs["photos"] = QContactDetail::TypeAvatar;
+    m_fieldNamePairs["urls"] = QContactDetail::TypeUrl;
 #endif
 
     m_notSupportedFields.clear();
@@ -78,9 +78,15 @@ void Contacts::saveContact(int scId, int ecId, const QVariantMap &params)
     QContact result;
     QList<QContactDetail *> detailsToDelete;
     foreach (const QString& field, params.keys()) {
-        QString qtDefinitionName = cordovaFieldNameToQtDefinitionName(field);
-        if (qtDefinitionName.isEmpty())
+#if QT_VERSION < 0x050000
+        QString qtDefinition = cordovaFieldNameToQtDefinition(field);
+        if (qtDefinition.isEmpty())
             continue;
+#else
+        QContactDetail::DetailType qtDefinition = cordovaFieldNameToQtDefinition(field);
+        if (qtDefinition == QContactDetail::TypeUndefined)
+            continue;
+#endif
 
         if (field == "nickname") {
             QContactNickname *detail = new QContactNickname;
@@ -101,8 +107,14 @@ void Contacts::saveContact(int scId, int ecId, const QVariantMap &params)
                     continue;
                 QContactPhoneNumber *detail = new QContactPhoneNumber;
                 detail->setNumber(phoneDesc.toMap()["value"].toString());
-                if (!phoneDesc.toMap()["type"].toString().isEmpty() && phoneDesc.toMap()["type"].toString() != "phone")
+                if (!phoneDesc.toMap()["type"].toString().isEmpty() &&
+                        phoneDesc.toMap()["type"].toString() != "phone")
+#if QT_VERSION < 0x050000
                     detail->setSubTypes(phoneDesc.toMap()["type"].toString());
+#else
+                    detail->setSubTypes(QList<int>() <<
+                                        subTypePhoneFromString(phoneDesc.toMap()["type"].toString()));
+#endif
                 detailsToDelete << detail;
                 result.saveDetail(detail);
             }
@@ -128,7 +140,12 @@ void Contacts::saveContact(int scId, int ecId, const QVariantMap &params)
                 QContactOnlineAccount *detail = new QContactOnlineAccount;
                 detail->setAccountUri(imDesc.toMap()["value"].toString());
                 if (!imDesc.toMap()["type"].toString().isEmpty())
+#if QT_VERSION < 0x050000
                     detail->setSubTypes(imDesc.toMap()["type"].toString());
+#else
+                    detail->setSubTypes(QList<int>() <<
+                                        subTypeOnlineAccountFromString(imDesc.toMap()["type"].toString()));
+#endif
                 detailsToDelete << detail;
                 result.saveDetail(detail);
             }
@@ -157,7 +174,11 @@ void Contacts::saveContact(int scId, int ecId, const QVariantMap &params)
                 QContactUrl *detail = new QContactUrl;
                 detail->setUrl(urlDesc.toMap()["value"].toString());
                 if (!urlDesc.toMap()["type"].toString().isEmpty())
+#if QT_VERSION < 0x050000
                     detail->setSubType(urlDesc.toMap()["type"].toString());
+#else
+                    detail->setSubType((QContactUrl::SubType) subTypeUrlFromString(urlDesc.toMap()["type"].toString()));
+#endif
                 detailsToDelete << detail;
                 result.saveDetail(detail);
             }
@@ -195,7 +216,9 @@ void Contacts::saveContact(int scId, int ecId, const QVariantMap &params)
         }
 
     }
+#if QT_VERSION < 0x050000
     result = m_manager->compatibleContact(result);
+#endif
     if (!m_manager->saveContact(&result)) {
         switch (m_manager->error()) {
         case QContactManager::DoesNotExistError:
@@ -283,6 +306,7 @@ void Contacts::findContacts(int scId, int ecId, const QStringList &fields, const
 
     QContactUnionFilter unionFilter;
 
+#if QT_VERSION < 0x050000
     QMap<QString, QStringList> fieldNames;
     fieldNames[QContactDisplayLabel::DefinitionName] << QContactDisplayLabel::FieldLabel;
     fieldNames[QContactName::DefinitionName] << QContactName::FieldFirstName << QContactName::FieldLastName << QContactName::FieldMiddleName << QContactName::FieldPrefix << QContactName::FieldSuffix;
@@ -305,6 +329,31 @@ void Contacts::findContacts(int scId, int ecId, const QStringList &fields, const
             unionFilter.append(subFilter);
         }
     }
+#else
+    QMap<QContactDetail::DetailType, QList<int> > fieldNames;
+    fieldNames[QContactDetail::TypeDisplayLabel] << QContactDisplayLabel::FieldLabel;
+    fieldNames[QContactDetail::TypeName] << QContactName::FieldFirstName << QContactName::FieldLastName << QContactName::FieldMiddleName << QContactName::FieldPrefix << QContactName::FieldSuffix;
+    fieldNames[QContactDetail::TypeNickname] << QContactNickname::FieldNickname;
+    fieldNames[QContactDetail::TypePhoneNumber] << QContactPhoneNumber::FieldNumber;
+    fieldNames[QContactDetail::TypeEmailAddress] << QContactEmailAddress::FieldEmailAddress;
+    fieldNames[QContactDetail::TypeAddress] << QContactAddress::FieldCountry << QContactAddress::FieldLocality << QContactAddress::FieldPostcode << QContactAddress::FieldPostOfficeBox << QContactAddress::FieldRegion << QContactAddress::FieldStreet;
+    fieldNames[QContactDetail::TypeOnlineAccount] << QContactOnlineAccount::FieldAccountUri;
+    fieldNames[QContactDetail::TypeOrganization] << QContactOrganization::FieldAssistantName << QContactOrganization::FieldDepartment << QContactOrganization::FieldLocation << QContactOrganization::FieldName << QContactOrganization::FieldRole << QContactOrganization::FieldTitle;
+    fieldNames[QContactDetail::TypeBirthday] << QContactBirthday::FieldBirthday;
+    fieldNames[QContactDetail::TypeNote] << QContactNote::FieldNote;
+    fieldNames[QContactDetail::TypeUrl] << QContactUrl::FieldUrl;
+
+    foreach (const QContactDetail::DetailType &defName, fieldNames.keys()) {
+        foreach(int fieldName, fieldNames[defName]) {
+            QContactDetailFilter subFilter;
+            subFilter.setDetailType(defName, fieldName);
+            subFilter.setValue(filter);
+            subFilter.setMatchFlags(QContactFilter::MatchContains);
+            unionFilter.append(subFilter);
+        }
+    }
+#endif
+
 
     QList<QContact> contacts = m_manager->contacts(unionFilter);
     if (contacts.empty()) {
@@ -320,12 +369,128 @@ void Contacts::findContacts(int scId, int ecId, const QStringList &fields, const
     }
 }
 
-QString Contacts::cordovaFieldNameToQtDefinitionName(const QString &cordovaFieldName) const
+#if QT_VERSION < 0x050000
+QString Contacts::cordovaFieldNameToQtDefinition(const QString &cordovaFieldName) const
+#else
+QContactDetail::DetailType Contacts::cordovaFieldNameToQtDefinition(const QString &cordovaFieldName) const
+#endif
 {
     if (m_fieldNamePairs.contains(cordovaFieldName))
         return m_fieldNamePairs[cordovaFieldName];
+#if QT_VERSION < 0x050000
     return "";
+#else
+    return QContactDetail::TypeUndefined;
+#endif
 }
+
+#if QT_VERSION >= 0x050000
+int Contacts::subTypePhoneFromString(const QString &cordovaSubType) const
+{
+    QString preparedSubType = cordovaSubType.toLower();
+    if (preparedSubType == "mobile")
+        return QContactPhoneNumber::SubTypeMobile;
+    else if (preparedSubType == "fax")
+        return QContactPhoneNumber::SubTypeFax;
+    else if (preparedSubType == "pager")
+        return QContactPhoneNumber::SubTypePager;
+    else if (preparedSubType == "voice")
+        return QContactPhoneNumber::SubTypeVoice;
+    else if (preparedSubType == "modem")
+        return QContactPhoneNumber::SubTypeModem;
+    else if (preparedSubType == "video")
+        return QContactPhoneNumber::SubTypeVideo;
+    else if (preparedSubType == "car")
+        return QContactPhoneNumber::SubTypeCar;
+    else if (preparedSubType == "assistant")
+        return QContactPhoneNumber::SubTypeAssistant;
+    return QContactPhoneNumber::SubTypeLandline;
+}
+
+int Contacts::subTypeOnlineAccountFromString(const QString &cordovaSubType) const
+{
+    QString preparedSubType = cordovaSubType.toLower();
+    if (preparedSubType == "aim")
+        return QContactOnlineAccount::ProtocolAim;
+    else if (preparedSubType == "icq")
+        return QContactOnlineAccount::ProtocolIcq;
+    else if (preparedSubType == "irc")
+        return QContactOnlineAccount::ProtocolIrc;
+    else if (preparedSubType == "jabber")
+        return QContactOnlineAccount::ProtocolJabber;
+    else if (preparedSubType == "msn")
+        return QContactOnlineAccount::ProtocolMsn;
+    else if (preparedSubType == "qq")
+        return QContactOnlineAccount::ProtocolQq;
+    else if (preparedSubType == "skype")
+        return QContactOnlineAccount::ProtocolSkype;
+    else if (preparedSubType == "yahoo")
+        return QContactOnlineAccount::ProtocolYahoo;
+    return QContactOnlineAccount::ProtocolUnknown;
+}
+
+int Contacts::subTypeUrlFromString(const QString &cordovaSubType) const
+{
+    QString preparedSubType = cordovaSubType.toLower();
+    if (preparedSubType == "blog")
+        return QContactUrl::SubTypeBlog;
+    else if (preparedSubType == "favourite")
+        return QContactUrl::SubTypeFavourite;
+    return QContactUrl::SubTypeHomePage;
+}
+
+QString Contacts::subTypePhoneToString(int qtSubType) const
+{
+    if (qtSubType == QContactPhoneNumber::SubTypeMobile)
+        return "mobile";
+    else if (qtSubType == QContactPhoneNumber::SubTypeFax)
+        return "fax";
+    else if (qtSubType == QContactPhoneNumber::SubTypePager)
+        return "pager";
+    else if (qtSubType == QContactPhoneNumber::SubTypeVoice)
+        return "voice";
+    else if (qtSubType == QContactPhoneNumber::SubTypeModem)
+        return "modem";
+    else if (qtSubType == QContactPhoneNumber::SubTypeVideo)
+        return "video";
+    else if (qtSubType == QContactPhoneNumber::SubTypeCar)
+        return "car";
+    else if (qtSubType == QContactPhoneNumber::SubTypeAssistant)
+        return "assistant";
+    return "home";
+}
+
+QString Contacts::subTypeOnlineAccountToString(int qtSubType) const
+{
+    if (qtSubType == QContactOnlineAccount::ProtocolAim)
+        return "aim";
+    else if (qtSubType == QContactOnlineAccount::ProtocolIcq)
+        return "icq";
+    else if (qtSubType == QContactOnlineAccount::ProtocolIrc)
+        return "irc";
+    else if (qtSubType == QContactOnlineAccount::ProtocolJabber)
+        return "jabber";
+    else if (qtSubType == QContactOnlineAccount::ProtocolMsn)
+        return "msn";
+    else if (qtSubType == QContactOnlineAccount::ProtocolQq)
+        return "qq";
+    else if (qtSubType == QContactOnlineAccount::ProtocolSkype)
+        return "skype";
+    else if (qtSubType == QContactOnlineAccount::ProtocolYahoo)
+        return "yahoo";
+    return "unknown";
+}
+
+QString Contacts::subTypeUrlToString(int qtSubType) const
+{
+    if (qtSubType == QContactUrl::SubTypeBlog)
+        return "blog";
+    else if (qtSubType == QContactUrl::SubTypeFavourite)
+        return "favourite";
+    return "homepage";
+}
+#endif
+
 
 QString Contacts::jsonedContact(const QContact &contact, const QStringList &fields) const
 {
@@ -336,7 +501,11 @@ QString Contacts::jsonedContact(const QContact &contact, const QStringList &fiel
         resultingFields << "id";
     QStringList fieldValuesList;
     foreach (const QString &field, resultingFields) {
-        QString qtDefinitionName = cordovaFieldNameToQtDefinitionName(field);
+#if QT_VERSION < 0x050000
+        QString qtDefinitionName = cordovaFieldNameToQtDefinition(field);
+#else
+        QContactDetail::DetailType qtDefinitionName = cordovaFieldNameToQtDefinition(field);
+#endif
         if (field == "id") {
 #if QT_VERSION < 0x050000
             fieldValuesList << QString("%1: \"%2\"")
@@ -367,7 +536,14 @@ QString Contacts::jsonedContact(const QContact &contact, const QStringList &fiel
             QList<QContactDetail> details = contact.details(qtDefinitionName);
             foreach (const QContactDetail &detail, details) {
                 QContactPhoneNumber castedDetail = detail;
+#if QT_VERSION < 0x050000
                 QStringList subTypes = castedDetail.subTypes();
+#else
+                QStringList subTypes;
+                foreach (int subType, castedDetail.subTypes())
+                    subTypes << subTypePhoneToString(subType);
+#endif
+
                 if (subTypes.isEmpty())
                     subTypes << "phone";
                 foreach(const QString &subType, subTypes) {
@@ -398,7 +574,13 @@ QString Contacts::jsonedContact(const QContact &contact, const QStringList &fiel
             QList<QContactDetail> details = contact.details(qtDefinitionName);
             foreach (const QContactDetail &detail, details) {
                 QContactOnlineAccount castedDetail = detail;
+#if QT_VERSION < 0x050000
                 QStringList subTypes = castedDetail.subTypes();
+#else
+                QStringList subTypes;
+                foreach (int subType, castedDetail.subTypes())
+                    subTypes << subTypeOnlineAccountToString(subType);
+#endif
                 if (subTypes.isEmpty())
                     subTypes << "IM";
                 foreach(const QString &subType, subTypes) {
@@ -427,10 +609,16 @@ QString Contacts::jsonedContact(const QContact &contact, const QStringList &fiel
         } else if (field == "urls") {
             QStringList fieldValues;
             QList<QContactDetail> details = contact.details(qtDefinitionName);
+
             foreach (const QContactDetail &detail, details) {
                 QContactUrl castedDetail = detail;
+#if QT_VERSION < 0x050000
+                QString subType = castedDetail.subType();
+#else
+                QString subType = subTypeUrlToString(castedDetail.subType());
+#endif
                 fieldValues << QString("{type: \"%1\", value: \"%2\", pref: %3}")
-                               .arg(castedDetail.subType())
+                               .arg(subType)
                                .arg(castedDetail.url())
                                .arg("false");
             }
