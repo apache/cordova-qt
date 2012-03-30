@@ -22,7 +22,9 @@ SOURCES += main.cpp \
     src/plugins/events.cpp \
     src/cordova.cpp \
     src/cplugin.cpp \
-    src/plugins/contacts.cpp
+    src/plugins/contacts.cpp \
+    src/plugins/camera.cpp
+    
 HEADERS += \
     src/plugins/notification.h \
     src/plugins/geolocation.h \
@@ -36,7 +38,9 @@ HEADERS += \
     src/plugins/events.h \
     src/cordova.h \
     src/cplugin.h \
-    src/plugins/contacts.h
+    src/plugins/contacts.h \
+    src/plugins/camera.h \
+    src/plugins/cameraresolution.h
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     message("Qt5 build")
@@ -60,7 +64,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     OTHER_FILES += qml/main_harmattan.qml \
         qml/cordova_wrapper.js
 
-    QT += declarative
+    QT += declarative dbus
     QT += webkit
     CONFIG += mobility qdeclarative-boostable
     MOBILITY += feedback location systeminfo sensors multimedia contacts
@@ -73,7 +77,8 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
     symbian:TARGET.UID3 = 0xE3522943
     #symbian:DEPLOYMENT.installer_header = 0x2002CCCF
-    symbian:TARGET.CAPABILITY += NetworkServices
+    symbian:TARGET.CAPABILITY += NetworkServices UserEnvironment
+    symbian:{LIBS += -lecam -lServiceHandler -lnewservice -lbafl}
 
     QT += declarative
     QT += webkit

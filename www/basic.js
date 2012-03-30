@@ -110,6 +110,23 @@ function getCurrentAcceleration() {
 
 }
 
+function getPicture(){
+    navigator.camera.getPicture(function(picture_file){
+                                    console.log("getPicture succeed callback: "+picture_file)
+                                    get("picture_val").innerHTML = '<img width="200" src="' + picture_file +'" />';
+                                },
+                                function(){
+                                    console.log("getPicture error callback")
+                                    get("picture_val").innerHTML = 'Capture cancelled or error occured'
+                                },
+                                { quality : 75,
+                                  destinationType : Camera.DestinationType.DATA_URL,
+                                  sourceType : Camera.PictureSourceType.CAMERA,
+                                  allowEdit : true,
+                                  encodingType: Camera.EncodingType.JPEG,
+                                  targetWidth: 100,
+                                  targetHeight: 100});
+}
 
 
 function test_requestFileSystem() {
