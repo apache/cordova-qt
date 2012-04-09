@@ -75,9 +75,13 @@ void Contacts::init()
 
 void Contacts::saveContact(int scId, int ecId, const QVariantMap &params)
 {
+    qDebug() << "saveContact" ;
     QContact result;
     QList<QContactDetail *> detailsToDelete;
-    foreach (const QString& field, params.keys()) {
+    foreach( QString key, params.keys()){
+        qDebug() << key << "==" << params[key];
+    }
+    foreach (QString field, params.keys()) {
 #if QT_VERSION < 0x050000
         QString qtDefinition = cordovaFieldNameToQtDefinition(field);
         if (qtDefinition.isEmpty())

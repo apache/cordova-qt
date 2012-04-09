@@ -23,7 +23,8 @@ SOURCES += main.cpp \
     src/cordova.cpp \
     src/cplugin.cpp \
     src/plugins/contacts.cpp \
-    src/plugins/camera.cpp
+    src/plugins/camera.cpp \
+    src/plugins/media.cpp
     
 HEADERS += \
     src/plugins/notification.h \
@@ -40,7 +41,8 @@ HEADERS += \
     src/cplugin.h \
     src/plugins/contacts.h \
     src/plugins/camera.h \
-    src/plugins/cameraresolution.h
+    src/plugins/cameraresolution.h \
+    src/plugins/media.h
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     message("Qt5 build")
@@ -77,7 +79,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
     symbian:TARGET.UID3 = 0xE3522943
     #symbian:DEPLOYMENT.installer_header = 0x2002CCCF
-    symbian:TARGET.CAPABILITY += NetworkServices UserEnvironment
+    symbian:TARGET.CAPABILITY += NetworkServices UserEnvironment ReadUserData WriteUserData
     symbian:{LIBS += -lecam -lServiceHandler -lnewservice -lbafl}
 
     QT += declarative

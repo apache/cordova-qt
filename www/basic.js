@@ -238,6 +238,64 @@ function removeTestContact() {
                             0, {filter:"Given", multiple: true})
 }
 
+
+function mediaOpen(){
+    console.log("opened media file...");
+    navigator.media.openMedia("testFile.mp3");
+    console.log("finished media file");
+    var position=0;
+    var duration=0;
+
+    navigator.media.getDuration( function( dur ) {
+                                                 duration=dur;
+                                             },
+                                             function( error ) {
+                                             });
+
+    // Update media position every second
+        var mediaTimer = setInterval(function() {
+            // get media position
+            navigator.media.getCurrentPosition(
+                // success callback
+                function(position) {
+                    if (position > -1) {
+                        navigator.media.getCurrentPosition( function( pos) {
+                                                                     position=pos;
+                                                                 },
+                                                                 function( error ) {
+                                                                 });
+                        get("media_position_duration_val").innerHTML = position + " / " + duration;
+                    }
+                },
+                // error callback
+                function(e) {
+                    console.log("Error getting pos=" + e);
+                }
+            );
+        }, 1000);
+}
+
+function mediaPlay(){
+    navigator.media.play();
+}
+function mediaPause(){
+    navigator.media.pause();
+}
+function mediaStop(){
+    navigator.media.stop();
+}
+function mediaStartRecording(){
+    navigator.media.startRecord();
+}
+function mediaStopRecording(){
+    navigator.media.stopRecord();
+}
+function mediaFF5sec(){
+    var jumpPosition=navigator.media.getCurrentPosition() + 5000;
+    if( jumpPosition < mediaTest.getDuration())
+        navigator.media.seekTo(jumpPosition);
+}
+
 /*
  * Register for the device ready event
  */
