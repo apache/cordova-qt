@@ -27,13 +27,20 @@ ContactAddress.prototype.country = ""
 function ContactField() {
 }
 
+function ContactField(p_type, p_value, p_pref) {
+    this.type = p_type;
+    this.value = p_value;
+    this.pref = p_pref;
+    return this;
+}
+
 ContactField.create = function(obj) {
             var result = new ContactField()
             result.type = obj.type
             result.value = obj.value
             result.pref = obj.pref
             return result
-        }
+}
 
 ContactField.prototype.type = ""
 ContactField.prototype.value = ""
@@ -149,7 +156,7 @@ Contact.create = function(obj) {
             var result = new Contact()
             result.id = obj.id
             result.displayName = obj.displayName
-            result.name = ContactName.create(obj.name)
+            result.name = ContactName.create(obj.name | obj.displayName)
             result.nickname = obj.nickname
             var subObj
             for (subObj in obj.phoneNumbers)

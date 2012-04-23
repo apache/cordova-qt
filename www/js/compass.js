@@ -22,11 +22,11 @@ function Heading() {
 
 Heading.cast = function( p_heading, p_accuracy ) {
     var heading = new Heading();
-    heading.dir = p_heading;
+    heading.magneticHeading = p_heading;
     return heading;
 };
 
-Heading.prototype.dir = null;
+Heading.prototype.magneticHeading = null;
 Heading.prototype.accuracy = null;
 
 

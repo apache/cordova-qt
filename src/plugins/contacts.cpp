@@ -364,8 +364,10 @@ void Contacts::findContacts(int scId, int ecId, const QStringList &fields, const
         callback(scId, "[]");
     } else {
         QStringList stringifiedContacts;
+        qDebug() << "stringifiedContacts:\n";
         foreach (const QContact &contact, contacts) {
             stringifiedContacts << jsonedContact(contact, fields);
+            qDebug() << jsonedContact(contact, fields) << "\n";
             if (!multiple)
                 break;
         }
