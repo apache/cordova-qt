@@ -23,8 +23,8 @@ SOURCES += main.cpp \
     src/cordova.cpp \
     src/cplugin.cpp \
     src/plugins/contacts.cpp \
-    src/plugins/camera.cpp \
-    src/plugins/media.cpp
+    src/plugins/camera.cpp 
+    #src/plugins/media.cpp
     
 HEADERS += \
     src/plugins/notification.h \
@@ -41,8 +41,8 @@ HEADERS += \
     src/cplugin.h \
     src/plugins/contacts.h \
     src/plugins/camera.h \
-    src/plugins/cameraresolution.h \
-    src/plugins/media.h
+    src/plugins/cameraresolution.h
+    #src/plugins/media.h
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     message("Qt5 build")
