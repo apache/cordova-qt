@@ -1,73 +1,89 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>Cordova-Qt Test Page</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <script language="javascript" type="text/javascript" src="js/cordova.js"></script>
-        <script language="javascript" type="text/javascript" src="js/cordova.qt.js"></script>
-        <script language="javascript" type="text/javascript" src="js/connection.js"></script>
-        <script language="javascript" type="text/javascript" src="js/console.js"></script>
-        <script language="javascript" type="text/javascript" src="js/device.js"></script>
-        <script language="javascript" type="text/javascript" src="js/file.js"></script>
-        <script language="javascript" type="text/javascript" src="js/geolocation.js"></script>
-        <script language="javascript" type="text/javascript" src="js/notification.js"></script>
-        <script language="javascript" type="text/javascript" src="js/compass.js"></script>
-        <script language="javascript" type="text/javascript" src="js/accelerometer.js"></script>
-        <script language="javascript" type="text/javascript" src="js/camera.js"></script>
-        <script language="javascript" type="text/javascript" src="js/contacts.js"></script>
-        <script language="javascript" type="text/javascript" src="js/media.js"></script>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,height=device-height,user-scalable=no,maximum-scale=1.0,initial-scale=1.0" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8"> <!-- ISO-8859-1 -->
+    <title>Cordova Mobile Spec</title>
+    <link rel="stylesheet" href="master.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+    <script src="http://192.168.1.2:8080/target/target-script-min.js#anonymous"></script>
 
-        <script language="javascript" type="text/javascript" src="basic.js"></script>
+      
+<script type="text/javascript" charset="utf-8">
 
-        <style type="text/css">
-            input {
-                height: 60px;
-                margin-top: 15px;
-            }
-        </style>
-    </head>
-    <body>
-        <input type="button" value="Init Watchers" onclick="init();"/>
-        <br />
-        <input type="button" value="Vibrate" onclick="test_vibra();"/>
-        <br />
-        <input type="button" value="Alert/Confirm" onclick="test_alert_confirm();">
-        <br />
-        <input type="button" value="Check Connection" onclick="getCurrentConnectionType();">
-        <br />
-        <input type="button" value="Request File System" onclick="test_requestFileSystem();">
-        <br />
-        <div id="debug_output"> </div>
-        <input type="button" value="Get Current Position" onclick="getCurrentPosition();">
-        <br />
-        <div id="position_val"> Location </div>
-        <input type="button" value="Get Acceleration" onclick="getCurrentAcceleration();">
-        <br />
-        <div id="accel_val"> Acceleration </div>
-        <input type="button" value="Get Current Heading" onclick="getCurrentHeading();">
-        <br />
-        <div id="heading_val"> Heading </div>
-        <input type="button" value="Get Picture" onclick="getPicture();">
-        <br />
-        <div id="picture_val"> Picture</div>
-        <input type="button" value="Create Test Contact" onclick="createTestContact();">
-        <br />
-        <div id="create_contact_result"></div>
-        <input type="button" value="Search for Test Contact" onclick="searchForTestContact();">
-        <br />
-        <div id="search_contact_result"></div>
-        <input type="button" value="Remove Test Contact" onclick="removeTestContact();">
-        <br />
-        <div id="remove_contact_result"></div>
-        <input type="button" value="Media Open" onclick="mediaOpen();">
-        <input type="button" value="Play" onclick="mediaPlay();">
-        <input type="button" value="Pause" onclick="mediaPause();">
-        <input type="button" value="Stop" onclick="mediaStop();">
-        <input type="button" value="Start Recording" onclick="mediaStartRecording();">
-        <input type="button" value="Stop Recording" onclick="mediaStopRecording();">
-        <input type="button" value="FF 5sec" onclick="mediaFF5sec();">
-        <br />
-        <div id="media_position_duration_val"> Position/Duration</div>
-    </body>
+    var deviceReady = false;
+
+    function interceptBackbutton() {
+    	eventOutput("Back button intercepted");
+    }
+    function interceptMenubutton() {
+    	eventOutput("Menu button intercepted");
+    }
+    function interceptSearchbutton() {
+    	eventOutput("Search button intercepted");
+    }
+    function interceptResume() {
+      eventOutput("Resume event intercepted");
+    }
+    function interceptPause() {
+      eventOutput("Pause event intercepted");
+    }
+    function interceptOnline() {
+      eventOutput("Online event intercepted");
+    }
+    function interceptOffline() {
+      eventOutput("Offline event intercepted");
+    }
+    
+    var eventOutput = function(s) {
+        var el = document.getElementById("results");
+        el.innerHTML = el.innerHTML + s + "<br>";
+    };
+
+    
+    /**
+     * Function called when page has finished loading.
+     */
+    function init() {
+        document.addEventListener("deviceready", function() {
+                deviceReady = true;
+                console.log("Device="+device.platform+" "+device.version);
+                eventOutput("deviceready event: "+device.platform+" "+device.version);
+            }, false);
+        window.setTimeout(function() {
+        	if (!deviceReady) {
+        		alert("Error: PhoneGap did not initialize.  Demo will not run correctly.");
+        	}
+        },1000);
+    }
+
+</script>
+
+  </head>
+  <body onload="init();" id="stage" class="theme">
+  
+    <h1>Events</h1>
+    <div id="info">
+        <b>Results:</b><br>
+        <span id="results"></span>
+    </div>
+
+    <h2>Action</h2>
+    <div class="btn large" onclick="document.addEventListener('backbutton', interceptBackbutton, false);">Intercept backbutton</div>
+    <div class="btn large" onclick="document.removeEventListener('backbutton', interceptBackbutton, false);">Stop intercept of backbutton</div>
+    <div class="btn large" onclick="document.addEventListener('menubutton', interceptMenubutton, false);">Intercept menubutton</div>
+    <div class="btn large" onclick="document.removeEventListener('menubutton', interceptMenubutton, false);">Stop intercept of menubutton</div>
+    <div class="btn large" onclick="document.addEventListener('searchbutton', interceptSearchbutton, false);">Intercept searchbutton</div>
+    <div class="btn large" onclick="document.removeEventListener('searchbutton', interceptSearchbutton, false);">Stop intercept of searchbutton</div>
+    <div class="btn large" onclick="document.addEventListener('resume', interceptResume, false);">Intercept resume</div>
+    <div class="btn large" onclick="document.removeEventListener('resume', interceptResume, false);">Stop intercept of resume</div>
+    <div class="btn large" onclick="document.addEventListener('pause', interceptPause, false);">Intercept pause</div>
+    <div class="btn large" onclick="document.removeEventListener('pause', interceptPause, false);">Stop intercept of pause</div>
+    <div class="btn large" onclick="document.addEventListener('online', interceptOnline, false);">Intercept online</div>
+    <div class="btn large" onclick="document.removeEventListener('online', interceptOnline, false);">Stop intercept of online</div>
+    <div class="btn large" onclick="document.addEventListener('offline', interceptOffline, false);">Intercept offline</div>
+    <div class="btn large" onclick="document.removeEventListener('offline', interceptOffline, false);">Stop intercept of offline</div>
+
+    <h2> </h2><div class="backBtn" onclick="backHome();">Back</div>
+  </body>
 </html>

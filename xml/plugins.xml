@@ -11,7 +11,7 @@
     <plugin name="Compass" value="com.cordova.Compass"/>
     <plugin name="Camera" value="com.cordova.Camera"/>
     <plugin name="Contacts" value="com.cordova.Contacts"/>
-    <plugin name="Media" value="com.cordova.Media"/>
+<!--    <plugin name="Media" value="com.cordova.Media"/>-->
 
 <!--    <plugin name="Compass" value="com.cordova.CompassListener"/>
     <plugin name="Media" value="com.cordova.AudioHandler"/>

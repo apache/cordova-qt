@@ -18,11 +18,11 @@
 #define MEDIA_H
 
 #include "../cplugin.h"
-#include <QMediaPlayer>
-#include <QMediaRecorder>
+#include <QtMultimediaKit/QMediaPlayer>
+#include <QtMultimediaKit/QMediaRecorder>
 #include <QUrl>
-#include <QAudioCaptureSource>
-#include <QAudioEncoderSettings>
+#include <QtMultimediaKit/QAudioCaptureSource>
+#include <QtMultimediaKit/QAudioEncoderSettings>
 
 //#ifdef QTM_NAMESPACE
 //QTM_USE_NAMESPACE

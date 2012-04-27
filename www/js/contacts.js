@@ -68,6 +68,7 @@ ContactName.create = function(obj) {
             var result = new ContactName()
             result.familyName = obj.familyName
             result.givenName = obj.givenName
+            result.formatted = obj.formatted
             result.middleName = obj.middleName
             result.honorificPrefix = obj.honorificPrefix
             result.honorificSuffix = obj.honorificSuffix
@@ -156,7 +157,7 @@ Contact.create = function(obj) {
             var result = new Contact()
             result.id = obj.id
             result.displayName = obj.displayName
-            result.name = ContactName.create(obj.name | obj.displayName)
+            result.name = ContactName.create(obj.name)
             result.nickname = obj.nickname
             var subObj
             for (subObj in obj.phoneNumbers)

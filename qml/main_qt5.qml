@@ -16,7 +16,7 @@ WebView {
     }
     //Uncomment when it will be available
     //experimental.setFlickableViewportEnabled: false
-//    experimental.useTraditionalDesktopBehaviour: true
+    //experimental.useTraditionalDesktopBehaviour: true
 
 
     Component.onCompleted: {
