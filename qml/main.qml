@@ -1,3 +1,4 @@
+//using main_qt4, remove me later
 import QtQuick 1.1
 import QtWebKit 1.0
 import "cordova_wrapper.js" as CordovaWrapper

@@ -82,18 +82,21 @@ function test_alert_confirm()
 
 
 function getCurrentPosition() {
+    console.log("clicked position");
     navigator.geolocation.getCurrentPosition( function( position ) {
-                                                 get( "position_val" ).innerHTML = position.coords.latitude + " / " + position.coords.longitude;
+//                                                 get( "position_val" ).innerHTML = position.coords.latitude + " / " + position.coords.longitude;
+                                                   get( "position_val" ).innerHTML = " success ";
                                              },
                                              function( error ) {
-                                                 get( "position_val" ).innerHTML = error.code + ": "  + error.message;
+//                                                 get( "position_val" ).innerHTML = error.code + ": "  + error.message;
+                                                 get( "position_val" ).innerHTML = "error";
                                              },
                                              { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true } );
 }
 
 function getCurrentHeading() {
     navigator.compass.getCurrentHeading( function( heading ) {
-                                            get( "heading_val" ).innerHTML = heading.dir;
+                                            get( "heading_val" ).innerHTML = heading.magneticHeading;
                                              },
                                              function( error ) {
                                                  get( "heading_val" ).innerHTML = error.code + ": "  + error.message;

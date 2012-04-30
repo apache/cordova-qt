@@ -63,7 +63,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     message("Qt4 build")
     message("Harmattan build")
 
-    OTHER_FILES += qml/main_harmattan.qml \
+    OTHER_FILES += \
         qml/cordova_wrapper.js
 
     QT += declarative dbus
@@ -99,4 +99,5 @@ OTHER_FILES += \
     qtc_packaging/debian_harmattan/copyright \
     qtc_packaging/debian_harmattan/control \
     qtc_packaging/debian_harmattan/compat \
-    qtc_packaging/debian_harmattan/changelog
+    qtc_packaging/debian_harmattan/changelog \
+    qml/main_qt4.qml
