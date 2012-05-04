@@ -1,38 +1,72 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width,height=device-height,user-scalable=no,initial-scale=1.0" />
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <title>Cordova Mobile Spec</title>
-	  <link rel="stylesheet" href="master.css" type="text/css" media="screen" title="no title" charset="utf-8">
-	  <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-	  <script type="text/javascript" charset="utf-8" src="main.js"></script>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Cordova-Qt Test Page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <script language="javascript" type="text/javascript" src="js/cordova.js"></script>
+        <script language="javascript" type="text/javascript" src="js/cordova.qt.js"></script>
+        <script language="javascript" type="text/javascript" src="js/connection.js"></script>
+        <script language="javascript" type="text/javascript" src="js/console.js"></script>
+        <script language="javascript" type="text/javascript" src="js/device.js"></script>
+        <script language="javascript" type="text/javascript" src="js/file.js"></script>
+        <script language="javascript" type="text/javascript" src="js/geolocation.js"></script>
+        <script language="javascript" type="text/javascript" src="js/notification.js"></script>
+        <script language="javascript" type="text/javascript" src="js/compass.js"></script>
+        <script language="javascript" type="text/javascript" src="js/accelerometer.js"></script>
+        <script language="javascript" type="text/javascript" src="js/camera.js"></script>
+        <script language="javascript" type="text/javascript" src="js/contacts.js"></script>
+        <script language="javascript" type="text/javascript" src="js/media.js"></script>
+        <script language="javascript" type="text/javascript" src="basic.js"></script>
 
-
-  </head>
-  <body onload="init();" id="stage" class="theme">
-    <h1>PhoneGap Tests</h1>
-    <div id="info">
-        <h4>Platform: <span id="platform">  </span></h4>
-        <h4>Version: <span id="version"> </span></h4>
-        <h4>UUID: <span id="uuid">  </span></h4>
-        <h4>Name: <span id="name"> </span></h4>
-        <h4>Width: <span id="width">  </span>,   Height: <span id="height"> 
-                   </span>, Color Depth: <span id="colorDepth"></span></h4>
-     </div>
-    <a href="autotest/index.html" class="btn large">Automatic Test</a>
-    <a href="accelerometer/index.html" class="btn large">Accelerometer</a>
-    <a href="audio/index.html" class="btn large">Audio Play/Record</a>
-    <a href="battery/index.html" class="btn large">Battery</a>
-    <a href="camera/index.html" class="btn large">Camera</a>
-    <a href="compass/index.html" class="btn large">Compass</a>
-    <a href="contacts/index.html" class="btn large">Contacts</a>
-    <a href="events/index.html" class="btn large">Events</a>
-    <a href="location/index.html" class="btn large">Location</a>
-    <a href="misc/index.html" class="btn large">Misc Content</a>
-    <a href="network/index.html" class="btn large">Network</a>
-    <a href="notification/index.html" class="btn large">Notification</a>
-    <a href="sql/index.html" class="btn large">Web SQL</a>
-    <a href="storage/index.html" class="btn large">Local Storage</a>
-  </body>
+        <style type="text/css">
+            input {
+                height: 60px;
+                margin-top: 15px;
+            }
+        </style>
+    </head>
+    <body>
+        <input type="button" value="Init Watchers" onclick="init();"/>
+        <br />
+        <input type="button" value="Vibrate" onclick="test_vibra();"/>
+        <br />
+        <input type="button" value="Alert/Confirm" onclick="test_alert_confirm();">
+        <br />
+        <input type="button" value="Check Connection" onclick="getCurrentConnectionType();">
+        <br />
+        <input type="button" value="Request File System" onclick="test_requestFileSystem();">
+        <br />
+        <div id="debug_output"> </div>
+        <input type="button" value="Get Current Position" onclick="getCurrentPosition();">
+        <br />
+        <div id="position_val"> Location </div>
+        <input type="button" value="Get Acceleration" onclick="getCurrentAcceleration();">
+        <br />
+        <div id="accel_val"> Acceleration </div>
+        <input type="button" value="Get Current Heading" onclick="getCurrentHeading();">
+        <br />
+        <div id="heading_val"> Heading </div>
+        <input type="button" value="Get Picture" onclick="getPicture();">
+        <br />
+        <div id="picture_val"> Picture</div>
+        <input type="button" value="Create Test Contact" onclick="createTestContact();">
+        <br />
+        <div id="create_contact_result"></div>
+        <input type="button" value="Search for Test Contact" onclick="searchForTestContact();">
+        <br />
+        <div id="search_contact_result"></div>
+        <input type="button" value="Remove Test Contact" onclick="removeTestContact();">
+        <br />
+        <div id="remove_contact_result"></div>
+        <input type="button" value="Media Open" onclick="mediaOpen();">
+        <input type="button" value="Play" onclick="mediaPlay();">
+        <input type="button" value="Pause" onclick="mediaPause();">
+        <input type="button" value="Stop" onclick="mediaStop();">
+        <input type="button" value="Start Recording" onclick="mediaStartRecording();">
+        <input type="button" value="Stop Recording" onclick="mediaStopRecording();">
+        <input type="button" value="FF 5sec" onclick="mediaFF5sec();">
+        <br />
+        <div id="media_position_duration_val"> Position/Duration</div>
+    </body>
 </html>
