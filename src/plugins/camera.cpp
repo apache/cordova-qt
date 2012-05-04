@@ -151,7 +151,7 @@ void Camera::startCamera()
 QString Camera::newImageFile(int width, int height)
 {
     qDebug() << Q_FUNC_INFO;
-#ifdef MEEGO_EDITION_HARMATTAN
+#ifndef Q_OS_SYMBIAN
     Q_UNUSED(width);
     Q_UNUSED(height);
 #endif
