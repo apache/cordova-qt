@@ -44,7 +44,7 @@ document.write('<script language="javascript" type="text/javascript" src="../../
 document.write('<script language="javascript" type="text/javascript" src="../../js/media.js"></script>');
 
 //for debugger
-document.write('<script src="http://192.168.2.14:8080/target/target-script-min.js#anonymous"></script>');
+//document.write('<script src="http://192.168.2.14:8080/target/target-script-min.js#anonymous"></script>');
 
 
 
