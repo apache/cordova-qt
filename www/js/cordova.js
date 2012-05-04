@@ -112,7 +112,7 @@ Cordova.EventHandler.prototype.addEventListener = function( p_listener, p_captur
 Cordova.EventHandler.prototype.removeEventListener = function( p_listener, p_capture ) {
     // Try to find the event listener in our list
     for( var i = 0; i < this.listeners.length; i++ ) {
-        if( this.listeners[i] == p_listener ) {
+        if( this.listeners[i] === p_listener ) {
             // Remove the listener from our queue
             this.listeners.splice( i, 1 );
             return;
@@ -161,7 +161,7 @@ Cordova.doc_removeEventListener = document.removeEventListener;
 Cordova.doc_dispatchEvent = document.dispatchEvent;
 
 document.addEventListener = function( type, listener, useCapture ) {
-    if( typeof Cordova.events[type] != "undefined" ) {
+    if( typeof Cordova.events[type] !== "undefined" ) {
         Cordova.events[type].addEventListener( listener, useCapture );
     }
     else {
@@ -170,7 +170,7 @@ document.addEventListener = function( type, listener, useCapture ) {
 };
 
 document.removeEventListener = function( type, listener, useCapture ) {
-    if( typeof Cordova.events[type] != "undefined" ) {
+    if( typeof Cordova.events[type] !== "undefined" ) {
         Cordova.events[type].removeEventListener( listener, useCapture );
     }
     else {
@@ -179,7 +179,7 @@ document.removeEventListener = function( type, listener, useCapture ) {
 };
 
 document.dispatchEvent = function( evt ) {
-    if( typeof Cordova.events[evt.type] != "undefined" ) {
+    if( typeof Cordova.events[evt.type] !== "undefined" ) {
         Cordova.events[evt.type].dispatchEvent();
     }
     else {

@@ -73,25 +73,25 @@ ContactName.create = function(obj) {
             result.honorificPrefix = obj.honorificPrefix
             result.honorificSuffix = obj.honorificSuffix
             var formattedArr = []
-            if (typeof result.honorificPrefix == 'undefined')
+            if (typeof result.honorificPrefix === 'undefined')
                 result.honorificPrefix = ""
-            else if (result.honorificPrefix != "")
+            else if (result.honorificPrefix !== "")
                 formattedArr.push(result.honorificPrefix)
-            if (typeof result.givenName == 'undefined')
+            if (typeof result.givenName === 'undefined')
                 result.givenName = ""
-            else if (result.givenName != "")
+            else if (result.givenName !== "")
                 formattedArr.push(result.givenName)
-            if (typeof result.middleName == 'undefined')
+            if (typeof result.middleName === 'undefined')
                 result.middleName = ""
-            else if (result.middleName != "")
+            else if (result.middleName !== "")
                 formattedArr.push(result.middleName)
             if (typeof result.familyName == 'undefined')
                 result.familyName = ""
-            else if (result.familyName != "")
+            else if (result.familyName !== "")
                 formattedArr.push(result.familyName)
             if (typeof result.honorificSuffix == 'undefined')
                 result.honorificSuffix = ""
-            else if (result.honorificSuffix != "")
+            else if (result.honorificSuffix !== "")
                 formattedArr.push(result.honorificSuffix)
 
             result.formatted = formattedArr.join(" ")
@@ -157,7 +157,7 @@ Contact.create = function(obj) {
             var result = new Contact()
             result.id = obj.id
             result.displayName = obj.displayName
-            result.name = ContactName.create(obj.name)
+            result.name = ContactName.create(obj.name || obj.displayName)
             result.nickname = obj.nickname
             var subObj
             for (subObj in obj.phoneNumbers)
@@ -208,7 +208,7 @@ Contact.prototype.remove = function(contactSuccess,contactError) {
             if( typeof contactError !== "function" ) contactError = function() {}
 
             //TODO: call onSaveError here
-            if (this.id == null || this.id == "")
+            if (this.id === null || this.id === "")
                 return
             console.log("Contact.remove 2")
 

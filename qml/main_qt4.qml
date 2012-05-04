@@ -32,6 +32,8 @@ PageStackWindow {
 
                 url: cordova.mainUrl
                 settings.javascriptEnabled: true
+                settings.offlineWebApplicationCacheEnabled : true
+                settings.pluginsEnabled : true
                 settings.localStorageDatabaseEnabled: true
                 settings.offlineStorageDatabaseEnabled: true
                 settings.localContentCanAccessRemoteUrls: true
@@ -47,8 +49,13 @@ PageStackWindow {
                             myConfirm.open();
                         }
                     }]
+                onUrlChanged: { console.log("find you")}
 
-                onLoadFinished: cordova.loadFinished(true)
+
+
+                onLoadFinished: {
+                    cordova.loadFinished(true)
+                }
                 onLoadFailed: cordova.loadFinished(false)
                 onAlert: {
                     alertText.text = message

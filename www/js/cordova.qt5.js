@@ -44,11 +44,11 @@ Cordova.exec = Cordova.Qt.exec;
 
 navigator.qt.onmessage = function(ev) {
             var received = eval('('+ev.data+')')
-            if (typeof received == 'undefined')
+            if (typeof received === 'undefined')
                 return false
-            if (typeof received.messageType == 'undefined')
+            if (typeof received.messageType === 'undefined')
                 return false
-            if (received.messageType == "evalJS") {
+            if (received.messageType === "evalJS") {
                 if (typeof received.jsData == 'undefined')
                     return false
                 eval(received.jsData)

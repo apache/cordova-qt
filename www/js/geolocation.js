@@ -50,7 +50,7 @@ function Position() {
 
 Position.cast = function( p_coords, p_timestamp ) {
     // The timestamp is optional and can be auto-generated on creation
-    if( typeof p_timestamp == "undefined" ) p_timestamp = (new Date()).getMilliseconds();
+    if( typeof p_timestamp === "undefined" ) p_timestamp = (new Date()).getMilliseconds();
 
     var position = new Position();
 
@@ -110,8 +110,8 @@ Geolocation.prototype.getCurrentPosition = function( successCallback, errorCallb
 
     // This is a workaround as we allow passing any object in as options (for convenience)
     var positionOptions = new PositionOptions();
-    if( typeof options.maximumAge != "undefined" && options.maximumAge > 0 ) positionOptions.maximumAge = options.maximumAge;
-    if( typeof options.timeout != "undefined" ) {
+    if( typeof options.maximumAge !== "undefined" && options.maximumAge > 0 ) positionOptions.maximumAge = options.maximumAge;
+    if( typeof options.timeout !== "undefined" ) {
         if( options.timeout > 0 ) {
             positionOptions.timeout = options.timeout;
         }
@@ -119,7 +119,7 @@ Geolocation.prototype.getCurrentPosition = function( successCallback, errorCallb
             positionOptions.timeout = 0;
         }
     }
-    if( typeof options.enableHighAccuracy != "undefined" ) positionOptions.enableHighAccuracy = options.enableHighAccuracy;
+    if( typeof options.enableHighAccuracy !== "undefined" ) positionOptions.enableHighAccuracy = options.enableHighAccuracy;
 
     // Check if the cached object is sufficient
     if( this.cachedPosition !== null && this.cachedPosition.timestamp > ((new Date()).getTime() - positionOptions.maximumAge) ) {
@@ -128,7 +128,7 @@ Geolocation.prototype.getCurrentPosition = function( successCallback, errorCallb
     }
 
     // Check if the timeout is 0, if yes invoke the ErrorCallback immediately
-    if( positionOptions.timeout == 0 ) {
+    if( positionOptions.timeout === 0 ) {
         errorCallback( PositionError.cast( PositionError.TIMEOUT, "Timeout" ) );
         return;
     }
