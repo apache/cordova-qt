@@ -49,6 +49,7 @@ private:
     QList<int> m_errorCallbacks;
     double m_azymuth;
     double m_accuracy;
+    qtimestamp m_timestamp;
 };
 
 #endif // COMPASS_H

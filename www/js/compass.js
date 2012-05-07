@@ -17,49 +17,50 @@
 //compass interface http://docs.phonegap.com/en/1.0.0/phonegap_compass_compass.md.html
 
 
-function Heading() {
+function CompassHeading() {
 };
 
-Heading.cast = function( p_heading, p_accuracy ) {
-    var heading = new Heading();
+
+CompassHeading.cast = function( p_heading, p_trueHeading, p_accuracy, timestamp) {
+    var heading = new CompassHeading();
     heading.magneticHeading = p_heading;
+    heading.trueHeading = p_trueHeading;
+    heading.headingAccuracy = p_accuracy;
+    heading.timestamp = timestamp;
     return heading;
 };
 
-Heading.prototype.magneticHeading = null;
-Heading.prototype.accuracy = null;
+
+CompassHeading.prototype.magneticHeading = 0;
+CompassHeading.prototype.trueHeading = 0;
+CompassHeading.prototype.headingAccuracy = 0;
+CompassHeading.prototype.timestamp = 0;
 
 
-//HeadingError
+//CompassError
 
-function HeadingError() {
+function CompassError() {
 };
 
-HeadingError.cast = function( p_code, p_message ) {
-    var headingError = new HeadingError();
-    headingError.code = p_code;
-    headingError.message = p_message;
+CompassError.cast = function( p_code, p_message ) {
+    var CompassError = new CompassError();
+    CompassError.code = p_code;
+    CompassError.message = p_message;
 
-    return headingError;
+    return CompassError;
 };
 
-HeadingError.COMPASS_INTERNAL_ERR = 1;
-HeadingError.COMPASS_NOT_SUPPORTED = 2;
+CompassError.COMPASS_INTERNAL_ERR = 0;
+CompassError.COMPASS_NOT_SUPPORTED = 20;
 
-HeadingError.prototype.code = 0;
-HeadingError.prototype.message = "";
+CompassError.prototype.code = 0;
+CompassError.prototype.message = "";
 
 /**
  * HeadingOptions interface
  */
 function HeadingOptions() {
 };
-
-//HeadingOptions.prototype.magneticHeading = 0;
-//HeadingOptions.prototype.trueHeading = 0;//
-//HeadingOptions.prototype.headingAccuracy = 0;
-//HeadingOptions.prototype.timestamp = 0;
-
 
 /**
  * Compass interface
@@ -76,12 +77,12 @@ Compass.prototype.getCurrentHeading = function( successCallback, errorCallback, 
     if( typeof errorCallback !== "function" ) errorCallback = function() {};
     var headingOptions = new HeadingOptions();
 
-    // Check the timestamp
-    if( this.cachedHeading !== null &&
-            (this.cachedHeading.timestamp <= (new Date()).getTime) ) {
-        successCallback( this.cachedHeading );
-        return;
-    }
+//    // Check the timestamp
+//    if( this.cachedHeading !== null &&
+//            (this.cachedHeading.timestamp <= (new Date()).getTime) ) {
+//        successCallback( this.cachedHeading );
+//        return;
+//    }
 
     // Call the native function and query for a new heading
     var me = this;
@@ -90,6 +91,7 @@ Compass.prototype.getCurrentHeading = function( successCallback, errorCallback, 
                       me.cachedHeading = p_heading;
                       successCallback( p_heading );
                   }, errorCallback, "com.cordova.Compass", "getCurrentHeading", [ headingOptions ] );
+    return heading = CompassHeading.cast(me.cachedHeading);
 };
 
 Compass.prototype.watchHeading = function( successCallback, errorCallback, options ) {

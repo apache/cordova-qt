@@ -39,7 +39,10 @@ void Compass::getCurrentHeading(int scId, int ecId, QVariantMap p_options) {
     m_successCallbacks << scId;
     m_errorCallbacks << ecId;
 
-    QString callbackArguments = "Heading.cast( " + QString::number(m_azymuth) + " )";
+    //TODO azymuth to true north conversion
+    QString callbackArguments = "CompassHeading.cast( " +
+            QString::number(m_azymuth) + ", "+ QString::number(m_azymuth) + "," +
+            QString::number(m_accuracy) + ", " + " 0 "+" )";
 
     for( int i = 0; i < m_successCallbacks.size(); i++ ) {
         this->callback( m_successCallbacks.at( i ), callbackArguments );
@@ -53,4 +56,5 @@ void Compass::updateSensor(){
     QCompassReading *heading = m_compassSource->reading();
     m_azymuth = heading->azimuth();
     m_accuracy = heading->calibrationLevel();
+    m_timestamp = heading->timestamp();
 }

@@ -49,7 +49,7 @@ PageStackWindow {
                             myConfirm.open();
                         }
                     }]
-                onUrlChanged: { console.log("find you")}
+                onUrlChanged: { console.log("url changing..")}
 
 
 
