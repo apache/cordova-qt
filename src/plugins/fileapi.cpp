@@ -38,7 +38,7 @@ FileAPI::FileAPI() : CPlugin() {
  * LocalFileSystem.requestFileSystem - http://www.w3.org/TR/file-system-api/#widl-LocalFileSystem-requestFileSystem
  */
 void FileAPI::requestFileSystem( int scId, int ecId, unsigned short p_type ) {
-//    Q_UNUSED(ecId)
+    //    Q_UNUSED(ecId)
 
     QDir dir;
 
@@ -49,10 +49,15 @@ void FileAPI::requestFileSystem( int scId, int ecId, unsigned short p_type ) {
     else {
         dir = QDir::home();
     }
-    if (p_type >= 10000){
-      this->callback( ecId, "FileSystem.cast( 'Home', '" + dir.dirName() + "', '" + dir.absolutePath() + "/' )" );
-    } else {
-      this->callback( scId, "FileSystem.cast( 'Home', '" + dir.dirName() + "', '" + dir.absolutePath() + "/' )" );
+    if (p_type == 0){
+        this->callback( scId, "FileSystem.cast( 'temporary', '" + dir.dirName() + "', '" + dir.absolutePath() + "/' )" );
+    } else if (p_type == 1){
+        this->callback( scId, "FileSystem.cast( 'persistent', '" + dir.dirName() + "', '" + dir.absolutePath() + "/' )" );
+    } else if (p_type == -1){
+        this->callback( ecId, "FileError.cast( FileError.SYNTAX_ERR )" );
+    }
+    else {
+        this->callback(ecId, "FileSystem.cast( 'ERROR', '" + dir.dirName() + "', '" + dir.absolutePath() + "/' )" );
     }
 
 
@@ -405,25 +410,25 @@ void FileAPI::readAsDataURL( int scId, int ecId, QString p_path ) {
  * Helper function for recursively removing a directory
  */
 bool FileAPI::rmDir( QDir p_dir ) {
-//    if( p_dir.exists() ) {
-//        // Iterate over entries and remove them
-//        Q_FOREACH( const QFileInfo &fileInfo, p_dir.entryInfoList( QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot ) ) {
-//            if( fileInfo.isDir() ) {
-//                if( !FileAPI::rmDir( fileInfo.dir() ) ) {
-//                    return false;
-//                }
-//            }
-//            else {
-//                if( !QFile::remove( fileInfo.absoluteFilePath() ) ) {
-//                    return false;
-//                }
-//            }
-//        }
+    //    if( p_dir.exists() ) {
+    //        // Iterate over entries and remove them
+    //        Q_FOREACH( const QFileInfo &fileInfo, p_dir.entryInfoList( QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot ) ) {
+    //            if( fileInfo.isDir() ) {
+    //                if( !FileAPI::rmDir( fileInfo.dir() ) ) {
+    //                    return false;
+    //                }
+    //            }
+    //            else {
+    //                if( !QFile::remove( fileInfo.absoluteFilePath() ) ) {
+    //                    return false;
+    //                }
+    //            }
+    //        }
 
-//        // Finally remove the current dir
-//        qDebug() << p_dir.absolutePath();
-//        return p_dir.rmdir( p_dir.absolutePath() );
-//    }
+    //        // Finally remove the current dir
+    //        qDebug() << p_dir.absolutePath();
+    //        return p_dir.rmdir( p_dir.absolutePath() );
+    //    }
 
     return false;
 }

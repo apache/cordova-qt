@@ -18,13 +18,13 @@ function Connection() {
 }
 
 Connection.prototype.type = 1;
-Connection.UNKNOWN = 1;
-Connection.ETHERNET = 2;
-Connection.WIFI = 3;
-Connection.CELL_2G = 4;
-Connection.CELL_3G = 5;
-Connection.CELL_4G = 6;
-Connection.NONE = 7;
+Connection.UNKNOWN = "unknown";
+Connection.ETHERNET = "ethernet";
+Connection.WIFI = "wifi";
+Connection.CELL_2G = "2g";
+Connection.CELL_3G = "3g";
+Connection.CELL_4G = "4g";
+Connection.NONE = "none";
 
 /**
  * Internal function for listening to change events
