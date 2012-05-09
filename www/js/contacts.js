@@ -40,7 +40,7 @@ ContactField.create = function(obj) {
             result.value = obj.value
             result.pref = obj.pref
             return result
-}
+        }
 
 ContactField.prototype.type = ""
 ContactField.prototype.value = ""
@@ -54,7 +54,7 @@ ContactFindOptions.create = function(obj) {
             var result = new ContactFindOptions()
             result.filter = obj.filter
             result.multiple = obj.multiple
-            return result
+            return result;
         }
 
 ContactFindOptions.prototype.filter = ""
@@ -94,7 +94,7 @@ ContactName.create = function(obj) {
             else if (result.honorificSuffix !== "")
                 formattedArr.push(result.honorificSuffix)
 
-            result.formatted = formattedArr.join(" ")
+            //            result.formatted = formattedArr.join(" ")
 
             return result
         }
@@ -141,24 +141,39 @@ ContactError.PERMISSION_DENIED_ERROR = 20
 ContactError.prototype.code = ContactError.UNKNOWN_ERROR
 
 
-function Contact() {
-    this.name = new ContactName()
-    this.phoneNumbers = []
-    this.emails = []
-    this.addresses = []
-    this.ims = []
-    this.organizations = []
-    this.photos = []
-    this.categories = []
-    this.urls = []
+function Contact(p_id, p_displayName, p_name, p_nickname,
+                 p_phoneNumbers,
+                 p_emails,
+                 p_addresses,
+                 p_ims,
+                 p_organizations,
+                 p_birthday,
+                 p_note,
+                 p_photos,
+                 p_categories,
+                 p_urls) {
+    this.id = p_id || "";
+    this.displayName = p_displayName || "";
+    this.name = new ContactName(p_name);
+    this.nickname = p_nickname || "";
+    this.phoneNumbers = p_phoneNumbers || []
+    this.emails = p_emails || []
+    this.addresses = p_addresses || []
+    this.ims = p_ims || []
+    this.organizations = p_organizations || []
+    this.birthday = p_birthday || ""
+    this.note = p_note || ""
+    this.photos = p_photos || []
+    this.categories = p_categories || []
+    this.urls = p_urls || []
 }
 
 Contact.create = function(obj) {
             var result = new Contact()
             result.id = obj.id
             result.displayName = obj.displayName
-            result.name = ContactName.create(obj.name || obj.displayName)
-            result.nickname = obj.nickname
+            result.name = ContactName.create(obj.name)
+            result.nickname = obj.nickname || null
             var subObj
             for (subObj in obj.phoneNumbers)
                 result.phoneNumbers.push(ContactField.create(obj.phoneNumbers[subObj]))
@@ -214,7 +229,7 @@ Contact.prototype.remove = function(contactSuccess,contactError) {
 
             Cordova.exec( contactSuccess, contactError, "com.cordova.Contacts", "removeContact", [ this.id ] )
             console.log("Contact.remove 3")
-}
+        }
 
 Contact.prototype.save = function(contactSuccess,contactError) {
             console.log("Contact.save 1")
@@ -240,9 +255,10 @@ ContactsManager.prototype.create = function(properties) {
 
 ContactsManager.prototype.find = function(contactFields, contactSuccess, contactError, contactFindOptions) {
             // Check the callbacks
-            if( typeof contactSuccess !== "function" ) return
-            if( typeof contactError !== "function" ) contactError = function() {}
-
+            if( typeof contactSuccess !== "function" ) {throw "no callback";}
+            if( typeof contactError !== "function" ) {
+                contactError = function() {}
+            }
             Cordova.exec( contactSuccess, contactError, "com.cordova.Contacts", "findContacts", [ contactFields, contactFindOptions.filter, contactFindOptions.multiple ] )
         }
 
@@ -250,5 +266,5 @@ ContactsManager.prototype.find = function(contactFields, contactSuccess, contact
  * Add the ContactsManager object to the navigator
  */
 Cordova.addConstructor( "com.cordova.Contacts", function () {
-                            navigator.contacts = new ContactsManager()
-                        } );
+                           navigator.contacts = new ContactsManager()
+                       } );

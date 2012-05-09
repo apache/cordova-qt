@@ -17,16 +17,12 @@
 //accelerometer interface http://docs.phonegap.com/en/1.0.0/phonegap_accelerometer_accelerometer.md.html
 
 
-function Acceleration() {
-};
-
-Acceleration.cast = function( p_acceleration) {
-    var acceleration = new Acceleration();
-    acceleration.x = p_acceleration.x;
-    acceleration.y = p_acceleration.y;
-    acceleration.z = p_acceleration.z;
-    acceleration.timestamp = p_acceleration.timestamp;
-    return acceleration;
+function Acceleration(p_x,p_y,p_z,p_ts) {
+    this.x = p_x || 0;
+    this.y = p_y || 0;
+    this.z = p_z || 0;
+    this.timestamp = p_ts || 0;
+    return this;
 };
 
 Acceleration.prototype.x = null;
@@ -34,14 +30,22 @@ Acceleration.prototype.y = null;
 Acceleration.prototype.z = null;
 Acceleration.prototype.timestamp = null;
 
-Accelerometer.prototype.watchIds = [];
+Acceleration.cast = function( p_acceleration) {
+    var acceleration = new Acceleration(p_acceleration.x,
+                                        p_acceleration.y,
+                                        p_acceleration.z,
+                                        p_acceleration.timestamp);
+    return acceleration;
+};
+
+
 
 /**
  * Accelerometer interface
  */
 function Accelerometer() {
 };
-
+Accelerometer.prototype.watchIds = [];
 
 Accelerometer.prototype.getCurrentAcceleration = function( successCallback, errorCallback) {
     // Check the callbacks

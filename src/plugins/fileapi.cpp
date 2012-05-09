@@ -38,7 +38,7 @@ FileAPI::FileAPI() : CPlugin() {
  * LocalFileSystem.requestFileSystem - http://www.w3.org/TR/file-system-api/#widl-LocalFileSystem-requestFileSystem
  */
 void FileAPI::requestFileSystem( int scId, int ecId, unsigned short p_type ) {
-    //    Q_UNUSED(ecId)
+    Q_UNUSED(ecId)
 
     QDir dir;
 
@@ -53,14 +53,9 @@ void FileAPI::requestFileSystem( int scId, int ecId, unsigned short p_type ) {
         this->callback( scId, "FileSystem.cast( 'temporary', '" + dir.dirName() + "', '" + dir.absolutePath() + "/' )" );
     } else if (p_type == 1){
         this->callback( scId, "FileSystem.cast( 'persistent', '" + dir.dirName() + "', '" + dir.absolutePath() + "/' )" );
-    } else if (p_type == -1){
+    } else {
         this->callback( ecId, "FileError.cast( FileError.SYNTAX_ERR )" );
     }
-    else {
-        this->callback(ecId, "FileSystem.cast( 'ERROR', '" + dir.dirName() + "', '" + dir.absolutePath() + "/' )" );
-    }
-
-
 }
 
 /**

@@ -1,4 +1,9 @@
 function Camera(){
+   this.DestinationType = Camera.DestinationType;
+   this.PictureSourceType = Camera.PictureSourceType;
+   this.EncodingType = Camera.EncodingType;
+   this.MediaType = Camera.MediaType;
+   return this;
 }
 
 Camera.DestinationType = {
@@ -18,7 +23,11 @@ Camera.EncodingType = {
      PNG : 1                 // Return PNG encoded image
 };
 
-
+Camera.MediaType = {
+     PICTURE : 0,
+     VIDEO : 1,
+     ALLMEDIA: 2
+};
 
 function CameraOptions() {
 };

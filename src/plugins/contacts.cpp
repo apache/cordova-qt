@@ -306,7 +306,10 @@ void Contacts::removeContact(int scId, int ecId, const QString &localId)
 void Contacts::findContacts(int scId, int ecId, const QStringList &fields, const QString &filter, bool multiple)
 {
     qDebug() << Q_FUNC_INFO << filter << fields << multiple;
-    Q_UNUSED(ecId);
+//    Q_UNUSED(ecId);
+    if(fields.length() <= 0){
+        callback(ecId, "ContactError.INVALID_ARGUMENT_ERROR");
+    }
 
     QContactUnionFilter unionFilter;
 
