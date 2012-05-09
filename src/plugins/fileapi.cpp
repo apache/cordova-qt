@@ -38,8 +38,7 @@ FileAPI::FileAPI() : CPlugin() {
  * LocalFileSystem.requestFileSystem - http://www.w3.org/TR/file-system-api/#widl-LocalFileSystem-requestFileSystem
  */
 void FileAPI::requestFileSystem( int scId, int ecId, unsigned short p_type ) {
-    Q_UNUSED(ecId)
-
+    //FIXEME, accept size parameter
     QDir dir;
 
     // Get correct system path
@@ -66,9 +65,9 @@ void FileAPI::resolveLocalFileSystemURL( int scId, int ecId, QString p_url ) {
 
     // Check if we have a valid URL
     if( !url.isValid() ) {
-        this->callback( ecId, "FileError.cast( FileError.SYNTAX_ERR )" );
+        this->callback( ecId, "FileError.cast( FileError.ENCODING_ERR )" );
         return;
-    }
+    }//FIXEME: invalid pass
 
     // Check for the correct scheme
     if( url.scheme() != "file" ) {
@@ -105,6 +104,8 @@ void FileAPI::getFile( int scId, int ecId, QString p_path, QVariantMap p_options
     bool exclusive = p_options.value("exclusive").toBool();
 
     QFile file( p_path );
+    QFileInfo pathInfo( p_path );
+    QString fileName(pathInfo.fileName());
 
     if( file.exists() ) {
         if( create && exclusive ) {
@@ -130,7 +131,7 @@ void FileAPI::getFile( int scId, int ecId, QString p_path, QVariantMap p_options
     }
 
     // If we reach here, everything went well
-    this->callback( scId, "FileEntry.cast( '" + file.fileName() + "', '" + QFileInfo( file ).absoluteFilePath() + "' )" );
+    this->callback( scId, "FileEntry.cast( '/" + fileName + "', '" + QFileInfo( file ).absoluteFilePath() + "' )" );
 }
 
 /**
@@ -170,7 +171,7 @@ void FileAPI::getDirectory( int scId, int ecId, QString p_path, QVariantMap p_op
     }
 
     // If we reach here, everything went well
-    this->callback( scId, "DirectoryEntry.cast( '" + dir.dirName() + "', '" + dir.absolutePath() + "/' )" );
+    this->callback( scId, "DirectoryEntry.cast( '" + dir.dirName() + "', '" + dir.absolutePath() + "' )" );
 }
 
 /**
@@ -405,25 +406,25 @@ void FileAPI::readAsDataURL( int scId, int ecId, QString p_path ) {
  * Helper function for recursively removing a directory
  */
 bool FileAPI::rmDir( QDir p_dir ) {
-    //    if( p_dir.exists() ) {
-    //        // Iterate over entries and remove them
-    //        Q_FOREACH( const QFileInfo &fileInfo, p_dir.entryInfoList( QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot ) ) {
-    //            if( fileInfo.isDir() ) {
-    //                if( !FileAPI::rmDir( fileInfo.dir() ) ) {
-    //                    return false;
-    //                }
-    //            }
-    //            else {
-    //                if( !QFile::remove( fileInfo.absoluteFilePath() ) ) {
-    //                    return false;
-    //                }
-    //            }
-    //        }
+//        if( p_dir.exists() ) {
+//            // Iterate over entries and remove them
+//            Q_FOREACH( const QFileInfo &fileInfo, p_dir.entryInfoList( QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot ) ) {
+//                if( fileInfo.isDir() ) {
+//                    if( !FileAPI::rmDir( fileInfo.dir() ) ) {
+//                        return false;
+//                    }
+//                }
+//                else {
+//                    if( !QFile::remove( fileInfo.absoluteFilePath() ) ) {
+//                        return false;
+//                    }
+//                }
+//            }
 
-    //        // Finally remove the current dir
-    //        qDebug() << p_dir.absolutePath();
-    //        return p_dir.rmdir( p_dir.absolutePath() );
-    //    }
+//            // Finally remove the current dir
+//            qDebug() << p_dir.absolutePath();
+//            return p_dir.rmdir( p_dir.absolutePath() );
+//        }
 
     return false;
 }
