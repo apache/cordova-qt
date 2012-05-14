@@ -114,8 +114,7 @@ void FileAPI::getFile( int scId, int ecId, QString p_path, QVariantMap p_options
     if( !url.isValid() ) {
         this->callback( ecId, "FileException.cast( FileException.ENCODING_ERR )" );
         return;
-    }//FIXEME: invalid pass
-
+    }
     // Check for the correct scheme
     if( url.scheme() != "file" ) {
         this->callback( ecId, "FileException.cast( FileException.TYPE_MISMATCH_ERR )" );
@@ -127,6 +126,16 @@ void FileAPI::getFile( int scId, int ecId, QString p_path, QVariantMap p_options
     QFile file( p_path );
     QFileInfo pathInfo( p_path );
     QString fileName(pathInfo.fileName());
+
+// if create is false and the path represents a directory, return error
+// if file does exist, and create is true and exclusive is true, return error
+// if file does not exist and create is false, return error
+// if file does not exist and create is true, create file and return File entry
+    QFileInfo fileInfo( url.path() );
+    if( (!create) && fileInfo.isDir() ) {
+        this->callback( ecId, "FileException.cast( FileException.TYPE_MISMATCH_ERR )" );
+        return;
+    }
 
     if( file.exists() ) {
         if( create && exclusive ) {
@@ -169,7 +178,7 @@ void FileAPI::getDirectory( int scId, int ecId, QString p_path, QVariantMap p_op
     if( !url.isValid()) {
         this->callback( ecId, "FileException.cast( FileException.ENCODING_ERR )" );
         return;
-    }//FIXEME: invalid pass
+    }
 
     // Check for the correct scheme
     if( url.scheme() != "file" ) {
@@ -181,11 +190,20 @@ void FileAPI::getDirectory( int scId, int ecId, QString p_path, QVariantMap p_op
 
     QDir dir( p_path );
 
+    //  if create is false and the path represents a file, return error
+    //  if directory does exist and create is true and exclusive is true, return error
+    //  if directory does not exist and create is false and directory does not exist, return error
+    //  if directory does not exist and create is true, create dir and return directory entry
+
+    QFileInfo fileInfo( url.path() );
+    if( (!create) && fileInfo.isFile() ) {
+        this->callback( ecId, "FileException.cast( FileException.TYPE_MISMATCH_ERR )" );
+        return;
+    }
+
+
     if( dir.exists() ) {
-        if (create && (!exclusive)){
-            this->callback( ecId, "FileException.cast( FileException.TYPE_MISMATCH_ERR )" );
-            return;
-        } else if( create && exclusive ) {
+        if( create && exclusive ) {
             this->callback( ecId, "FileException.cast( FileException.PATH_EXISTS_ERR )" );
             return;
         }
@@ -462,25 +480,25 @@ void FileAPI::readAsDataURL( int scId, int ecId, QString p_path ) {
  */
 bool FileAPI::rmDir( QDir p_dir ) {
     qDebug() << Q_FUNC_INFO << p_dir;
-//    if( p_dir.exists() ) {
-//        // Iterate over entries and remove them
-//        Q_FOREACH( const QFileInfo &fileInfo, p_dir.entryInfoList( QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot ) ) {
-//            if( fileInfo.isDir() ) {
-//                if( !FileAPI::rmDir( fileInfo.dir() ) ) {
-//                    return false;
-//                }
-//            }
-//            else {
-//                if( !QFile::remove( fileInfo.absoluteFilePath() ) ) {
-//                    return false;
-//                }
-//            }
-//        }
+    //    if( p_dir.exists() ) {
+    //        // Iterate over entries and remove them
+    //        Q_FOREACH( const QFileInfo &fileInfo, p_dir.entryInfoList( QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot ) ) {
+    //            if( fileInfo.isDir() ) {
+    //                if( !FileAPI::rmDir( fileInfo.dir() ) ) {
+    //                    return false;
+    //                }
+    //            }
+    //            else {
+    //                if( !QFile::remove( fileInfo.absoluteFilePath() ) ) {
+    //                    return false;
+    //                }
+    //            }
+    //        }
 
-//        // Finally remove the current dir
-//        qDebug() << p_dir.absolutePath();
-//        return p_dir.rmdir( p_dir.absolutePath() );
-//    }
+    //        // Finally remove the current dir
+    //        qDebug() << p_dir.absolutePath();
+    //        return p_dir.rmdir( p_dir.absolutePath() );
+    //    }
 
     return false;
 }
