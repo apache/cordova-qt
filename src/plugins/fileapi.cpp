@@ -244,7 +244,7 @@ void FileAPI::removeRecursively( int scId, int ecId, QString p_path ) {
     }
 
     // Something went wrong if we reach here
-    this->callback( ecId, "FileException.cast( FileException.INVALID_MODIFICATION_ERR )" );
+    this->callback( ecId, "FileException.cast( FileException.NO_MODIFICATION_ALLOWED_ERR )" );
 }
 
 /**
@@ -260,7 +260,7 @@ void FileAPI::file( int scId, int ecId, QString p_path ) {
         return;
     }
     else {
-        this->callback( scId, "FileInfo.cast( '" + fileInfo.fileName() + "', '" + fileInfo.absoluteFilePath() + "', 'unknown/unknown', new Date(" + QString::number(fileInfo.lastModified().toMSecsSinceEpoch()) + "), " + QString::number(fileInfo.size()) + " )" );
+        this->callback( scId, "File.cast( '" + fileInfo.fileName() + "', '" + fileInfo.absoluteFilePath() + "', 'unknown/unknown', new Date(" + QString::number(fileInfo.lastModified().toMSecsSinceEpoch()) + "), " + QString::number(fileInfo.size()) + " )" );
         return;
     }
 }
@@ -480,25 +480,30 @@ void FileAPI::readAsDataURL( int scId, int ecId, QString p_path ) {
  */
 bool FileAPI::rmDir( QDir p_dir ) {
     qDebug() << Q_FUNC_INFO << p_dir;
-    //    if( p_dir.exists() ) {
-    //        // Iterate over entries and remove them
-    //        Q_FOREACH( const QFileInfo &fileInfo, p_dir.entryInfoList( QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot ) ) {
-    //            if( fileInfo.isDir() ) {
-    //                if( !FileAPI::rmDir( fileInfo.dir() ) ) {
-    //                    return false;
-    //                }
-    //            }
-    //            else {
-    //                if( !QFile::remove( fileInfo.absoluteFilePath() ) ) {
-    //                    return false;
-    //                }
-    //            }
-    //        }
+    QDir dir = QDir::current();
+    QString absPath = dir.absolutePath() + "/doc";
+    if ( p_dir == absPath){//can't remove root dir
+        return false;
+    }
+    bool result = true;
+       if( p_dir.exists() ) {
+           // Iterate over entries and remove them
+           Q_FOREACH( const QFileInfo &fileInfo, p_dir.entryInfoList( QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot ) ) {
+               if (fileInfo.isDir()) {
+                   result = rmDir(fileInfo.absoluteFilePath());
+               }
+               else {
+                   result = QFile::remove(fileInfo.absoluteFilePath());
+               }
 
-    //        // Finally remove the current dir
-    //        qDebug() << p_dir.absolutePath();
-    //        return p_dir.rmdir( p_dir.absolutePath() );
-    //    }
+               if (!result) {
+                   return result;
+               }
+           }
 
-    return false;
+           // Finally remove the current dir
+           qDebug() << p_dir.absolutePath();
+           return p_dir.rmdir( p_dir.absolutePath() );
+       }
+       return result;
 }

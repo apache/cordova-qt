@@ -137,24 +137,39 @@ Entry.prototype.getParent = function( successCallback, errorCallback ) {
  * (had to call the 'File' object FileInfo since there were name conflicts)
  * http://dev.w3.org/2006/webapi/FileAPI/#dfn-file
  */
-function FileInfo() {
-}
+//function FileInfo() {
+//}
 
-FileInfo.cast = function( p_name, p_fullPath, p_type, p_lastModifiedDate, p_size ) {
-            var f = new FileInfo();
-            f.name = p_name;
-            f.fullPath = p_fullPath;
-            f.type = p_type;
-            f.lastModifiedDate = p_lastModifiedDate;
-            f.size = p_size;
+//FileInfo.cast = function( p_name, p_fullPath, p_type, p_lastModifiedDate, p_size ) {
+//            var f = new FileInfo();
+//            f.name = p_name;
+//            f.fullPath = p_fullPath;
+//            f.type = p_type;
+//            f.lastModifiedDate = p_lastModifiedDate;
+//            f.size = p_size;
 
+//            return f;
+//        }
+//FileInfo.prototype.name = "";
+//FileInfo.prototype.fullPath = "";
+//FileInfo.prototype.type = "unknown/unknown";
+//FileInfo.prototype.lastModifiedDate = null;
+//FileInfo.prototype.size = 0;
+
+//Rework, have to overwrite it to pass the test-cast,
+function File(name, fullPath, type, lastModifiedDate, size) {
+         this.name = name || null;
+  this.fullPath = fullPath || null;
+        this.type = type || null;
+   this.lastModifiedDate = lastModifiedDate || null;
+     this.size = size || 0;
+ }
+
+File.cast = function( p_name, p_fullPath, p_type, p_lastModifiedDate, p_size ) {
+            var f = new File(p_name, p_fullPath, p_type, p_lastModifiedDate, p_size);
             return f;
         }
-FileInfo.prototype.name = "";
-FileInfo.prototype.fullPath = "";
-FileInfo.prototype.type = "unknown/unknown";
-FileInfo.prototype.lastModifiedDate = null;
-FileInfo.prototype.size = 0;
+
 
 /**
  * FileSaver interface
