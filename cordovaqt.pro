@@ -5,8 +5,9 @@
 wwwDir.source = www
 xmlDir.source = xml
 qmlDir.source = qml
+docDir.source = doc
 
-DEPLOYMENTFOLDERS = wwwDir xmlDir qmlDir # file1 dir1
+DEPLOYMENTFOLDERS = wwwDir xmlDir qmlDir docDir# file1 dir1
 
 
 SOURCES += main.cpp \
