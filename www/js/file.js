@@ -63,6 +63,11 @@ FileException.ENCODING_ERR = 5;
 FileException.NO_MODIFICATION_ALLOWED_ERR = 6;
 FileException.INVALID_STATE_ERR = 7;
 FileException.SYNTAX_ERR = 8;
+FileException.INVALID_MODIFICATION_ERR = 9;
+FileException.QUOTA_EXCEEDED_ERR = 10;
+FileException.TYPE_MISMATCH_ERR = 11;
+FileException.PATH_EXISTS_ERR = 12;
+
 
 /**
  * FileMetadata (Metadata) interface
@@ -88,7 +93,7 @@ function Entry() {
 Entry.prototype.isFile = false;
 Entry.prototype.isDirectory = false;
 Entry.prototype.name = "";
-Entry.prototype.fullPath = "";
+Entry.prototype.fullPath = "";//fullpath for cordova-test = realFullPath - "/"
 Entry.prototype.filesystem = null;
 Entry.prototype.getMetadata = function( successCallback, errorCallback ) {
         // Get metadata for this entry
@@ -435,7 +440,6 @@ DirectoryEntry.cast = function( dirname, path ) {
         var de = new DirectoryEntry();
         de.name = dirname;
         de.fullPath = path;
-
         return de;
 }
 
@@ -447,7 +451,7 @@ DirectoryEntry.prototype.getFile = function( path, options, successCallback, err
         var requestPath = path;
 
         // Check for a relative path
-        if( requestPath.charAt(0) != '/' ) requestPath = this.fullPath + requestPath;
+        if( requestPath.charAt(0) != '/' ) requestPath = this.fullPath + "/" + requestPath;
 
         // Lets get the file
         Cordova.exec(successCallback, errorCallback, "com.cordova.File", "getFile", [requestPath, options]);
@@ -456,9 +460,7 @@ DirectoryEntry.prototype.getDirectory = function( path, options, successCallback
         var requestPath = path;
 
         // Check for a relative path
-        if( requestPath.charAt(0) != '/' ) requestPath = this.fullPath + requestPath;
-        // Make sure we have a trailing slash
-        if( requestPath.charAt(requestPath.length - 1) != '/' ) requestPath = requestPath + "/";
+        if( requestPath.charAt(0) != '/' ) requestPath = this.fullPath + "/" + requestPath;
 
         // Lets get the directory
         Cordova.exec(successCallback, errorCallback, "com.cordova.File", "getDirectory", [requestPath, options]);

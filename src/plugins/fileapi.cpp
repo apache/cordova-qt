@@ -41,17 +41,23 @@ void FileAPI::requestFileSystem( int scId, int ecId, unsigned short p_type ) {
     //FIXEME, accept size parameter
     QDir dir;
 
+    QString absPath;
+
+    qDebug() << "requestFileSystem: " << QDir::temp().absolutePath();
     // Get correct system path
     if( p_type == 0 ) {
         dir = QDir::temp();
+        absPath = dir.absolutePath();
     }
     else {
         dir = QDir::home();
+        absPath = dir.absolutePath();
     }
+
     if (p_type == 0){
-        this->callback( scId, "FileSystem.cast( 'temporary', '" + dir.dirName() + "', '" + dir.absolutePath() + "/' )" );
+        this->callback( scId, "FileSystem.cast( 'temporary', '" + dir.dirName() + "', '" + absPath + "')" );
     } else if (p_type == 1){
-        this->callback( scId, "FileSystem.cast( 'persistent', '" + dir.dirName() + "', '" + dir.absolutePath() + "/' )" );
+        this->callback( scId, "FileSystem.cast( 'persistent', '" + dir.dirName() + "', '" + absPath + "')" );
     } else {
         this->callback( ecId, "FileError.cast( FileError.SYNTAX_ERR )" );
     }
@@ -62,6 +68,7 @@ void FileAPI::requestFileSystem( int scId, int ecId, unsigned short p_type ) {
  */
 void FileAPI::resolveLocalFileSystemURL( int scId, int ecId, QString p_url ) {
     QUrl url = QUrl::fromUserInput( p_url );
+    qDebug() << Q_FUNC_INFO << p_url;
 
     // Check if we have a valid URL
     if( !url.isValid() ) {
@@ -82,24 +89,25 @@ void FileAPI::resolveLocalFileSystemURL( int scId, int ecId, QString p_url ) {
         this->callback( ecId, "FileError.cast( FileError.NOT_FOUND_ERR )" );
         return;
     }
-
+    this->callback( scId, "DirectoryEntry.cast( '" + fileInfo.fileName() + "', '"
+           + QDir::cleanPath(fileInfo.absoluteFilePath()) + "' )" );
+    return;
     // Now check if this is a dir or a file
-    if( fileInfo.isDir() ) {
-        this->callback( scId, "DirectoryEntry.cast( '" + fileInfo.fileName() + "', '" + QDir::cleanPath(fileInfo.absoluteFilePath()) + "/' )" );
-        return;
-    }
-    else {
-        this->callback( scId, "FileEntry.cast( '" + fileInfo.fileName() + "', '" + fileInfo.absoluteFilePath() + "' )" );
-        return;
-    }
+//    if( fileInfo.isDir() ) {
+//        this->callback( scId, "DirectoryEntry.cast( '" + fileInfo.fileName() + "', '" + QDir::cleanPath(fileInfo.absoluteFilePath()) + "/' )" );
+//        return;
+//    }
+//    else {
+//        this->callback( scId, "FileEntry.cast( '" + fileInfo.fileName() + "', '" + fileInfo.absoluteFilePath() + "' )" );
+//        return;
+//    }
 }
 
 /**
  * DirectoryEntry.getFile - http://www.w3.org/TR/file-system-api/#widl-DirectoryEntry-getFile
  */
 void FileAPI::getFile( int scId, int ecId, QString p_path, QVariantMap p_options ) {
-    qDebug() << "Path: " << p_path;
-
+    qDebug() << Q_FUNC_INFO << p_path;
     bool create = p_options.value("create").toBool();
     bool exclusive = p_options.value("exclusive").toBool();
 
@@ -131,15 +139,14 @@ void FileAPI::getFile( int scId, int ecId, QString p_path, QVariantMap p_options
     }
 
     // If we reach here, everything went well
-    this->callback( scId, "FileEntry.cast( '/" + fileName + "', '" + QFileInfo( file ).absoluteFilePath() + "' )" );
+    this->callback( scId, "FileEntry.cast( '" + fileName + "', '" + QFileInfo( file ).absoluteFilePath() + "' )" );
 }
 
 /**
  * DirectoryEntry.getDirectory - http://www.w3.org/TR/file-system-api/#widl-DirectoryEntry-getDirectory
  */
 void FileAPI::getDirectory( int scId, int ecId, QString p_path, QVariantMap p_options ) {
-    qDebug() << "Path: " << p_path;
-
+    qDebug() << Q_FUNC_INFO << p_path;
     bool create = p_options.value("create").toBool();
     bool exclusive = p_options.value("exclusive").toBool();
 
@@ -179,6 +186,7 @@ void FileAPI::getDirectory( int scId, int ecId, QString p_path, QVariantMap p_op
  */
 void FileAPI::removeRecursively( int scId, int ecId, QString p_path ) {
     QDir dir( p_path );
+    qDebug() << Q_FUNC_INFO << p_path;
 
     if( FileAPI::rmDir(dir) ) {
         this->callback( scId, "" );
@@ -195,6 +203,7 @@ void FileAPI::removeRecursively( int scId, int ecId, QString p_path ) {
  */
 void FileAPI::file( int scId, int ecId, QString p_path ) {
     QFileInfo fileInfo(p_path);
+    qDebug() << Q_FUNC_INFO << p_path;
 
     if( !fileInfo.exists() ) {
         this->callback( ecId, "FileError.cast( FileError.NOT_FOUND_ERR )" );
@@ -211,6 +220,8 @@ void FileAPI::file( int scId, int ecId, QString p_path ) {
  */
 void FileAPI::write( int scId, int ecId, QString p_path, unsigned long long p_position, QString p_data ) {
     QFile file( p_path );
+
+    qDebug() << Q_FUNC_INFO << p_path;
 
     // Check if file exists
     if( !file.exists() ) {
@@ -258,6 +269,8 @@ void FileAPI::write( int scId, int ecId, QString p_path, unsigned long long p_po
 void FileAPI::truncate( int scId, int ecId, QString p_path, unsigned long long p_size ) {
     QFile file(p_path);
 
+    qDebug() << Q_FUNC_INFO << p_path;
+
     // Check if file exists at all
     if( !file.exists() ) {
         this->callback( ecId, "FileError.cast( FileError.NOT_FOUND_ERR ), 0, 0" );
@@ -281,6 +294,8 @@ void FileAPI::truncate( int scId, int ecId, QString p_path, unsigned long long p
 void FileAPI::getParent( int scId, int ecId, QString p_path ) {
     QDir dir( p_path );
 
+    qDebug() << Q_FUNC_INFO << p_path;
+
     // Try to change into upper directory
     if( !dir.cdUp() ) {
         this->callback( ecId, "FileError.cast( FileError.NOT_FOUND_ERR )" );
@@ -288,7 +303,7 @@ void FileAPI::getParent( int scId, int ecId, QString p_path ) {
     }
 
     // Extract names and send back
-    this->callback( scId, "DirectoryEntry.cast( '" + dir.dirName() + "', '" + dir.absolutePath() + "/' )" );
+    this->callback( scId, "DirectoryEntry.cast( '" + dir.dirName() + "', '" + dir.absolutePath() + "' )" );
     return;
 }
 
@@ -297,6 +312,8 @@ void FileAPI::getParent( int scId, int ecId, QString p_path ) {
  */
 void FileAPI::remove( int scId, int ecId, QString p_path ) {
     QFileInfo fileInfo(p_path);
+
+    qDebug() << Q_FUNC_INFO << p_path;
 
     // Check if entry exists at all
     if( !fileInfo.exists() ) {
@@ -333,6 +350,8 @@ void FileAPI::remove( int scId, int ecId, QString p_path ) {
 void FileAPI::getMetadata( int scId, int ecId, QString p_path ) {
     QFileInfo fileInfo( p_path );
 
+    qDebug() << Q_FUNC_INFO << p_path;
+
     // Check if file exists
     if( !fileInfo.exists() ) {
         this->callback( ecId, "FileError.cast( FileError.NOT_FOUND_ERR )" );
@@ -349,6 +368,8 @@ void FileAPI::getMetadata( int scId, int ecId, QString p_path ) {
  */
 void FileAPI::readEntries( int scId, int ecId, QString p_path ) {
     QDir dir( p_path );
+
+    qDebug() << Q_FUNC_INFO << p_path;
 
     QString entriesList = "";
 
@@ -381,6 +402,8 @@ void FileAPI::readEntries( int scId, int ecId, QString p_path ) {
  */
 void FileAPI::readAsDataURL( int scId, int ecId, QString p_path ) {
     QFile file( p_path );
+
+    qDebug() << Q_FUNC_INFO << p_path;
 
     // Check if file exists at all
     if( !file.exists() ) {

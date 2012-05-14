@@ -33,18 +33,26 @@ signals:
 public slots:
     void requestFileSystem( int scId, int ecId, unsigned short p_type );
     void resolveLocalFileSystemURL( int scId, int ecId, QString p_url );
-    void getFile( int scId, int ecId, QString p_path, QVariantMap p_options );
     void getDirectory( int scId, int ecId, QString p_path, QVariantMap p_options );
+    void getFile( int scId, int ecId, QString p_path, QVariantMap p_options );
+    void getParent( int scId, int ecId, QString p_path );
+    void getMetadata( int scId, int ecId, QString p_path );
+    void remove( int scId, int ecId, QString p_path );
     void removeRecursively( int scId, int ecId, QString p_path );
     void file( int scId, int ecId, QString p_path );
     void write( int scId, int ecId, QString p_path, unsigned long long p_position, QString p_data );
     void truncate( int scId, int ecId, QString p_path, unsigned long long p_size );
-    void getParent( int scId, int ecId, QString p_path );
-    void remove( int scId, int ecId, QString p_path );
-    void getMetadata( int scId, int ecId, QString p_path );
     void readEntries( int scId, int ecId, QString p_path );
     void readAsDataURL( int scId, int ecId, QString p_path );
-
+//    void copyTo();
+//    void moveTo();
+//    void canCopyMoveSrc();
+//    void doCopyMove();
+//    void getFileMetadata();
+//    void readEntries();
+//    void readFile();
+//    void readAsText();
+//    void readAsDataUrl();
 protected:
     static bool rmDir( QDir p_dir );
 

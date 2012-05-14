@@ -34,3 +34,8 @@ Device.prototype.version = "";
 Cordova.addConstructor( "com.cordova.Device", function() {
                             window.device = new Device();
                         } );
+
+var cordova = window.Cordova;
+var PhoneGap = window.Cordova;
+PhoneGap.addPlugin = window.Cordova.enablePlugin;
+var plugins = window.Cordova;
