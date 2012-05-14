@@ -37,13 +37,13 @@ FileAPI::FileAPI() : CPlugin() {
 /**
  * LocalFileSystem.requestFileSystem - http://www.w3.org/TR/file-system-api/#widl-LocalFileSystem-requestFileSystem
  */
-void FileAPI::requestFileSystem( int scId, int ecId, unsigned short p_type ) {
-    //FIXEME, accept size parameter
+void FileAPI::requestFileSystem( int scId, int ecId, unsigned short p_type, unsigned long long p_size) {
     QDir dir;
-
+    //FIXEME,what is quota value
+    if (p_size >= 10000){
+        this->callback( ecId, "FileException.cast( FileException.QUOTA_EXCEEDED_ERR)");
+    }
     QString absPath;
-
-    qDebug() << "requestFileSystem: " << QDir::temp().absolutePath();
     // Get correct system path
     if( p_type == 0 ) {
         dir = QDir::temp();
@@ -59,7 +59,7 @@ void FileAPI::requestFileSystem( int scId, int ecId, unsigned short p_type ) {
     } else if (p_type == 1){
         this->callback( scId, "FileSystem.cast( 'persistent', '" + dir.dirName() + "', '" + absPath + "')" );
     } else {
-        this->callback( ecId, "FileError.cast( FileError.SYNTAX_ERR )" );
+        this->callback( ecId, "FileException.cast( FileException.SYNTAX_ERR )" );
     }
 }
 
@@ -72,13 +72,13 @@ void FileAPI::resolveLocalFileSystemURL( int scId, int ecId, QString p_url ) {
 
     // Check if we have a valid URL
     if( !url.isValid() ) {
-        this->callback( ecId, "FileError.cast( FileError.ENCODING_ERR )" );
+        this->callback( ecId, "FileException.cast( FileException.ENCODING_ERR )" );
         return;
     }//FIXEME: invalid pass
 
     // Check for the correct scheme
     if( url.scheme() != "file" ) {
-        this->callback( ecId, "FileError.cast( FileError.TYPE_MISMATCH_ERR )" );
+        this->callback( ecId, "FileException.cast( FileException.TYPE_MISMATCH_ERR )" );
         return;
     }
 
@@ -86,21 +86,17 @@ void FileAPI::resolveLocalFileSystemURL( int scId, int ecId, QString p_url ) {
     QFileInfo fileInfo( url.path() );
     // Check if entry exists
     if( !fileInfo.exists() ) {
-        this->callback( ecId, "FileError.cast( FileError.NOT_FOUND_ERR )" );
+        this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR )" );
         return;
     }
-    this->callback( scId, "DirectoryEntry.cast( '" + fileInfo.fileName() + "', '"
-           + QDir::cleanPath(fileInfo.absoluteFilePath()) + "' )" );
-    return;
-    // Now check if this is a dir or a file
-//    if( fileInfo.isDir() ) {
-//        this->callback( scId, "DirectoryEntry.cast( '" + fileInfo.fileName() + "', '" + QDir::cleanPath(fileInfo.absoluteFilePath()) + "/' )" );
-//        return;
-//    }
-//    else {
-//        this->callback( scId, "FileEntry.cast( '" + fileInfo.fileName() + "', '" + fileInfo.absoluteFilePath() + "' )" );
-//        return;
-//    }
+    if( fileInfo.isDir() ) {
+        this->callback( scId, "DirectoryEntry.cast( '" + fileInfo.fileName() + "', '" + QDir::cleanPath(fileInfo.absoluteFilePath()) + "' )" );
+        return;
+    }
+    else {
+        this->callback( scId, "FileEntry.cast( '" + fileInfo.fileName() + "', '" + fileInfo.absoluteFilePath() + "' )" );
+        return;
+    }
 }
 
 /**
@@ -117,13 +113,13 @@ void FileAPI::getFile( int scId, int ecId, QString p_path, QVariantMap p_options
 
     if( file.exists() ) {
         if( create && exclusive ) {
-            this->callback( ecId, "FileError.cast( FileError.PATH_EXISTS_ERR )" );
+            this->callback( ecId, "FileException.cast( FileException.PATH_EXISTS_ERR )" );
             return;
         }
     }
     else {
         if( !create ) {
-            this->callback( ecId, "FileError.cast( FileError.NOT_FOUND_ERR )" );
+            this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR )" );
             return;
         }
 
@@ -133,7 +129,7 @@ void FileAPI::getFile( int scId, int ecId, QString p_path, QVariantMap p_options
 
         // Check if creation was successfull
         if( !file.exists() ) {
-            this->callback( ecId, "FileError.cast( FileError.NO_MODIFICATION_ALLOWED_ERR )" );
+            this->callback( ecId, "FileException.cast( FileException.NO_MODIFICATION_ALLOWED_ERR )" );
             return;
         }
     }
@@ -154,13 +150,13 @@ void FileAPI::getDirectory( int scId, int ecId, QString p_path, QVariantMap p_op
 
     if( dir.exists() ) {
         if( create && exclusive ) {
-            this->callback( ecId, "FileError.cast( FileError.PATH_EXISTS_ERR )" );
+            this->callback( ecId, "FileException.cast( FileException.PATH_EXISTS_ERR )" );
             return;
         }
     }
     else {
         if( !create ) {
-            this->callback( ecId, "FileError.cast( FileError.NOT_FOUND_ERR )" );
+            this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR )" );
             return;
         }
 
@@ -172,7 +168,7 @@ void FileAPI::getDirectory( int scId, int ecId, QString p_path, QVariantMap p_op
 
         // Check if creation was successfull
         if( !dir.exists() ) {
-            this->callback( ecId, "FileError.cast( FileError.NO_MODIFICATION_ALLOWED_ERR )" );
+            this->callback( ecId, "FileException.cast( FileException.NO_MODIFICATION_ALLOWED_ERR )" );
             return;
         }
     }
@@ -194,7 +190,7 @@ void FileAPI::removeRecursively( int scId, int ecId, QString p_path ) {
     }
 
     // Something went wrong if we reach here
-    this->callback( ecId, "FileError.cast( FileError.INVALID_MODIFICATION_ERR )" );
+    this->callback( ecId, "FileException.cast( FileException.INVALID_MODIFICATION_ERR )" );
 }
 
 /**
@@ -206,7 +202,7 @@ void FileAPI::file( int scId, int ecId, QString p_path ) {
     qDebug() << Q_FUNC_INFO << p_path;
 
     if( !fileInfo.exists() ) {
-        this->callback( ecId, "FileError.cast( FileError.NOT_FOUND_ERR )" );
+        this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR )" );
         return;
     }
     else {
@@ -225,7 +221,7 @@ void FileAPI::write( int scId, int ecId, QString p_path, unsigned long long p_po
 
     // Check if file exists
     if( !file.exists() ) {
-        this->callback( ecId, "FileError.cast( FileError.NOT_FOUND_ERR ), 0, 0" );
+        this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR ), 0, 0" );
         return;
     }
 
@@ -234,7 +230,7 @@ void FileAPI::write( int scId, int ecId, QString p_path, unsigned long long p_po
 
     // Try to open the file for writing
     if( !file.open( QIODevice::ReadWrite ) ) {
-        this->callback( ecId, "FileError.cast( FileError.NO_MODIFICATION_ALLOWED_ERR ), 0, " + QString::number(fileInfo.size()) );
+        this->callback( ecId, "FileException.cast( FileException.NO_MODIFICATION_ALLOWED_ERR ), 0, " + QString::number(fileInfo.size()) );
         return;
     }
 
@@ -247,7 +243,7 @@ void FileAPI::write( int scId, int ecId, QString p_path, unsigned long long p_po
         file.close();
         fileInfo.refresh();
 
-        this->callback( ecId, "FileError.cast( FileError.INVALID_MODIFICATION_ERR ), 0, " + QString::number(fileInfo.size()) );
+        this->callback( ecId, "FileException.cast( FileException.INVALID_MODIFICATION_ERR ), 0, " + QString::number(fileInfo.size()) );
         return;
     }
 
@@ -273,13 +269,13 @@ void FileAPI::truncate( int scId, int ecId, QString p_path, unsigned long long p
 
     // Check if file exists at all
     if( !file.exists() ) {
-        this->callback( ecId, "FileError.cast( FileError.NOT_FOUND_ERR ), 0, 0" );
+        this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR ), 0, 0" );
         return;
     }
 
     // Try to resize (truncate) the file
     if( !file.resize(p_size) ) {
-        this->callback( ecId, "FileError.cast( FileError.NO_MODIFICATION_ALLOWED_ERR ), " + QString::number(file.size()) + ", " + QString::number(file.size()) );
+        this->callback( ecId, "FileException.cast( FileException.NO_MODIFICATION_ALLOWED_ERR ), " + QString::number(file.size()) + ", " + QString::number(file.size()) );
         return;
     }
 
@@ -298,7 +294,7 @@ void FileAPI::getParent( int scId, int ecId, QString p_path ) {
 
     // Try to change into upper directory
     if( !dir.cdUp() ) {
-        this->callback( ecId, "FileError.cast( FileError.NOT_FOUND_ERR )" );
+        this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR )" );
         return;
     }
 
@@ -317,7 +313,7 @@ void FileAPI::remove( int scId, int ecId, QString p_path ) {
 
     // Check if entry exists at all
     if( !fileInfo.exists() ) {
-        this->callback( ecId, "FileError.cast( FileError.NOT_FOUND_ERR )" );
+        this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR )" );
         return;
     }
 
@@ -340,7 +336,7 @@ void FileAPI::remove( int scId, int ecId, QString p_path ) {
     }
 
     // Something went wrong if we reached here
-    this->callback( ecId, "FileError.cast( FileError.NO_MODIFICATION_ALLOWED_ERR )" );
+    this->callback( ecId, "FileException.cast( FileException.NO_MODIFICATION_ALLOWED_ERR )" );
     return;
 }
 
@@ -354,7 +350,7 @@ void FileAPI::getMetadata( int scId, int ecId, QString p_path ) {
 
     // Check if file exists
     if( !fileInfo.exists() ) {
-        this->callback( ecId, "FileError.cast( FileError.NOT_FOUND_ERR )" );
+        this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR )" );
         return;
     }
 
@@ -394,7 +390,7 @@ void FileAPI::readEntries( int scId, int ecId, QString p_path ) {
     }
 
     // If we reach here, something went wrong
-    this->callback( ecId, "FileError.cast( FileError.NOT_FOUND_ERR )" );
+    this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR )" );
 }
 
 /**
@@ -407,13 +403,13 @@ void FileAPI::readAsDataURL( int scId, int ecId, QString p_path ) {
 
     // Check if file exists at all
     if( !file.exists() ) {
-        this->callback( ecId, "FileError.cast( FileError.NOT_FOUND_ERR )" );
+        this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR )" );
         return;
     }
 
     // Try to open file for reading
     if( !file.open( QIODevice::ReadOnly ) ) {
-        this->callback( ecId, "FileError.cast( FileError.NOT_READABLE_ERR )" );
+        this->callback( ecId, "FileException.cast( FileException.NOT_READABLE_ERR )" );
         return;
     }
 

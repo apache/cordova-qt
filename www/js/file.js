@@ -45,6 +45,7 @@ FileError.PATH_EXISTS_ERR = 12;
  * FileException interface
  * http://www.w3.org/TR/FileAPI/#dfn-FileException
  */
+//use this one as FileError name conflict
 function FileException() {
 }
 
@@ -499,7 +500,7 @@ LocalFileSystem.TEMPORARY = 0;
 LocalFileSystem.PERSISTENT = 1;
 
 LocalFileSystem.prototype.requestFileSystem = function( type, size, successCallback, errorCallback ) {
-        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "requestFileSystem", [type]);
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "requestFileSystem", [type,size]);
 }
 LocalFileSystem.prototype.resolveLocalFileSystemURL = function( url, successCallback, errorCallback ) {
         Cordova.exec(successCallback, errorCallback, "com.cordova.File", "resolveLocalFileSystemURL", [url]);

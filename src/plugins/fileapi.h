@@ -31,7 +31,7 @@ public:
 signals:
 
 public slots:
-    void requestFileSystem( int scId, int ecId, unsigned short p_type );
+    void requestFileSystem( int scId, int ecId, unsigned short p_type, unsigned long long p_size);
     void resolveLocalFileSystemURL( int scId, int ecId, QString p_url );
     void getDirectory( int scId, int ecId, QString p_path, QVariantMap p_options );
     void getFile( int scId, int ecId, QString p_path, QVariantMap p_options );
