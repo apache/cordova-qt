@@ -21,6 +21,7 @@
 
 #include <QDir>
 #include <QVariantMap>
+#include <QMap>
 
 class FileAPI : public CPlugin
 {
@@ -58,6 +59,9 @@ protected:
 
 private:
     static FileAPI* m_fileAPI;
+    typedef QMap<QString, QString> MimeTypeMap;
+    static MimeTypeMap createMimeTypeMap();
+    static MimeTypeMap mimeMap_;
 };
 
 #endif // FILEAPI_H

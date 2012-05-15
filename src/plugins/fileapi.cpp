@@ -19,6 +19,7 @@
 #include "../pluginregistry.h"
 
 #include <QFile>
+#include <QFileInfo>
 #include <QDebug>
 #include <QDateTime>
 #include <QUrl>
@@ -26,12 +27,24 @@
 
 // Create static instance of ourself
 FileAPI* FileAPI::m_fileAPI = new FileAPI();
+//use static method create initialized map for hardcoded mimetype
+FileAPI::MimeTypeMap FileAPI::mimeMap_(FileAPI::createMimeTypeMap());
 
 /**
  * Constructor - NOTE: Never do anything except registering the plugin
  */
 FileAPI::FileAPI() : CPlugin() {
     PluginRegistry::getRegistry()->registerPlugin( "com.cordova.File", this );
+}
+
+FileAPI::MimeTypeMap FileAPI::createMimeTypeMap(){
+    MimeTypeMap map;
+    map.insert(QString("txt"),QString("text/plain"));
+    map.insert(QString("css"),QString("text/css"));
+    map.insert(QString("js"),QString("text/javascript"));
+    map.insert(QString("xml"),QString("text/xml"));
+    map.insert(QString("html"),QString("text/html"));
+    return map;
 }
 
 /**
@@ -460,8 +473,13 @@ void FileAPI::readEntries( int scId, int ecId, QString p_path ) {
  */
 void FileAPI::readAsDataURL( int scId, int ecId, QString p_path ) {
     QFile file( p_path );
-
+    QFileInfo fileInfo( p_path );
     qDebug() << Q_FUNC_INFO << p_path;
+
+    if(p_path.startsWith("content:")){
+        this->callback( ecId, "FileException.cast( FileException.NOT_READABLE_ERR )" );
+        return;
+    }
 
     // Check if file exists at all
     if( !file.exists() ) {
@@ -477,9 +495,10 @@ void FileAPI::readAsDataURL( int scId, int ecId, QString p_path ) {
 
     // Read the file content
     QByteArray byteArray = file.readAll();
+    QString contentType( mimeMap_[fileInfo.completeSuffix()] );
 
     // Escape string & send back
-    this->callback( scId, "'" + byteArray.toBase64() + "'" );
+    this->callback( scId, "'data:" + contentType + ";base64," + byteArray.toBase64() + "'" );
     return;
 }
 
