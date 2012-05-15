@@ -346,11 +346,18 @@ void FileAPI::getParent( int scId, int ecId, QString p_path ) {
 
     qDebug() << Q_FUNC_INFO << p_path;
 
+    //can't cdup more than app's root
+    QDir root = QDir::current();
+    QString absPath = root.absolutePath() + "/doc";
     // Try to change into upper directory
-    if( !dir.cdUp() ) {
-        this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR )" );
-        return;
+    if( p_path != absPath){
+        if( !dir.cdUp() ) {
+            this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR )" );
+            return;
+        }
+
     }
+
 
     // Extract names and send back
     this->callback( scId, "DirectoryEntry.cast( '" + dir.dirName() + "', '" + dir.absolutePath() + "' )" );
@@ -364,10 +371,11 @@ void FileAPI::remove( int scId, int ecId, QString p_path ) {
     QFileInfo fileInfo(p_path);
 
     qDebug() << Q_FUNC_INFO << p_path;
-
+    QDir root = QDir::current();
+    QString absPath = root.absolutePath() + "/doc";
     // Check if entry exists at all
-    if( !fileInfo.exists() ) {
-        this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR )" );
+    if( !fileInfo.exists() || (p_path == absPath)) {
+        this->callback( ecId, "FileException.cast( FileException.NO_MODIFICATION_ALLOWED_ERR )" );
         return;
     }
 
@@ -390,7 +398,7 @@ void FileAPI::remove( int scId, int ecId, QString p_path ) {
     }
 
     // Something went wrong if we reached here
-    this->callback( ecId, "FileException.cast( FileException.NO_MODIFICATION_ALLOWED_ERR )" );
+    this->callback( ecId, "FileException.cast( FileException.INVALID_MODIFICATION_ERR )" );
     return;
 }
 
@@ -409,7 +417,7 @@ void FileAPI::getMetadata( int scId, int ecId, QString p_path ) {
     }
 
     // Return modification date
-    this->callback( scId, "FileMetadata.cast( new Date(" + QString::number(fileInfo.lastModified().toMSecsSinceEpoch()) + ") )" );
+    this->callback( scId, "Metadata.cast( new Date(" + QString::number(fileInfo.lastModified().toMSecsSinceEpoch()) + ") )" );
     return;
 }
 
@@ -486,24 +494,24 @@ bool FileAPI::rmDir( QDir p_dir ) {
         return false;
     }
     bool result = true;
-       if( p_dir.exists() ) {
-           // Iterate over entries and remove them
-           Q_FOREACH( const QFileInfo &fileInfo, p_dir.entryInfoList( QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot ) ) {
-               if (fileInfo.isDir()) {
-                   result = rmDir(fileInfo.absoluteFilePath());
-               }
-               else {
-                   result = QFile::remove(fileInfo.absoluteFilePath());
-               }
+    if( p_dir.exists() ) {
+        // Iterate over entries and remove them
+        Q_FOREACH( const QFileInfo &fileInfo, p_dir.entryInfoList( QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot ) ) {
+            if (fileInfo.isDir()) {
+                result = rmDir(fileInfo.absoluteFilePath());
+            }
+            else {
+                result = QFile::remove(fileInfo.absoluteFilePath());
+            }
 
-               if (!result) {
-                   return result;
-               }
-           }
+            if (!result) {
+                return result;
+            }
+        }
 
-           // Finally remove the current dir
-           qDebug() << p_dir.absolutePath();
-           return p_dir.rmdir( p_dir.absolutePath() );
-       }
-       return result;
+        // Finally remove the current dir
+        qDebug() << p_dir.absolutePath();
+        return p_dir.rmdir( p_dir.absolutePath() );
+    }
+    return result;
 }

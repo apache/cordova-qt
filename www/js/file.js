@@ -116,6 +116,11 @@ Entry.prototype.getMetadata = function( successCallback, errorCallback ) {
             // Get metadata for this entry
             Cordova.exec(successCallback, errorCallback, "com.cordova.File", "getMetadata", [this.fullPath]);
         }
+Entry.prototype.setMetadata = function( successCallback, errorCallback ) {
+            //Cordova.exec(successCallback, errorCallback, "com.cordova.File", "setMetadata", [this.fullPath]);
+        }
+Entry.prototype.moveTo = function( parent, newName, successCallback, errorCallback ) {
+        }
 Entry.prototype.moveTo = function( parent, newName, successCallback, errorCallback ) {
         }
 Entry.prototype.copyTo = function( parent, newName, successCallback, errorCallback ) {
