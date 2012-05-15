@@ -376,7 +376,7 @@ FileReader.prototype.readAsText = function( file ) {
 
                              if( typeof me.onloadend === "function" ) me.onloadend( FileSaver.createEvent( "loadend", me) );
                              if( typeof me.onerror === "function" ) me.onerror( FileSaver.createEvent( "error", me) );
-                         }, "com.cordova.File", "readAsDataURL", [file.fullPath]);
+                         }, "com.cordova.File", "readAsText", [file.fullPath]);
         }
 FileReader.prototype.readAsDataURL = function( file ) {
             this.readyState = FileReader.EMPTY;

@@ -45,6 +45,7 @@ public slots:
     void truncate( int scId, int ecId, QString p_path, unsigned long long p_size );
     void readEntries( int scId, int ecId, QString p_path );
     void readAsDataURL( int scId, int ecId, QString p_path );
+    void readAsText( int scId, int ecId, QString p_path );
 //    void copyTo();
 //    void moveTo();
 //    void canCopyMoveSrc();

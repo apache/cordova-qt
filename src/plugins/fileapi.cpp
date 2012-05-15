@@ -471,6 +471,29 @@ void FileAPI::readEntries( int scId, int ecId, QString p_path ) {
 /**
  * FileReader.readAsText - http://www.w3.org/TR/FileAPI/#dfn-readAsText
  */
+void FileAPI::readAsText( int scId, int ecId, QString p_path ) {
+    QFile file( p_path );
+    qDebug() << Q_FUNC_INFO << p_path;
+
+    // Check if file exists at all
+    if( !file.exists() ) {
+        this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR )" );
+        return;
+    }
+    // Try to open file for reading
+    if( !file.open( QIODevice::ReadOnly ) ) {
+        this->callback( ecId, "FileException.cast( FileException.NOT_READABLE_ERR )" );
+        return;
+    }
+    QByteArray byteArray = file.readAll();
+    // Escape string & send back
+    this->callback( scId, "'" + byteArray.toBase64() + "'" );
+    return;
+}
+
+/**
+ * FileReader.readAsDataURL - http://www.w3.org/TR/FileAPI/#dfn-readAsText
+ */
 void FileAPI::readAsDataURL( int scId, int ecId, QString p_path ) {
     QFile file( p_path );
     QFileInfo fileInfo( p_path );
@@ -480,24 +503,22 @@ void FileAPI::readAsDataURL( int scId, int ecId, QString p_path ) {
         this->callback( ecId, "FileException.cast( FileException.NOT_READABLE_ERR )" );
         return;
     }
-
     // Check if file exists at all
     if( !file.exists() ) {
         this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR )" );
         return;
     }
-
     // Try to open file for reading
     if( !file.open( QIODevice::ReadOnly ) ) {
         this->callback( ecId, "FileException.cast( FileException.NOT_READABLE_ERR )" );
         return;
     }
-
     // Read the file content
     QByteArray byteArray = file.readAll();
     QString contentType( mimeMap_[fileInfo.completeSuffix()] );
 
     // Escape string & send back
+//    this->callback( scId, "'" + byteArray.toBase64() + "'" );
     this->callback( scId, "'data:" + contentType + ";base64," + byteArray.toBase64() + "'" );
     return;
 }
