@@ -46,17 +46,14 @@ public slots:
     void readEntries( int scId, int ecId, QString p_path );
     void readAsDataURL( int scId, int ecId, QString p_path );
     void readAsText( int scId, int ecId, QString p_path );
-//    void copyTo();
-//    void moveTo();
-//    void canCopyMoveSrc();
-//    void doCopyMove();
-//    void getFileMetadata();
-//    void readEntries();
-//    void readFile();
-//    void readAsText();
-//    void readAsDataUrl();
+    void copyFile(int scId, int ecId,const QString& sourceFile, const QString& destinationParentDir, const QString& newName);
+    void moveFile(int scId, int ecId,const QString& sourceFile, const QString& destinationParentDir, const QString& newName);
+    void copyDir(int scId, int ecId,const QString& sourceFolder, const QString& destFolder, const QString& newName);
+    void moveDir(int scId, int ecId,const QString& sourceFolder, const QString& destFolder, const QString& newName);
+
 protected:
     static bool rmDir( QDir p_dir );
+    static bool copyFolder(const QString& sourceFolder, const QString& destFolder);
 
 private:
     static FileAPI* m_fileAPI;

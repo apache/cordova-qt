@@ -119,12 +119,16 @@ Entry.prototype.getMetadata = function( successCallback, errorCallback ) {
 Entry.prototype.setMetadata = function( successCallback, errorCallback ) {
             //Cordova.exec(successCallback, errorCallback, "com.cordova.File", "setMetadata", [this.fullPath]);
         }
-Entry.prototype.moveTo = function( parent, newName, successCallback, errorCallback ) {
-        }
-Entry.prototype.moveTo = function( parent, newName, successCallback, errorCallback ) {
-        }
-Entry.prototype.copyTo = function( parent, newName, successCallback, errorCallback ) {
-        }
+/**
+  * Copies or Move a file to a new location
+  *
+  * @param {Entry} parent the directory to which to copy the entry
+  * @param {DOMString} newName the new name of the entry, defaults to the current name
+  */
+//Entry.prototype.moveTo = function( parent, newName, successCallback, errorCallback ) {
+//        }
+//Entry.prototype.copyTo = function( parent, newName, successCallback, errorCallback ) {
+//        }
 Entry.prototype.toURL = function( mimeType ) {
             return "file://" + this.fullPath;
         }
@@ -352,6 +356,7 @@ FileReader.prototype.readAsArrayBuffer = function( file ) {
         }
 FileReader.prototype.readAsBinaryString = function( file ) {
         }
+
 FileReader.prototype.readAsText = function( file ) {
             this.readyState = FileReader.EMPTY;
             this.result = null;
@@ -442,6 +447,13 @@ FileEntry.prototype.file = function( successCallback, errorCallback ) {
             // Lets get the fileinfo
             Cordova.exec(successCallback, errorCallback, "com.cordova.File", "file", [this.fullPath]);
         }
+FileEntry.prototype.copyTo = function(parent, newName, successCallback, errorCallback) {
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "copyFile", [this.fullPath, parent, newName]);
+};
+
+FileEntry.prototype.moveTo = function(parent, newName, successCallback, errorCallback) {
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "moveFile", [this.fullPath, parent, newName]);
+};
 
 /**
  * DirectoryReader interface
@@ -506,6 +518,16 @@ DirectoryEntry.prototype.removeRecursively = function( successCallback, errorCal
             // Remove the directory
             Cordova.exec(successCallback, errorCallback, "com.cordova.File", "removeRecursively", [this.fullPath]);
         }
+
+DirectoryEntry.prototype.copyTo = function(parent, newName, successCallback, errorCallback) {
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "copyDir", [this.fullPath, parent, newName]);
+};
+
+DirectoryEntry.prototype.moveTo = function(parent, newName, successCallback, errorCallback) {
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "moveDir", [this.fullPath, parent, newName]);
+};
+
+
 
 /**
  * FileSystem interface

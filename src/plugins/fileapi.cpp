@@ -81,8 +81,6 @@ void FileAPI::requestFileSystem( int scId, int ecId, unsigned short p_type, unsi
  */
 void FileAPI::resolveLocalFileSystemURL( int scId, int ecId, QString p_url ) {
     QUrl url = QUrl::fromUserInput( p_url );
-    qDebug() << Q_FUNC_INFO << p_url;
-
     // Check if we have a valid URL
     if( !url.isValid() ) {
         this->callback( ecId, "FileException.cast( FileException.ENCODING_ERR )" );
@@ -116,7 +114,6 @@ void FileAPI::resolveLocalFileSystemURL( int scId, int ecId, QString p_url ) {
  * DirectoryEntry.getFile - http://www.w3.org/TR/file-system-api/#widl-DirectoryEntry-getFile
  */
 void FileAPI::getFile( int scId, int ecId, QString p_path, QVariantMap p_options ) {
-    qDebug() << Q_FUNC_INFO << p_path;
     //NOTE: colon is not safe in url, it is not a valid path in Win and Mac, simple disable it here.
     if(p_path.contains(":")){
         this->callback( ecId, "FileException.cast( FileException.ENCODING_ERR )" );
@@ -181,7 +178,6 @@ void FileAPI::getFile( int scId, int ecId, QString p_path, QVariantMap p_options
  * DirectoryEntry.getDirectory - http://www.w3.org/TR/file-system-api/#widl-DirectoryEntry-getDirectory
  */
 void FileAPI::getDirectory( int scId, int ecId, QString p_path, QVariantMap p_options ) {
-    qDebug() << Q_FUNC_INFO << p_path;
     //NOTE: colon is not safe in url, it is not a valid path in Win and Mac, simple disable it here.
     if(p_path.contains(":")){
         this->callback( ecId, "FileException.cast( FileException.ENCODING_ERR )" );
@@ -249,8 +245,6 @@ void FileAPI::getDirectory( int scId, int ecId, QString p_path, QVariantMap p_op
  */
 void FileAPI::removeRecursively( int scId, int ecId, QString p_path ) {
     QDir dir( p_path );
-    qDebug() << Q_FUNC_INFO << p_path;
-
     if( FileAPI::rmDir(dir) ) {
         this->callback( scId, "" );
         return;
@@ -266,7 +260,6 @@ void FileAPI::removeRecursively( int scId, int ecId, QString p_path ) {
  */
 void FileAPI::file( int scId, int ecId, QString p_path ) {
     QFileInfo fileInfo(p_path);
-    qDebug() << Q_FUNC_INFO << p_path;
 
     if( !fileInfo.exists() ) {
         this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR )" );
@@ -283,9 +276,6 @@ void FileAPI::file( int scId, int ecId, QString p_path ) {
  */
 void FileAPI::write( int scId, int ecId, QString p_path, unsigned long long p_position, QString p_data ) {
     QFile file( p_path );
-
-    qDebug() << Q_FUNC_INFO << p_path;
-
     // Check if file exists
     if( !file.exists() ) {
         this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR ), 0, 0" );
@@ -332,8 +322,6 @@ void FileAPI::write( int scId, int ecId, QString p_path, unsigned long long p_po
 void FileAPI::truncate( int scId, int ecId, QString p_path, unsigned long long p_size ) {
     QFile file(p_path);
 
-    qDebug() << Q_FUNC_INFO << p_path;
-
     // Check if file exists at all
     if( !file.exists() ) {
         this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR ), 0, 0" );
@@ -357,8 +345,6 @@ void FileAPI::truncate( int scId, int ecId, QString p_path, unsigned long long p
 void FileAPI::getParent( int scId, int ecId, QString p_path ) {
     QDir dir( p_path );
 
-    qDebug() << Q_FUNC_INFO << p_path;
-
     //can't cdup more than app's root
     QDir root = QDir::current();
     QString absPath = root.absolutePath() + "/doc";
@@ -370,8 +356,6 @@ void FileAPI::getParent( int scId, int ecId, QString p_path ) {
         }
 
     }
-
-
     // Extract names and send back
     this->callback( scId, "DirectoryEntry.cast( '" + dir.dirName() + "', '" + dir.absolutePath() + "' )" );
     return;
@@ -382,8 +366,6 @@ void FileAPI::getParent( int scId, int ecId, QString p_path ) {
  */
 void FileAPI::remove( int scId, int ecId, QString p_path ) {
     QFileInfo fileInfo(p_path);
-
-    qDebug() << Q_FUNC_INFO << p_path;
     QDir root = QDir::current();
     QString absPath = root.absolutePath() + "/doc";
     // Check if entry exists at all
@@ -421,7 +403,6 @@ void FileAPI::remove( int scId, int ecId, QString p_path ) {
 void FileAPI::getMetadata( int scId, int ecId, QString p_path ) {
     QFileInfo fileInfo( p_path );
 
-    qDebug() << Q_FUNC_INFO << p_path;
 
     // Check if file exists
     if( !fileInfo.exists() ) {
@@ -439,8 +420,6 @@ void FileAPI::getMetadata( int scId, int ecId, QString p_path ) {
  */
 void FileAPI::readEntries( int scId, int ecId, QString p_path ) {
     QDir dir( p_path );
-
-    qDebug() << Q_FUNC_INFO << p_path;
 
     QString entriesList = "";
 
@@ -473,7 +452,6 @@ void FileAPI::readEntries( int scId, int ecId, QString p_path ) {
  */
 void FileAPI::readAsText( int scId, int ecId, QString p_path ) {
     QFile file( p_path );
-    qDebug() << Q_FUNC_INFO << p_path;
 
     // Check if file exists at all
     if( !file.exists() ) {
@@ -497,7 +475,6 @@ void FileAPI::readAsText( int scId, int ecId, QString p_path ) {
 void FileAPI::readAsDataURL( int scId, int ecId, QString p_path ) {
     QFile file( p_path );
     QFileInfo fileInfo( p_path );
-    qDebug() << Q_FUNC_INFO << p_path;
 
     if(p_path.startsWith("content:")){
         this->callback( ecId, "FileException.cast( FileException.NOT_READABLE_ERR )" );
@@ -527,7 +504,6 @@ void FileAPI::readAsDataURL( int scId, int ecId, QString p_path ) {
  * Helper function for recursively removing a directory
  */
 bool FileAPI::rmDir( QDir p_dir ) {
-    qDebug() << Q_FUNC_INFO << p_dir;
     QDir dir = QDir::current();
     QString absPath = dir.absolutePath() + "/doc";
     if ( p_dir == absPath){//can't remove root dir
@@ -555,3 +531,82 @@ bool FileAPI::rmDir( QDir p_dir ) {
     }
     return result;
 }
+
+void FileAPI::copyFile(int scId, int ecId,const QString& sourceFile, const QString& destinationParentDir, const QString& newName)
+{
+    qDebug()<< Q_FUNC_INFO;
+    QString destinationFile;
+    if (newName.isEmpty()){
+        QFileInfo fileInfo(sourceFile);
+        destinationFile = destinationParentDir + "/" + fileInfo.fileName();
+        destinationFile = destinationParentDir + "/" + newName;
+    } else {
+    }
+    if(QFile::copy(sourceFile, destinationFile)){
+        qDebug()<< Q_FUNC_INFO << "success";
+    };
+    this->callback( scId, "" );
+}
+
+void FileAPI::moveFile(int scId, int ecId,const QString& sourceFile, const QString& destinationParentDir, const QString& newName){
+    qDebug()<< Q_FUNC_INFO;
+    copyFile(scId,ecId,sourceFile, destinationParentDir, newName);
+    remove(scId,ecId, sourceFile);
+    this->callback( scId, "" );
+}
+
+void FileAPI::copyDir(int scId, int ecId,const QString& sourceFolder, const QString& destinationParentDir, const QString& newName)
+{
+    qDebug()<< Q_FUNC_INFO;
+    QDir sourceDir(sourceFolder);
+    QString destFolder(destinationParentDir + "/" + newName);
+    if(newName.isEmpty()){
+        destFolder = (destinationParentDir + "/" + sourceDir.dirName());
+    }
+    qDebug() << "destFolder: "<<destFolder;
+    QDir destDir(destFolder);
+    if(!destDir.exists())
+    {
+        qDebug() << "mkdir" << destDir.mkdir(destFolder);;
+    }
+    copyFolder(sourceFolder, destFolder);
+    this->callback( scId, "" );
+}
+
+void FileAPI::moveDir(int scId, int ecId,const QString& sourceDir, const QString& destinationParentDir, const QString& newName){
+     qDebug()<< Q_FUNC_INFO;
+     copyDir(scId, ecId, sourceDir, destinationParentDir,newName);
+     removeRecursively(scId, ecId,sourceDir );
+     this->callback( scId, "" );
+}
+
+//helper function to copy foler to new destination
+bool FileAPI::copyFolder(const QString& sourceFolder, const QString& destFolder)
+{
+    qDebug()<< Q_FUNC_INFO;
+    QDir sourceDir(sourceFolder);
+    if(!sourceDir.exists())
+        return false;
+    QDir destDir(destFolder);
+    if(!destDir.exists())
+    {
+        destDir.mkdir(destFolder);
+    }
+    QStringList files = sourceDir.entryList(QDir::Files);
+    for(int i = 0; i< files.count(); i++)
+    {
+        QString srcName = sourceFolder + "/" + files[i];
+        QString destName = destFolder + "/" + files[i];
+        QFile::copy(srcName, destName);
+    }
+    files.clear();
+    files = sourceDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
+    for(int i = 0; i< files.count(); i++)
+    {
+        QString srcName = sourceFolder + "/" + files[i];
+        QString destName = destFolder + "/" + files[i];
+        copyFolder(srcName, destName);
+    }
+    return true;
+}
+
