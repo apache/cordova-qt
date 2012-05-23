@@ -18,6 +18,7 @@
 #define FILEAPI_H
 
 #include "../cplugin.h"
+#include "../cordova.h"
 
 #include <QDir>
 #include <QVariantMap>
@@ -46,18 +47,19 @@ public slots:
     void readEntries( int scId, int ecId, QString p_path );
     void readAsDataURL( int scId, int ecId, QString p_path );
     void readAsText( int scId, int ecId, QString p_path );
-    void copyFile(int scId, int ecId,const QString& sourceFile, const QString& destinationParentDir, const QString& newName);
+    bool copyFile(int scId, int ecId,const QString& sourceFile, const QString& destinationParentDir, const QString& newName);
     void moveFile(int scId, int ecId,const QString& sourceFile, const QString& destinationParentDir, const QString& newName);
-    void copyDir(int scId, int ecId,const QString& sourceFolder, const QString& destFolder, const QString& newName);
+    bool copyDir(int scId, int ecId,const QString& sourceFolder, const QString& destFolder, const QString& newName);
     void moveDir(int scId, int ecId,const QString& sourceFolder, const QString& destFolder, const QString& newName);
 
 protected:
-    static bool rmDir( QDir p_dir );
-    static bool copyFolder(const QString& sourceFolder, const QString& destFolder);
+    bool rmDir( QDir p_dir );
+    bool copyFolder(const QString& sourceFolder, const QString& destFolder);
 
 private:
     static FileAPI* m_fileAPI;
     typedef QMap<QString, QString> MimeTypeMap;
+    QString persistentDir_;
     static MimeTypeMap createMimeTypeMap();
     static MimeTypeMap mimeMap_;
 };

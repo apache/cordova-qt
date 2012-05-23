@@ -448,11 +448,11 @@ FileEntry.prototype.file = function( successCallback, errorCallback ) {
             Cordova.exec(successCallback, errorCallback, "com.cordova.File", "file", [this.fullPath]);
         }
 FileEntry.prototype.copyTo = function(parent, newName, successCallback, errorCallback) {
-        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "copyFile", [this.fullPath, parent, newName]);
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "copyFile", [this.fullPath, parent.fullPath, newName]);
 };
 
 FileEntry.prototype.moveTo = function(parent, newName, successCallback, errorCallback) {
-        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "moveFile", [this.fullPath, parent, newName]);
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "moveFile", [this.fullPath, parent.fullPath, newName]);
 };
 
 /**
@@ -520,11 +520,11 @@ DirectoryEntry.prototype.removeRecursively = function( successCallback, errorCal
         }
 
 DirectoryEntry.prototype.copyTo = function(parent, newName, successCallback, errorCallback) {
-        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "copyDir", [this.fullPath, parent, newName]);
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "copyDir", [this.fullPath, parent.fullPath, newName]);
 };
 
 DirectoryEntry.prototype.moveTo = function(parent, newName, successCallback, errorCallback) {
-        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "moveDir", [this.fullPath, parent, newName]);
+        Cordova.exec(successCallback, errorCallback, "com.cordova.File", "moveDir", [this.fullPath, parent.fullPath, newName]);
 };
 
 
