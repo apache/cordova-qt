@@ -54,7 +54,7 @@ FileAPI::MimeTypeMap FileAPI::createMimeTypeMap(){
 void FileAPI::requestFileSystem( int scId, int ecId, unsigned short p_type, unsigned long long p_size) {
     QDir dir;
     persistentDir_ = QDir::homePath() + "/MyDocs/persistent";
-    qDebug() << "this is current path" << persistentDir_;
+//    qDebug() << "this is current path" << persistentDir_;
     //FIXEME,what is quota value
     if (p_size >= 10000){
         this->callback( ecId, "FileException.cast( FileException.QUOTA_EXCEEDED_ERR)");
@@ -88,7 +88,7 @@ void FileAPI::requestFileSystem( int scId, int ecId, unsigned short p_type, unsi
  * LocalFileSystem.resolveLocalFileSystemURL - http://www.w3.org/TR/file-system-api/#widl-LocalFileSystem-resolveLocalFileSystemURL
  */
 void FileAPI::resolveLocalFileSystemURL( int scId, int ecId, QString p_url ) {
-    qDebug() << Q_FUNC_INFO << QString(p_url);
+//    qDebug() << Q_FUNC_INFO << QString(p_url);
     QUrl url = QUrl::fromUserInput( p_url );
     // Check if we have a valid URL
     if( !url.isValid() ) {
@@ -123,7 +123,7 @@ void FileAPI::resolveLocalFileSystemURL( int scId, int ecId, QString p_url ) {
  * DirectoryEntry.getFile - http://www.w3.org/TR/file-system-api/#widl-DirectoryEntry-getFile
  */
 void FileAPI::getFile( int scId, int ecId, QString p_path, QVariantMap p_options ) {
-    qDebug() << Q_FUNC_INFO << QString(p_path);
+//    qDebug() << Q_FUNC_INFO << QString(p_path);
     //NOTE: colon is not safe in url, it is not a valid path in Win and Mac, simple disable it here.
     if(p_path.contains(":")){
         this->callback( ecId, "FileException.cast( FileException.ENCODING_ERR )" );
@@ -188,7 +188,7 @@ void FileAPI::getFile( int scId, int ecId, QString p_path, QVariantMap p_options
  * DirectoryEntry.getDirectory - http://www.w3.org/TR/file-system-api/#widl-DirectoryEntry-getDirectory
  */
 void FileAPI::getDirectory( int scId, int ecId, QString p_path, QVariantMap p_options ) {
-    qDebug() << Q_FUNC_INFO << QString(p_path);
+//    qDebug() << Q_FUNC_INFO << QString(p_path);
     //NOTE: colon is not safe in url, it is not a valid path in Win and Mac, simple disable it here.
     if(p_path.contains(":")){
         this->callback( ecId, "FileException.cast( FileException.ENCODING_ERR )" );
@@ -255,7 +255,6 @@ void FileAPI::getDirectory( int scId, int ecId, QString p_path, QVariantMap p_op
  * DirectoryEntry.removeRecursively - http://www.w3.org/TR/file-system-api/#widl-DirectoryEntry-removeRecursively
  */
 void FileAPI::removeRecursively( int scId, int ecId, QString p_path ) {
-    qDebug()<< Q_FUNC_INFO;
     QDir dir( p_path );
     if( FileAPI::rmDir(dir) ) {
         this->callback( scId, "" );
@@ -287,12 +286,14 @@ void FileAPI::file( int scId, int ecId, QString p_path ) {
  * FileWriter.write - http://www.w3.org/TR/file-writer-api/#widl-FileWriter-write
  */
 void FileAPI::write( int scId, int ecId, QString p_path, unsigned long long p_position, QString p_data ) {
+    qDebug() << Q_FUNC_INFO  << p_path <<p_position <<p_data;
     QFile file( p_path );
     // Check if file exists
     if( !file.exists() ) {
         this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR ), 0, 0" );
         return;
     }
+
 
     // Get detailed info
     QFileInfo fileInfo( file );
@@ -512,7 +513,7 @@ void FileAPI::readAsDataURL( int scId, int ecId, QString p_path ) {
  * Helper function for recursively removing a directory
  */
 bool FileAPI::rmDir( QDir p_dir ) {
-    qDebug()<< Q_FUNC_INFO ;
+//    qDebug()<< Q_FUNC_INFO ;
     if ( p_dir == persistentDir_){//can't remove root dir
         return false;
     }
@@ -533,7 +534,7 @@ bool FileAPI::rmDir( QDir p_dir ) {
         }
 
         // Finally remove the current dir
-        qDebug() << p_dir.absolutePath();
+//        qDebug() << p_dir.absolutePath();
         return p_dir.rmdir( p_dir.absolutePath() );
     }
     return result;
@@ -541,14 +542,14 @@ bool FileAPI::rmDir( QDir p_dir ) {
 
 bool FileAPI::copyFile(int scId, int ecId,const QString& sourceFile, const QString& destinationParentDir, const QString& newName)
 {
-    qDebug()<< Q_FUNC_INFO << sourceFile << ", "<< destinationParentDir << "," << newName;
+//    qDebug()<< Q_FUNC_INFO << sourceFile << ", "<< destinationParentDir << "," << newName;
     if(!QDir(destinationParentDir).exists()){
         this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR )" );
         return false;
     }
     QFileInfo fileInfo(sourceFile);
     QString fileName = ((newName.isEmpty()) ? fileInfo.fileName() : newName);
-    qDebug() << "fileName"<< fileName;
+//    qDebug() << "fileName"<< fileName;
     QString destinationFile(destinationParentDir + "/" + fileName);
     //NOTE: colon is not safe in url, it is not a valid path in Win and Mac, simple disable it here.
     if(!QUrl::fromUserInput(destinationFile).isValid() || destinationFile.contains(":")){
@@ -557,7 +558,7 @@ bool FileAPI::copyFile(int scId, int ecId,const QString& sourceFile, const QStri
     }
 
     if(QFile::copy(sourceFile, destinationFile)){
-        qDebug()<< Q_FUNC_INFO << "success";
+//        qDebug()<< Q_FUNC_INFO << "success";
         this->callback( scId, "FileEntry.cast( '" + fileName + "', '" + destinationFile + "' )" );
         return true;
     } else {
@@ -573,8 +574,6 @@ void FileAPI::moveFile(int scId, int ecId,const QString& sourceFile, const QStri
     QString destinationFile(destinationParentDir + "/" + fileName);
     if(QFileInfo(destinationFile).exists() && (sourceFile != destinationFile)){
         if(!QFile::remove(destinationFile)){
-            qDebug() << "fail to remove existing file..." << Q_FUNC_INFO
-                     << sourceFile << ", "<< destinationParentDir << "," << newName;
             this->callback( ecId, "FileException.cast( FileException.INVALID_MODIFICATION_ERR )" );
             return;
         }
@@ -596,14 +595,14 @@ void FileAPI::moveFile(int scId, int ecId,const QString& sourceFile, const QStri
 
 void FileAPI::copyDir(int scId, int ecId,const QString& sourceFolder, const QString& destinationParentDir, const QString& newName)
 {
-    qDebug()<< Q_FUNC_INFO << sourceFolder << ", " << destinationParentDir << ", " << newName;
+//    qDebug()<< Q_FUNC_INFO << sourceFolder << ", " << destinationParentDir << ", " << newName;
     QDir sourceDir(sourceFolder);
     QString dirName = ((newName.isEmpty()) ? sourceDir.dirName() : newName);
     QString destFolder(destinationParentDir + "/" + dirName);
     //    if(newName.isEmpty()){
     //        destFolder = (destinationParentDir + "/" + sourceDir.dirName());
     //    }
-    qDebug() << "destFolder: "<<destFolder;
+//    qDebug() << "destFolder: "<<destFolder;
     //can't copy a dir on a file
     if(QFileInfo(destFolder).isFile()){
         this->callback( ecId, "FileException.cast( FileException.INVALID_MODIFICATION_ERR )" );
@@ -634,7 +633,7 @@ void FileAPI::copyDir(int scId, int ecId,const QString& sourceFolder, const QStr
 }
 
 void FileAPI::moveDir(int scId, int ecId,const QString& sourceDir, const QString& destinationParentDir, const QString& newName){
-    qDebug()<< Q_FUNC_INFO;
+//    qDebug()<< Q_FUNC_INFO;
     QString dirName = ((newName.isEmpty()) ? QDir(sourceDir).dirName() : newName);
     QString destFolder(destinationParentDir + "/" + dirName);
     QDir destDir(destFolder);
@@ -674,7 +673,7 @@ void FileAPI::moveDir(int scId, int ecId,const QString& sourceDir, const QString
 //helper function to copy foler to new destination
 bool FileAPI::copyFolder(const QString& sourceFolder, const QString& destFolder)
 {
-    qDebug()<< Q_FUNC_INFO;
+//    qDebug()<< Q_FUNC_INFO;
     QDir sourceDir(sourceFolder);
     if(!sourceDir.exists())
         return false;
