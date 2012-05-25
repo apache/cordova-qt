@@ -5,9 +5,8 @@
 wwwDir.source = www
 xmlDir.source = xml
 qmlDir.source = qml
-docDir.source = doc
 
-DEPLOYMENTFOLDERS = wwwDir xmlDir qmlDir docDir# file1 dir1
+DEPLOYMENTFOLDERS = wwwDir xmlDir qmlDir# file1 dir1
 
 
 SOURCES += main.cpp \
@@ -24,8 +23,8 @@ SOURCES += main.cpp \
     src/cordova.cpp \
     src/cplugin.cpp \
     src/plugins/contacts.cpp \
-    src/plugins/camera.cpp 
-    #src/plugins/media.cpp
+    src/plugins/camera.cpp
+#    src/plugins/media.cpp
     
 HEADERS += \
     src/plugins/notification.h \
@@ -81,7 +80,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     symbian:TARGET.UID3 = 0xE3522943
     #symbian:DEPLOYMENT.installer_header = 0x2002CCCF
     symbian:TARGET.CAPABILITY += NetworkServices UserEnvironment ReadUserData WriteUserData
-    symbian:{LIBS += -lecam -lServiceHandler -lnewservice -lbafl}
+    symbian:{LIBS += -lecam -lServiceHandler -lbafl}
 
     QT += declarative
     QT += webkit
@@ -101,4 +100,5 @@ OTHER_FILES += \
     qtc_packaging/debian_harmattan/control \
     qtc_packaging/debian_harmattan/compat \
     qtc_packaging/debian_harmattan/changelog \
-    qml/main_qt4.qml
+    qml/main_qt4.qml \
+    qml/main.qml

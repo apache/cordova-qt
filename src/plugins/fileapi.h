@@ -49,7 +49,7 @@ public slots:
     void readAsText( int scId, int ecId, QString p_path );
     bool copyFile(int scId, int ecId,const QString& sourceFile, const QString& destinationParentDir, const QString& newName);
     void moveFile(int scId, int ecId,const QString& sourceFile, const QString& destinationParentDir, const QString& newName);
-    bool copyDir(int scId, int ecId,const QString& sourceFolder, const QString& destFolder, const QString& newName);
+    void copyDir(int scId, int ecId,const QString& sourceFolder, const QString& destFolder, const QString& newName);
     void moveDir(int scId, int ecId,const QString& sourceFolder, const QString& destFolder, const QString& newName);
 
 protected:

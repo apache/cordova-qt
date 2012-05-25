@@ -255,6 +255,7 @@ void FileAPI::getDirectory( int scId, int ecId, QString p_path, QVariantMap p_op
  * DirectoryEntry.removeRecursively - http://www.w3.org/TR/file-system-api/#widl-DirectoryEntry-removeRecursively
  */
 void FileAPI::removeRecursively( int scId, int ecId, QString p_path ) {
+    qDebug()<< Q_FUNC_INFO;
     QDir dir( p_path );
     if( FileAPI::rmDir(dir) ) {
         this->callback( scId, "" );
@@ -511,6 +512,7 @@ void FileAPI::readAsDataURL( int scId, int ecId, QString p_path ) {
  * Helper function for recursively removing a directory
  */
 bool FileAPI::rmDir( QDir p_dir ) {
+    qDebug()<< Q_FUNC_INFO ;
     if ( p_dir == persistentDir_){//can't remove root dir
         return false;
     }
@@ -592,7 +594,7 @@ void FileAPI::moveFile(int scId, int ecId,const QString& sourceFile, const QStri
 
 }
 
-bool FileAPI::copyDir(int scId, int ecId,const QString& sourceFolder, const QString& destinationParentDir, const QString& newName)
+void FileAPI::copyDir(int scId, int ecId,const QString& sourceFolder, const QString& destinationParentDir, const QString& newName)
 {
     qDebug()<< Q_FUNC_INFO << sourceFolder << ", " << destinationParentDir << ", " << newName;
     QDir sourceDir(sourceFolder);
@@ -605,47 +607,59 @@ bool FileAPI::copyDir(int scId, int ecId,const QString& sourceFolder, const QStr
     //can't copy a dir on a file
     if(QFileInfo(destFolder).isFile()){
         this->callback( ecId, "FileException.cast( FileException.INVALID_MODIFICATION_ERR )" );
-        return false;
+        return;
     }
     QDir destDir(destFolder);
     //can't copy on or in itself
     if( (sourceFolder == destFolder) || (sourceFolder == destinationParentDir)){
         this->callback( ecId, "FileException.cast( FileException.INVALID_MODIFICATION_ERR )" );
-        return false;
+        return;
     }
     //create the dir
     if(!destDir.exists()){
         qDebug() << "mkdir" << destDir.mkdir(destFolder);;
     } else{
         this->callback( ecId, "FileException.cast( FileException.INVALID_MODIFICATION_ERR )" );
-        return false;
+        return;
     }
 
     //recursively copying begin
     if(copyFolder(sourceFolder, destFolder)){
         this->callback( scId, "DirectoryEntry.cast( '" + dirName + "', '" + destFolder + "' )" );
-        return true;
+        return;
     }else{
         this->callback( ecId, "FileException.cast( FileException.INVALID_MODIFICATION_ERR )" );
-        return false;
+        return;
     }
 }
 
 void FileAPI::moveDir(int scId, int ecId,const QString& sourceDir, const QString& destinationParentDir, const QString& newName){
-
+    qDebug()<< Q_FUNC_INFO;
     QString dirName = ((newName.isEmpty()) ? QDir(sourceDir).dirName() : newName);
     QString destFolder(destinationParentDir + "/" + dirName);
     QDir destDir(destFolder);
-    if(destDir.exists() && (destFolder != sourceDir)){
-            qDebug() << "***empty folder***";
-            if(QDir(destinationParentDir).rmdir(dirName)){
-                qDebug() << "rmed";
-            }
+
+    //can't copy a dir on a file
+    if(QFileInfo(destFolder).isFile()){
+        this->callback( ecId, "FileException.cast( FileException.INVALID_MODIFICATION_ERR )" );
+        return;
+    }
+    //can't copy on or in itself
+    if( (sourceDir == destFolder) || (sourceDir == destinationParentDir)){
+        this->callback( ecId, "FileException.cast( FileException.INVALID_MODIFICATION_ERR )" );
+        return;
     }
 
-    if(copyDir(scId, ecId, sourceDir, destinationParentDir,newName)){
-        removeRecursively(scId, ecId,sourceDir );
-        this->callback( scId, "" );
+    if(destDir.exists() && (destFolder != sourceDir)){
+        if(QDir(destinationParentDir).rmdir(dirName)){
+            qDebug() << "empty folder rmed";
+        }
+    }
+    if(copyFolder(sourceDir, destFolder)){
+        qDebug() << "rming src dir if src-> dest copy success";
+        rmDir(sourceDir );
+        this->callback( scId, "DirectoryEntry.cast( '" + dirName + "', '" + destFolder + "' )" );
+        return;
     } else {
         qDebug()<< "unable to copy dirs" <<Q_FUNC_INFO <<
                    ", "<<sourceDir << ", "<< destinationParentDir << ", "<<newName;
@@ -662,8 +676,7 @@ bool FileAPI::copyFolder(const QString& sourceFolder, const QString& destFolder)
     if(!sourceDir.exists())
         return false;
     QDir destDir(destFolder);
-    if(!destDir.exists())
-    {
+    if(!destDir.exists()){
         destDir.mkdir(destFolder);
     }
     QStringList files = sourceDir.entryList(QDir::Files);
