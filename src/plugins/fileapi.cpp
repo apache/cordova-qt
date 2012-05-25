@@ -653,6 +653,9 @@ void FileAPI::moveDir(int scId, int ecId,const QString& sourceDir, const QString
     if(destDir.exists() && (destFolder != sourceDir)){
         if(QDir(destinationParentDir).rmdir(dirName)){
             qDebug() << "empty folder rmed";
+        } else {
+            this->callback( ecId, "FileException.cast( FileException.INVALID_MODIFICATION_ERR )" );
+            return;
         }
     }
     if(copyFolder(sourceDir, destFolder)){
