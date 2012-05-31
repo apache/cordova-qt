@@ -184,6 +184,7 @@ File.cast = function( p_name, p_fullPath, p_type, p_lastModifiedDate, p_size ) {
  * FileSaver interface
  * http://www.w3.org/TR/file-writer-api/#idl-def-FileSaver
  */
+
 function FileSaver() {
 }
 
@@ -220,25 +221,29 @@ FileSaver.prototype.onabort = null;
 FileSaver.prototype.onerror = null;
 FileSaver.prototype.onwriteend = null;
 
-FileSaver.prototype.fullPath = "";		// Not W3C conform, but we need the path for handling!
+//FileSaver.prototype.fullPath = "";		// Not W3C conform, but we need the path for handling!
 
 /**
  * FileWriter interface
  * (derives from FileSaver)
  * http://www.w3.org/TR/file-writer-api/#idl-def-FileWriter
  */
-function FileWriter() {
+
+function FileWriter(p_file) {
+    this.fullPath = p_file.fullPath || "";
+    return this;
 }
 
+
 FileWriter.cast = function( p_fullPath, p_length ) {
-            var fw = new FileWriter();
-            fw.fullPath = p_fullPath;
-            fw.length = p_length;
+            var tmpFile = new File(null,p_fullPath,null, null,null);
+            var fw = new FileWriter(tmpFile);
 
             return fw;
         }
 
 FileWriter.prototype = new FileSaver();
+FileWriter.prototype.fullPath = "";
 FileWriter.prototype.position = 0;
 FileWriter.prototype.length = 0;
 FileWriter.prototype.write = function( data ) {

@@ -286,8 +286,12 @@ void FileAPI::file( int scId, int ecId, QString p_path ) {
  * FileWriter.write - http://www.w3.org/TR/file-writer-api/#widl-FileWriter-write
  */
 void FileAPI::write( int scId, int ecId, QString p_path, unsigned long long p_position, QString p_data ) {
-    qDebug() << Q_FUNC_INFO  << p_path <<p_position <<p_data;
+    qDebug() << Q_FUNC_INFO  << QString(p_path) << p_position <<p_data;
     QFile file( p_path );
+    if(!file.exists()){
+            file.open( QIODevice::WriteOnly );
+            file.close();
+    }
     // Check if file exists
     if( !file.exists() ) {
         this->callback( ecId, "FileException.cast( FileException.NOT_FOUND_ERR ), 0, 0" );
