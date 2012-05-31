@@ -90,6 +90,7 @@ void FileAPI::requestFileSystem( int scId, int ecId, unsigned short p_type, unsi
 void FileAPI::resolveLocalFileSystemURL( int scId, int ecId, QString p_url ) {
 //    qDebug() << Q_FUNC_INFO << QString(p_url);
     QUrl url = QUrl::fromUserInput( p_url );
+    QUrl urls(p_url);
     // Check if we have a valid URL
     if( !url.isValid() ) {
         this->callback( ecId, "FileException.cast( FileException.ENCODING_ERR )" );
@@ -311,6 +312,7 @@ void FileAPI::write( int scId, int ecId, QString p_path, unsigned long long p_po
     // Create TextStream for writing
     QTextStream textStream( &file );
     textStream.setCodec( "UTF-8" );
+    textStream.setAutoDetectUnicode(true);
 
     // Seek to correct position
     if( !textStream.seek( p_position ) ) {
@@ -327,6 +329,12 @@ void FileAPI::write( int scId, int ecId, QString p_path, unsigned long long p_po
     file.flush();
     file.close();
     fileInfo.refresh();
+    if(p_position > 0){
+        if(!file.resize(p_position + p_data.size()) ){
+            this->callback( ecId, "FileException.cast( FileException.NO_MODIFICATION_ALLOWED_ERR ), " + QString::number(file.size()) + ", " + QString::number(file.size()) );
+            return;
+        }
+    }
 
     // Hooray - we are done!
     this->callback( scId, QString::number(fileInfo.size()) + ", " + QString::number(fileInfo.size()) );

@@ -290,7 +290,7 @@ FileWriter.prototype.seek = function( offset ) {
             if( this.readyState == FileSaver.WRITING ) throw FileException.cast(FileException.INVALID_STATE_ERR);
 
             if( offset < 0 ) {
-                this.position = offset + this.length;
+                this.position = Math.max(offset + this.length, 0);
             }
             else if( offset > this.length ) {
                 this.position = this.length;
