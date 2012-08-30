@@ -1,7 +1,7 @@
 Cordova/Qt
 ==========
 
-Cordova/Qt is the Qt port of the Cordova (formerly PhoneGap) framework. It should compile on any platform which is compatible with Qt and Qt Mobility.
+Cordova/Qt is the Qt port of the Apache Cordova project. It should compile on any platform which is compatible with Qt and Qt Mobility.
 
 Requirements
 ------------
@@ -32,7 +32,7 @@ Unsupported APIs
 -----------------
 
 - Capture - in progress
-- Media (PhoneGap will be moving to follow the W3C specification which is supported by WebKit and these APIS are likely to be deprecated)
+- Media (Cordova will be moving to follow the W3C specification which is supported by WebKit and these APIS are likely to be deprecated)
 
 License
 -------

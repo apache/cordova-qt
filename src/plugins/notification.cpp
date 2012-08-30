@@ -43,7 +43,7 @@ Notification::Notification() : CPlugin(){
 }
 
 /**
- * Nofication.beep - http://docs.phonegap.com/phonegap_notification_notification.md.html#notification.beep
+ * Nofication.beep - http://docs.cordova.io/en/2.0.0/cordova_notification_notification.md.html#notification.beep
  */
 void Notification::beep( int scId, int ecId, int p_times ) {
     Q_UNUSED(scId)
@@ -56,7 +56,7 @@ void Notification::beep( int scId, int ecId, int p_times ) {
 }
 
 /**
- * Notification.vibrate - http://docs.phonegap.com/phonegap_notification_notification.md.html#notification.vibrate
+ * Notification.vibrate - http://docs.cordova.io/en/2.0.0/cordova_notification_notification.md.html#notification.vibrate
  */
 void Notification::vibrate( int scId, int ecId, int p_milliseconds ) {
     Q_UNUSED(scId)

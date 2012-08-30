@@ -16,7 +16,7 @@
 
 /**
  * Notification
- * http://docs.phonegap.com/phonegap_notification_notification.md.html
+ * http://docs.cordova.io/en/2.0.0/cordova_notification_notification.md.html
  */
 function Notification() {
 }

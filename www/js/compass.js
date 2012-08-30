@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-//compass interface http://docs.phonegap.com/en/1.0.0/phonegap_compass_compass.md.html
+//compass interface http://docs.cordova.io/en/2.0.0/cordova_compass_compass.md.html
 
 function CompassHeading(p_heading, p_trueHeading, p_accuracy, timestamp){
                    this.magneticHeading = p_heading || 0;

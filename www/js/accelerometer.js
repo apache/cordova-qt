@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-//accelerometer interface http://docs.phonegap.com/en/1.0.0/phonegap_accelerometer_accelerometer.md.html
+//accelerometer interface http://docs.cordova.io/en/2.0.0/cordova_accelerometer_accelerometer.md.html
 
 
 function Acceleration(p_x,p_y,p_z,p_ts) {
