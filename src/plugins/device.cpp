@@ -28,7 +28,7 @@
 
 #include <QDebug>
 
-#define CORDOVA "1.3.0"
+#define CORDOVA "2.1.0"
 
 #ifdef QTM_NAMESPACE
 QTM_USE_NAMESPACE
